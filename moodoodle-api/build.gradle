@@ -1,0 +1,21 @@
+dependencies {
+    implementation project(':moodoodle-common')
+    implementation project(':moodoodle-domain')
+    implementation project(':moodoodle-infrastructure')
+
+    // spring boot
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+}
+
+tasks.named('bootJar') {
+    enabled = true
+}
+
+tasks.named('jar') {
+    enabled = false
+}

@@ -1,0 +1,6 @@
+rootProject.name = 'moodoodle'
+include 'moodoodle-api'
+include 'moodoodle-batch'
+include 'moodoodle-common'
+include 'moodoodle-domain'
+include 'moodoodle-infrastructure'
