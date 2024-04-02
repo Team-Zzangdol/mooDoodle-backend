@@ -1,3 +1,7 @@
+plugins {
+    id 'com.google.cloud.tools.jib' version '3.4.0'
+}
+
 dependencies {
     implementation project(':moodoodle-common')
     implementation project(':moodoodle-domain')
@@ -18,4 +22,10 @@ tasks.named('bootJar') {
 
 tasks.named('jar') {
     enabled = false
+}
+
+if (project.hasProperty('dev')) {
+    apply from: project.file('profile-dev.gradle')
+} else if (project.hasProperty('prod')) {
+    apply from: project.file('profile-prod.gradle')
 }
