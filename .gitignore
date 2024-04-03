@@ -35,3 +35,10 @@ out/
 
 ### QueryDSL ###
 /src/main/generated/
+
+### submodule ###
+moodoodle-api/src/main/resources/*.yml
+moodoodle-batch/src/main/resources/*.yml
+moodoodle-common/src/main/resources/*.yml
+moodoodle-domain/src/main/resources/*.yml
+moodoodle-infrastructure/src/main/resources/*.yml

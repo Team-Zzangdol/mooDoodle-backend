@@ -29,3 +29,11 @@ if (project.hasProperty('dev')) {
 } else if (project.hasProperty('prod')) {
     apply from: project.file('profile-prod.gradle')
 }
+
+task copyYML(type: Copy) {
+    copy {
+        from '../moodoodle-submodule/api'
+        include "*.yml"
+        into 'src/main/resources'
+    }
+}
