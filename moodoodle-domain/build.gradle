@@ -1,6 +1,10 @@
 dependencies {
+    // spring boot
     implementation 'org.springframework.boot:spring-boot-starter'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // mysql
+    runtimeOnly 'com.mysql:mysql-connector-j'
 }
 
 task copyYML(type: Copy) {

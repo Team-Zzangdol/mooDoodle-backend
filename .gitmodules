@@ -1,3 +1,4 @@
 [submodule "moodoodle-submodule"]
 	path = moodoodle-submodule
 	url = https://github.com/Team-Zzangdol/mooDoodle-submodule.git
+    branch = main
