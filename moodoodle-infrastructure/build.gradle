@@ -1,6 +1,11 @@
 dependencies {
+    // spring boot
     implementation 'org.springframework.boot:spring-boot-starter'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // feign
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.1'
 }
 
 task copyYML(type: Copy) {
