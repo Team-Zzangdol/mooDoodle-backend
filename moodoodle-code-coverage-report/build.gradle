@@ -1,0 +1,48 @@
+plugins {
+    id 'base'
+    id 'jacoco-report-aggregation'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    jacocoAggregation project(':moodoodle-api')
+    jacocoAggregation project(':moodoodle-domain')
+}
+
+reporting {
+    reports {
+        testCodeCoverageReport(JacocoCoverageReport) {
+            testType = TestSuiteType.UNIT_TEST
+        }
+    }
+}
+
+testCodeCoverageReport {
+    reports {
+        html.required = true
+        xml.required = false
+    }
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it, excludes: [
+                            '**/*Application*',
+                            '**/*Config*',
+                            '**/*Dto*',
+                            '**/*Request*',
+                            '**/*Response*',
+                            '**/*Exception*',
+                            '**/*Status*'
+                    ])
+                })
+        )
+    }
+}
+
+test {
+    useJUnitPlatform()
+    finalizedBy 'testCodeCoverageReport'
+}
