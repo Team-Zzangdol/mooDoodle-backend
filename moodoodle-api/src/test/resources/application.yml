@@ -1,0 +1,12 @@
+outer-api:
+  text-emotion-analysis:
+    url: test
+  text-2-image:
+    url: test
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:test
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
