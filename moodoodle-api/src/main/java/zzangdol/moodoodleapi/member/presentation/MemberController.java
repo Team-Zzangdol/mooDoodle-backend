@@ -20,11 +20,17 @@ public class MemberController {
     private final VerificationCodeService verificationCodeService;
 
     @PostMapping("/send-mail")
-    public ApiResponse<Boolean> sendEmail(@RequestParam String email) {
+    public ApiResponse<Boolean> sendCode(@RequestParam String email) {
         String verificationCode = verificationCodeGenerator.generate();
         verificationCodeService.saveVerificationCode(email, verificationCode, 300L);
         awsSesService.sendVerificationEmail(email, verificationCode);
         return ApiResponse.onSuccess(Boolean.TRUE);
+    }
+
+    @PostMapping("/verification")
+    public ApiResponse<Boolean> verifyCode(@RequestParam String email, @RequestParam String code) {
+        boolean isVerified = verificationCodeService.getVerificationCode(email).equals(code);
+        return ApiResponse.onSuccess(isVerified);
     }
 
 }
