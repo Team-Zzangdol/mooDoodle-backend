@@ -2,35 +2,29 @@ package zzangdol.moodoodleapi.member.presentation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import zzangdol.moodoodleapi.email.VerificationCodeGenerator;
-import zzangdol.moodoodleapi.email.VerificationCodeService;
+import zzangdol.moodoodleapi.member.business.MemberFacade;
+import zzangdol.moodoodleapi.member.presentation.dto.EmailVerificationRequest;
 import zzangdol.moodoodlecommon.response.ApiResponse;
-import zzangdol.ses.service.AwsSesService;
 
 @RequiredArgsConstructor
 @RequestMapping("/members")
 @RestController
 public class MemberController {
 
-    private final AwsSesService awsSesService;
-    private final VerificationCodeGenerator verificationCodeGenerator;
-    private final VerificationCodeService verificationCodeService;
+    private final MemberFacade memberFacade;
 
-    @PostMapping("/send-mail")
-    public ApiResponse<Boolean> sendCode(@RequestParam String email) {
-        String verificationCode = verificationCodeGenerator.generate();
-        verificationCodeService.saveVerificationCode(email, verificationCode, 300L);
-        awsSesService.sendVerificationEmail(email, verificationCode);
-        return ApiResponse.onSuccess(Boolean.TRUE);
+    @PostMapping("/send-verification-email")
+    public ApiResponse<Boolean> sendVerificationEmail(@RequestParam String email) {
+        return ApiResponse.onSuccess(memberFacade.sendVerificationEmail(email));
     }
 
-    @PostMapping("/verification")
-    public ApiResponse<Boolean> verifyCode(@RequestParam String email, @RequestParam String code) {
-        boolean isVerified = verificationCodeService.getVerificationCode(email).equals(code);
-        return ApiResponse.onSuccess(isVerified);
+    @PostMapping("/verify-email")
+    public ApiResponse<Boolean> verifyEmail(@RequestBody EmailVerificationRequest request) {
+        return ApiResponse.onSuccess(memberFacade.verifyEmail(request));
     }
 
 }

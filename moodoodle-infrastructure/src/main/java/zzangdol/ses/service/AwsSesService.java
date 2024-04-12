@@ -20,7 +20,7 @@ public class AwsSesService {
     private final SesClient sesClient;
     private final SpringTemplateEngine templateEngine;
 
-    public void sendVerificationEmail(String to, String verificationCode) {
+    public boolean sendVerificationEmail(String to, String verificationCode) {
         Context context = new Context();
         context.setVariable("verificationCode", verificationCode);
         String htmlBody = templateEngine.process("verificationEmail", context);
@@ -34,8 +34,13 @@ public class AwsSesService {
                 .source("무두들 <no-reply@moodoodle.site>")
                 .build();
 
-        sesClient.sendEmail(request);
+        try {
+            sesClient.sendEmail(request);
+            log.info("Verification email sent successfully to {}", to);
+            return true;
+        } catch (Exception e) {
+            log.error("Failed to send verification email to {}: {}", to, e.getMessage());
+            return false;
+        }
     }
-
-
 }

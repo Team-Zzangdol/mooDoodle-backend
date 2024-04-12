@@ -1,5 +1,7 @@
 package zzangdol.redis.config;
 
+import static org.springframework.data.redis.core.RedisKeyValueAdapter.EnableKeyspaceEvents.ON_STARTUP;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +12,7 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import zzangdol.InfrastructurePackageLocation;
 
-@EnableRedisRepositories(basePackageClasses = InfrastructurePackageLocation.class)
+@EnableRedisRepositories(basePackageClasses = InfrastructurePackageLocation.class, enableKeyspaceEvents = ON_STARTUP)
 @Configuration
 public class RedisConfig {
 
