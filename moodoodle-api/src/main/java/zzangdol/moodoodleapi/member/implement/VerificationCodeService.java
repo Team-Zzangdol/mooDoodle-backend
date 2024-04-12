@@ -3,6 +3,8 @@ package zzangdol.moodoodleapi.member.implement;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import zzangdol.moodoodlecommon.exception.custom.VerificationCodeException;
+import zzangdol.moodoodlecommon.response.status.ErrorStatus;
 import zzangdol.redis.dao.VerificationCodeRepository;
 import zzangdol.redis.domain.VerificationCode;
 
@@ -29,7 +31,18 @@ public class VerificationCodeService {
 
     public boolean verifyCode(String id, String code) {
         VerificationCode storedCode = verificationCodeRepository.findById(id).orElse(null);
-        return storedCode != null && storedCode.getCode().equals(code);
+        if (storedCode == null) {
+            throw new VerificationCodeException(ErrorStatus.VERIFICATION_CODE_EXPIRED);
+        }
+        if (!storedCode.getCode().equals(code)) {
+            throw new VerificationCodeException(ErrorStatus.INVALID_VERIFICATION_CODE);
+        }
+        deleteVerificationCode(id);
+        return true;
+    }
+
+    private void deleteVerificationCode(String id) {
+        verificationCodeRepository.deleteById(id);
     }
 
 }
