@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입 인증</title>
+    <link rel="stylesheet" as="style" crossorigin
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css"/>
+    <style>
+        body {
+            font-family: 'Pretendard', sans-serif;
+        }
+
+        .header {
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        .content {
+            color: #3F3F3F;
+            margin-top: 30px;
+            font-size: 15px;
+        }
+
+        .content p {
+            margin-left: 20px;
+            font-size: 13px;
+            line-height: 0.8;
+        }
+
+        .content h4 {
+            margin-left: 20px;
+        }
+
+        .header img {
+            margin: 0 auto;
+            display: block;
+            width: 200px;
+            height: auto;
+        }
+
+        .verification-code {
+            color: #3F3F3F;
+            background-color: #FBD6CF;
+            padding: 3px;
+            text-align: center;
+            margin: 30px auto 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <img src="https://github.com/ahnsugyeong/ahnsugyeong/assets/88311377/329982f4-4784-4e23-bdb7-edfb07a96ea7"
+         alt="Moodoodle Logo">
+</div>
+<div class="content">
+    <h4>회원가입을 위해 메일을 인증해 주세요.</h4>
+    <p>안녕하세요, 무두들입니다.</p>
+    <p>아래의 인증 번호를 입력하여 회원가입을 완료해 주세요.</p>
+    <div class="verification-code">
+        <h4 th:text="${verificationCode}">123456</h4>
+    </div>
+</div>
+</body>
+</html>

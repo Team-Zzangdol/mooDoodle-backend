@@ -10,5 +10,5 @@ import zzangdol.DomainPackageLocation;
 @EnableJpaAuditing
 @EntityScan(basePackageClasses = DomainPackageLocation.class)
 @EnableJpaRepositories(basePackageClasses = DomainPackageLocation.class)
-public class JpaConfig {
+public class DomainConfig {
 }

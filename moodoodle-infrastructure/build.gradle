@@ -5,7 +5,16 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
     // feign
-    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.1'
+    api 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.1'
+
+    // mail
+    api 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    api 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+    api group: 'software.amazon.awssdk', name: 'ses', version: "2.19.29"
+    api 'com.sun.mail:javax.mail:1.6.2'
+
+    // redis
+    api 'org.springframework.boot:spring-boot-starter-data-redis'
 }
 
 task copyYML(type: Copy) {

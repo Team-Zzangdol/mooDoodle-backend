@@ -1,4 +1,4 @@
-package zzangdol.dto;
+package zzangdol.feign.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
