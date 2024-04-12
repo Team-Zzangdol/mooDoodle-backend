@@ -15,7 +15,9 @@ public enum ErrorStatus implements BaseStatus {
 
     // Auth (4050 ~ 4051)
     VERIFICATION_CODE_EXPIRED(HttpStatus.GONE, 4050, "인증 코드가 만료되었습니다."),
-    INVALID_VERIFICATION_CODE(HttpStatus.BAD_REQUEST, 4051, "잘못된 인증 코드입니다.");
+    INVALID_VERIFICATION_CODE(HttpStatus.BAD_REQUEST, 4051, "유효하지 않은 인증 코드입니다."),
+    INVALID_EMAIL_VERIFICATION_TOKEN(HttpStatus.BAD_REQUEST, 4052, "유효하지 않은 이메일 인증 토큰입니다.");
+
 
 
     private final HttpStatus httpStatus;

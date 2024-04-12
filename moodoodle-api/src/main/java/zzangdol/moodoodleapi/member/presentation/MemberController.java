@@ -11,7 +11,7 @@ import zzangdol.moodoodleapi.member.presentation.dto.EmailVerificationRequest;
 import zzangdol.moodoodlecommon.response.ApiResponse;
 
 @RequiredArgsConstructor
-@RequestMapping("/members")
+@RequestMapping("/api/members")
 @RestController
 public class MemberController {
 
@@ -23,7 +23,7 @@ public class MemberController {
     }
 
     @PostMapping("/verify-email")
-    public ApiResponse<Boolean> verifyEmail(@RequestBody EmailVerificationRequest request) {
+    public ApiResponse<String> verifyEmail(@RequestBody EmailVerificationRequest request) {
         return ApiResponse.onSuccess(memberFacade.verifyEmail(request));
     }
 
