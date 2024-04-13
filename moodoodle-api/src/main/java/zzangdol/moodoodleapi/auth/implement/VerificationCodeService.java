@@ -1,4 +1,4 @@
-package zzangdol.moodoodleapi.member.implement;
+package zzangdol.moodoodleapi.auth.implement;
 
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
