@@ -39,4 +39,8 @@ public class AuthFacade {
         return authService.signIn(request);
     }
 
+    public boolean isEmailAvailable(String email) {
+        return authService.isEmailAvailable(email);
+    }
+
 }

@@ -42,4 +42,9 @@ public class AuthService {
         Authentication authentication = new UsernamePasswordAuthenticationToken(member, "", member.getAuthorities());
         return jwtProvider.generateToken(authentication);
     }
+
+    public boolean isEmailAvailable(String email) {
+        return !memberRepository.findByAuthProviderAndEmail(AuthProvider.DEFAULT, email).isPresent();
+    }
+
 }
