@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import zzangdol.member.domain.Member;
 import zzangdol.member.domain.Role;
-import zzangdol.member.domain.SocialProvider;
+import zzangdol.member.domain.AuthProvider;
 
 @Builder
 @Getter
@@ -20,12 +20,12 @@ public class SignUpRequest {
     private String nickname;
     private LocalTime notificationTime;
 
-    public Member toEntity(SocialProvider socialProvider, Role role) {
+    public Member toEntity(AuthProvider authProvider, Role role, String encodedPassword) {
         return Member.builder()
                 .email(email)
-                .password(password)
+                .password(encodedPassword)
                 .nickname(nickname)
-                .socialProvider(socialProvider)
+                .authProvider(authProvider)
                 .role(role)
                 .notificationTime(notificationTime)
                 .build();

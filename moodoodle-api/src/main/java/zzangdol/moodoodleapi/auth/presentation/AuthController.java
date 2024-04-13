@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import zzangdol.moodoodleapi.auth.business.AuthFacade;
 import zzangdol.moodoodleapi.auth.presentation.dto.request.EmailVerificationRequest;
+import zzangdol.moodoodleapi.auth.presentation.dto.request.SignInRequest;
 import zzangdol.moodoodleapi.auth.presentation.dto.request.SignUpRequest;
+import zzangdol.moodoodleapi.jwt.JwtResponse;
 import zzangdol.moodoodlecommon.response.ApiResponse;
 
 @RequiredArgsConstructor
@@ -30,9 +32,14 @@ public class AuthController {
     }
 
     @PostMapping("/sign-up")
-    public ApiResponse<Long> signUp(@RequestHeader("X-Email-Verification-Token") String emailVerificationToken,
-                                    @RequestBody SignUpRequest request) {
+    public ApiResponse<JwtResponse> signUp(@RequestHeader("X-Email-Verification-Token") String emailVerificationToken,
+                                           @RequestBody SignUpRequest request) {
         return ApiResponse.onSuccess(authFacade.signUp(emailVerificationToken, request));
+    }
+
+    @PostMapping("/sign-in")
+    public ApiResponse<JwtResponse> signUp(@RequestBody SignInRequest request) {
+        return ApiResponse.onSuccess(authFacade.signIn(request));
     }
 
 }

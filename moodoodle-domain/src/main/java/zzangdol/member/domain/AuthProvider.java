@@ -1,5 +1,5 @@
 package zzangdol.member.domain;
 
-public enum SocialProvider {
+public enum AuthProvider {
     KAKAO, NAVER, APPLE, DEFAULT
 }

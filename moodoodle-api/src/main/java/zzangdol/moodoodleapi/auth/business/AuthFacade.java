@@ -6,7 +6,9 @@ import zzangdol.moodoodleapi.auth.implement.AuthService;
 import zzangdol.moodoodleapi.auth.implement.EmailVerificationTokenService;
 import zzangdol.moodoodleapi.auth.implement.VerificationCodeService;
 import zzangdol.moodoodleapi.auth.presentation.dto.request.EmailVerificationRequest;
+import zzangdol.moodoodleapi.auth.presentation.dto.request.SignInRequest;
 import zzangdol.moodoodleapi.auth.presentation.dto.request.SignUpRequest;
+import zzangdol.moodoodleapi.jwt.JwtResponse;
 import zzangdol.ses.service.AwsSesService;
 
 @Component
@@ -28,9 +30,13 @@ public class AuthFacade {
         return emailVerificationTokenService.generateAndSaveCode(request.getEmail());
     }
 
-    public Long signUp(String emailVerificationToken, SignUpRequest request) {
+    public JwtResponse signUp(String emailVerificationToken, SignUpRequest request) {
         emailVerificationTokenService.verifyToken(request.getEmail(), emailVerificationToken);
-        return authService.signUp(request).getId();
+        return authService.signUp(request);
+    }
+
+    public JwtResponse signIn(SignInRequest request) {
+        return authService.signIn(request);
     }
 
 }
