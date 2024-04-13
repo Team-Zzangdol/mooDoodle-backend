@@ -4,6 +4,7 @@ import java.security.SecureRandom;
 import java.util.Base64;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import zzangdol.moodoodleapi.auth.presentation.dto.response.EmailVerificationTokenResponse;
 import zzangdol.moodoodlecommon.exception.custom.EmailVerificationTokenException;
 import zzangdol.moodoodlecommon.response.status.ErrorStatus;
 import zzangdol.redis.dao.EmailVerificationTokenRepository;
@@ -15,10 +16,12 @@ public class EmailVerificationTokenService {
 
     private final EmailVerificationTokenRepository emailVerificationTokenRepository;
 
-    public String generateAndSaveCode(String id) {
+    public EmailVerificationTokenResponse generateAndSaveCode(String id) {
         String token = generateSecureToken();
         saveEmailVerificationToken(id, token, 86400L);
-        return token;
+        return EmailVerificationTokenResponse.builder()
+                .emailVerificationToken(token)
+                .build();
     }
 
     private String generateSecureToken() {

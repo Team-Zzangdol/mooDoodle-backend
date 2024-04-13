@@ -1,4 +1,4 @@
-package zzangdol.moodoodleapi.security;
+package zzangdol.moodoodleapi.global.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

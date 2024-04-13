@@ -25,8 +25,8 @@ public enum ErrorStatus implements BaseStatus {
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, 4058, "존재하지 않는 회원입니다."),
     PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, 4059, "비밀번호가 일치하지 않습니다."),
     AUTHENTICATION_REQUIRED(HttpStatus.BAD_REQUEST, 4060, "인증 정보가 필요합니다."),
-    REFRESH_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, 4061, "저장소에 해당 토큰이 존재하지 않습니다.");
-
+    REFRESH_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, 4061, "저장소에 해당 토큰이 존재하지 않습니다."),
+    EMAIL_ALREADY_EXISTS(HttpStatus.CONFLICT, 4062, "이미 사용 중인 이메일입니다.");
 
     private final HttpStatus httpStatus;
     private final int code;

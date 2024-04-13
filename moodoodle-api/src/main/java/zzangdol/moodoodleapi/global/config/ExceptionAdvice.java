@@ -1,4 +1,4 @@
-package zzangdol.moodoodleapi.config;
+package zzangdol.moodoodleapi.global.config;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
@@ -18,7 +18,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import zzangdol.moodoodlecommon.exception.GeneralException;
-import zzangdol.moodoodlecommon.response.ApiResponse;
+import zzangdol.moodoodlecommon.response.ResponseDto;
 import zzangdol.moodoodlecommon.response.status.ErrorStatus;
 
 @RestControllerAdvice(annotations = {RestController.class})
@@ -67,7 +67,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
     private ResponseEntity<Object> handleExceptionInternal(Exception e, ErrorStatus errorStatus,
                                                            HttpHeaders headers, HttpServletRequest request) {
-        ApiResponse<Object> body = ApiResponse.onFailure(errorStatus.getCode(), errorStatus.getMessage(), null);
+        ResponseDto<Object> body = ResponseDto.onFailure(errorStatus.getCode(), errorStatus.getMessage(), null);
         WebRequest webRequest = new ServletWebRequest(request);
         return super.handleExceptionInternal(
                 e,
@@ -81,7 +81,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     private ResponseEntity<Object> handleExceptionInternalFalse(Exception e, ErrorStatus errorStatus,
                                                                 HttpHeaders headers, HttpStatus status,
                                                                 WebRequest request, String errorPoint) {
-        ApiResponse<Object> body = ApiResponse.onFailure(errorStatus.getCode(),
+        ResponseDto<Object> body = ResponseDto.onFailure(errorStatus.getCode(),
                 errorStatus.getMessage(),
                 errorPoint);
         return super.handleExceptionInternal(
@@ -96,7 +96,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     private ResponseEntity<Object> handleExceptionInternalArgs(Exception e, HttpHeaders headers,
                                                                ErrorStatus errorCommonStatus,
                                                                WebRequest request, Map<String, String> errorArgs) {
-        ApiResponse<Object> body = ApiResponse.onFailure(errorCommonStatus.getCode(),
+        ResponseDto<Object> body = ResponseDto.onFailure(errorCommonStatus.getCode(),
                 errorCommonStatus.getMessage(),
                 errorArgs);
         return super.handleExceptionInternal(
@@ -110,7 +110,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
     private ResponseEntity<Object> handleExceptionInternalConstraint(Exception e, ErrorStatus errorStatus,
                                                                      HttpHeaders headers, WebRequest request) {
-        ApiResponse<Object> body = ApiResponse.onFailure(errorStatus.getCode(),
+        ResponseDto<Object> body = ResponseDto.onFailure(errorStatus.getCode(),
                 errorStatus.getMessage(),
                 null);
         return super.handleExceptionInternal(

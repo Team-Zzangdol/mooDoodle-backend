@@ -8,8 +8,11 @@ import zzangdol.moodoodleapi.auth.implement.VerificationCodeService;
 import zzangdol.moodoodleapi.auth.presentation.dto.request.EmailVerificationRequest;
 import zzangdol.moodoodleapi.auth.presentation.dto.request.SignInRequest;
 import zzangdol.moodoodleapi.auth.presentation.dto.request.SignUpRequest;
+import zzangdol.moodoodleapi.auth.presentation.dto.response.EmailVerificationTokenResponse;
 import zzangdol.moodoodleapi.jwt.JwtResponse;
 import zzangdol.moodoodleapi.jwt.JwtService;
+import zzangdol.moodoodlecommon.exception.custom.MemberCredentialsException;
+import zzangdol.moodoodlecommon.response.status.ErrorStatus;
 import zzangdol.ses.service.AwsSesService;
 
 @Component
@@ -23,16 +26,25 @@ public class AuthFacade {
     private final EmailVerificationTokenService emailVerificationTokenService;
 
     public boolean sendVerificationEmail(String email) {
+        if (!authService.isEmailAvailable(email)) {
+            throw new MemberCredentialsException(ErrorStatus.EMAIL_ALREADY_EXISTS);
+        }
         String verificationCode = verificationCodeService.generateAndSaveCode(email);
         return awsSesService.sendVerificationEmail(email, verificationCode);
     }
 
-    public String verifyEmail(EmailVerificationRequest request) {
+    public EmailVerificationTokenResponse verifyEmail(EmailVerificationRequest request) {
+        if (!authService.isEmailAvailable(request.getEmail())) {
+            throw new MemberCredentialsException(ErrorStatus.EMAIL_ALREADY_EXISTS);
+        }
         verificationCodeService.verifyCode(request.getEmail(), request.getCode());
         return emailVerificationTokenService.generateAndSaveCode(request.getEmail());
     }
 
     public JwtResponse signUp(String emailVerificationToken, SignUpRequest request) {
+        if (!authService.isEmailAvailable(request.getEmail())) {
+            throw new MemberCredentialsException(ErrorStatus.EMAIL_ALREADY_EXISTS);
+        }
         emailVerificationTokenService.verifyToken(request.getEmail(), emailVerificationToken);
         return authService.signUp(request);
     }
