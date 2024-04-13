@@ -9,6 +9,7 @@ import zzangdol.moodoodleapi.auth.presentation.dto.request.EmailVerificationRequ
 import zzangdol.moodoodleapi.auth.presentation.dto.request.SignInRequest;
 import zzangdol.moodoodleapi.auth.presentation.dto.request.SignUpRequest;
 import zzangdol.moodoodleapi.jwt.JwtResponse;
+import zzangdol.moodoodleapi.jwt.JwtService;
 import zzangdol.ses.service.AwsSesService;
 
 @Component
@@ -16,6 +17,7 @@ import zzangdol.ses.service.AwsSesService;
 public class AuthFacade {
 
     private final AuthService authService;
+    private final JwtService jwtService;
     private final AwsSesService awsSesService;
     private final VerificationCodeService verificationCodeService;
     private final EmailVerificationTokenService emailVerificationTokenService;
@@ -41,6 +43,10 @@ public class AuthFacade {
 
     public boolean isEmailAvailable(String email) {
         return authService.isEmailAvailable(email);
+    }
+
+    public JwtResponse reissueToken(String refreshToken) {
+        return jwtService.reissueToken(refreshToken);
     }
 
 }

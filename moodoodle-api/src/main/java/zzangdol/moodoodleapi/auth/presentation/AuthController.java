@@ -45,8 +45,12 @@ public class AuthController {
 
     @GetMapping("/check-email")
     public ApiResponse<Boolean> checkEmailAvailability(@RequestParam String email) {
-        boolean isAvailable = authFacade.isEmailAvailable(email);
-        return ApiResponse.onSuccess(isAvailable);
+        return ApiResponse.onSuccess(authFacade.isEmailAvailable(email));
+    }
+
+    @PostMapping("/reissue")
+    public ApiResponse<JwtResponse> reissue(@RequestParam String refreshToken) {
+        return ApiResponse.onSuccess(authFacade.reissueToken(refreshToken));
     }
 
 }

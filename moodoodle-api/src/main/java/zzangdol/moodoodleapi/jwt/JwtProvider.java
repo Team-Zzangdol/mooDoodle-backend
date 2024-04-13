@@ -22,6 +22,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import zzangdol.member.domain.Member;
 import zzangdol.moodoodlecommon.exception.GeneralException;
 import zzangdol.moodoodlecommon.response.status.ErrorStatus;
 
@@ -35,22 +36,21 @@ public class JwtProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public JwtResponse generateToken(Authentication authentication) {
-        String authorities = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
+    public JwtResponse generateToken(Member member) {
 
         long now = (new Date()).getTime();
 
         String accessToken = Jwts.builder()
-                .setSubject(authentication.getName())
-                .claim("auth", authorities)
+                .setSubject(member.getId().toString())
+                .claim("authProvider", member.getAuthProvider())
+                .claim("nickname", member.getNickname())
+                .claim("auth", member.getRole())
                 .setExpiration(new Date(now + 1800000))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
         String refreshToken = Jwts.builder()
-                .setSubject(authentication.getName())
+                .setSubject(member.getId().toString())
                 .setExpiration(new Date(now + 604800000))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
