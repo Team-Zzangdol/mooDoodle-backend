@@ -1,4 +1,4 @@
-package zzangdol.moodoodleapi.security;
+package zzangdol.moodoodleapi.global.annotation;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

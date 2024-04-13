@@ -1,11 +1,11 @@
-package zzangdol.moodoodleapi.config;
+package zzangdol.moodoodleapi.global.config;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import zzangdol.moodoodleapi.security.AuthenticationArgumentResolver;
+import zzangdol.moodoodleapi.global.annotation.AuthenticationArgumentResolver;
 
 @RequiredArgsConstructor
 @Configuration

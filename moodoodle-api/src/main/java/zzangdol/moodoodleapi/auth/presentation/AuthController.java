@@ -1,5 +1,7 @@
 package zzangdol.moodoodleapi.auth.presentation;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,9 +15,12 @@ import zzangdol.moodoodleapi.auth.presentation.dto.request.EmailVerificationRequ
 import zzangdol.moodoodleapi.auth.presentation.dto.request.SignInRequest;
 import zzangdol.moodoodleapi.auth.presentation.dto.request.SignUpRequest;
 import zzangdol.moodoodleapi.jwt.JwtResponse;
-import zzangdol.moodoodlecommon.response.ApiResponse;
+import zzangdol.moodoodlecommon.response.ResponseDto;
 
 @RequiredArgsConstructor
+
+@ApiResponse(responseCode = "2000", description = "성공")
+@Tag(name = "Auth API", description = "인증 API")
 @RequestMapping("/api/auth")
 @RestController
 public class AuthController {
@@ -23,34 +28,34 @@ public class AuthController {
     private final AuthFacade authFacade;
 
     @PostMapping("/send-verification-email")
-    public ApiResponse<Boolean> sendVerificationEmail(@RequestParam String email) {
-        return ApiResponse.onSuccess(authFacade.sendVerificationEmail(email));
+    public ResponseDto<Boolean> sendVerificationEmail(@RequestParam String email) {
+        return ResponseDto.onSuccess(authFacade.sendVerificationEmail(email));
     }
 
     @PostMapping("/verify-email")
-    public ApiResponse<String> verifyEmail(@RequestBody EmailVerificationRequest request) {
-        return ApiResponse.onSuccess(authFacade.verifyEmail(request));
+    public ResponseDto<String> verifyEmail(@RequestBody EmailVerificationRequest request) {
+        return ResponseDto.onSuccess(authFacade.verifyEmail(request));
     }
 
     @PostMapping("/sign-up")
-    public ApiResponse<JwtResponse> signUp(@RequestHeader("X-Email-Verification-Token") String emailVerificationToken,
+    public ResponseDto<JwtResponse> signUp(@RequestHeader("X-Email-Verification-Token") String emailVerificationToken,
                                            @RequestBody SignUpRequest request) {
-        return ApiResponse.onSuccess(authFacade.signUp(emailVerificationToken, request));
+        return ResponseDto.onSuccess(authFacade.signUp(emailVerificationToken, request));
     }
 
     @PostMapping("/sign-in")
-    public ApiResponse<JwtResponse> signUp(@RequestBody SignInRequest request) {
-        return ApiResponse.onSuccess(authFacade.signIn(request));
+    public ResponseDto<JwtResponse> signUp(@RequestBody SignInRequest request) {
+        return ResponseDto.onSuccess(authFacade.signIn(request));
     }
 
     @GetMapping("/check-email")
-    public ApiResponse<Boolean> checkEmailAvailability(@RequestParam String email) {
-        return ApiResponse.onSuccess(authFacade.isEmailAvailable(email));
+    public ResponseDto<Boolean> checkEmailAvailability(@RequestParam String email) {
+        return ResponseDto.onSuccess(authFacade.isEmailAvailable(email));
     }
 
     @PostMapping("/reissue")
-    public ApiResponse<JwtResponse> reissue(@RequestParam String refreshToken) {
-        return ApiResponse.onSuccess(authFacade.reissueToken(refreshToken));
+    public ResponseDto<JwtResponse> reissue(@RequestParam String refreshToken) {
+        return ResponseDto.onSuccess(authFacade.reissueToken(refreshToken));
     }
 
 }
