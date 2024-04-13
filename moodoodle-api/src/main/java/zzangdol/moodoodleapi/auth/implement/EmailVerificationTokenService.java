@@ -1,4 +1,4 @@
-package zzangdol.moodoodleapi.member.implement;
+package zzangdol.moodoodleapi.auth.implement;
 
 import java.security.SecureRandom;
 import java.util.Base64;
