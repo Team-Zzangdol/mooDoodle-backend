@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -35,37 +36,21 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.formLogin(AbstractHttpConfigurer::disable);
-        httpSecurity.csrf(AbstractHttpConfigurer::disable);
-        httpSecurity.sessionManagement(sessionManagement ->
-                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-        if (springEnvironmentHelper.isDevAndProdProfile()) {
-            httpSecurity.authorizeHttpRequests((authorizeRequests) -> authorizeRequests.requestMatchers(
-                    "/swagger-ui/**",
-                    "/v3/api-docs/**",
-                    "/swagger-resources/**"
-            ).authenticated());
-            httpSecurity.httpBasic(AbstractHttpConfigurer::disable);
-        }
-
-        httpSecurity.authorizeHttpRequests((authorizeRequests) -> authorizeRequests
-                .requestMatchers(
-                        "/",
-                        "/health/**",
-                        "/swagger-ui/**",
-                        "/v3/api-docs/**",
-                        "/swagger-resources/**",
-                        "/api/**"
-                ).permitAll()
-        );
-        return httpSecurity.build();
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(AbstractHttpConfigurer::disable)
+            .formLogin(AbstractHttpConfigurer::disable)
+            .sessionManagement(sessionManagement ->
+                    sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .httpBasic(Customizer.withDefaults()) // Basic 인증 활성화
+            .authorizeHttpRequests(auth -> auth
+                    .requestMatchers("/swagger-ui/**",
+                            "/v3/api-docs/**",
+                            "/swagger-resources/**").authenticated()
+                    .anyRequest().permitAll());
+        return http.build();
     }
 
-    /**
-     * 스웨거용 인메모리 유저 설정
-     */
     @Bean
     public InMemoryUserDetailsManager userDetailsService() {
         UserDetails user =
