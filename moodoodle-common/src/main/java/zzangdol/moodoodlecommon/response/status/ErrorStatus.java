@@ -23,7 +23,9 @@ public enum ErrorStatus implements BaseStatus {
     TOKEN_CLAIMS_EMPTY(HttpStatus.BAD_REQUEST, 4056, "토큰 클레임이 비어있습니다."),
     INVALID_CREDENTIALS(HttpStatus.BAD_REQUEST,4057, "유효하지 않은 회원 정보입니다."),
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, 4058, "존재하지 않는 회원입니다."),
-    PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, 4059, "비밀번호가 일치하지 않습니다.");
+    PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, 4059, "비밀번호가 일치하지 않습니다."),
+    AUTHENTICATION_REQUIRED(HttpStatus.BAD_REQUEST, 4060, "인증 정보가 필요합니다.");
+
 
     private final HttpStatus httpStatus;
     private final int code;

@@ -49,5 +49,4 @@ public class AuthController {
         return ApiResponse.onSuccess(isAvailable);
     }
 
-
 }
