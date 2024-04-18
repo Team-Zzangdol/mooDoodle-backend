@@ -1,10 +1,10 @@
-package zzangdol.feign.client;
+package zzangdol.feign.model.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import zzangdol.feign.dto.ContentDto;
-import zzangdol.feign.dto.MessageDto;
+import zzangdol.outer.api.model.dto.ContentDto;
+import zzangdol.outer.api.model.dto.MessageDto;
 
 @FeignClient(name = "textEmotionAnalysisModelClient", url = "${outer-api.text-emotion-analysis.url}")
 public interface TextEmotionAnalysisModelClient {

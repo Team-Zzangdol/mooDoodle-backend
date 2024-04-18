@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import zzangdol.member.dao.MemberRepository;
-import zzangdol.member.domain.AuthProvider;
-import zzangdol.member.domain.Member;
-import zzangdol.member.domain.Role;
+import zzangdol.user.dao.UserRepository;
+import zzangdol.user.domain.AuthProvider;
+import zzangdol.user.domain.User;
+import zzangdol.user.domain.Role;
 import zzangdol.moodoodleapi.auth.presentation.dto.request.SignInRequest;
 import zzangdol.moodoodleapi.auth.presentation.dto.request.SignUpRequest;
 import zzangdol.moodoodleapi.jwt.JwtResponse;
@@ -21,26 +21,26 @@ import zzangdol.moodoodlecommon.response.status.ErrorStatus;
 public class AuthService {
 
     private final PasswordEncoder passwordEncoder;
-    private final MemberRepository memberRepository;
+    private final UserRepository userRepository;
     private final JwtService jwtService;
 
     public JwtResponse signUp(SignUpRequest request) {
         String encodedPassword = passwordEncoder.encode(request.getPassword());
-        Member member = memberRepository.save(request.toEntity(AuthProvider.DEFAULT, Role.USER, encodedPassword));
-        return jwtService.issueToken(member);
+        User user = userRepository.save(request.toEntity(AuthProvider.DEFAULT, Role.MEMBER, encodedPassword));
+        return jwtService.issueToken(user);
     }
 
     public JwtResponse signIn(SignInRequest request) {
-        Member member = memberRepository.findByAuthProviderAndEmail(AuthProvider.DEFAULT, request.getEmail())
+        User user = userRepository.findByAuthProviderAndEmail(AuthProvider.DEFAULT, request.getEmail())
                 .orElseThrow(() -> new MemberCredentialsException(ErrorStatus.MEMBER_NOT_FOUND));
-        if (!passwordEncoder.matches(request.getPassword(), member.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new MemberCredentialsException(ErrorStatus.PASSWORD_MISMATCH);
         }
-        return jwtService.issueToken(member);
+        return jwtService.issueToken(user);
     }
 
     public boolean isEmailAvailable(String email) {
-        return !memberRepository.findByAuthProviderAndEmail(AuthProvider.DEFAULT, email).isPresent();
+        return !userRepository.findByAuthProviderAndEmail(AuthProvider.DEFAULT, email).isPresent();
     }
 
 }

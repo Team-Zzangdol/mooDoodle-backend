@@ -19,10 +19,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import zzangdol.member.domain.Member;
+import zzangdol.user.domain.User;
 import zzangdol.moodoodlecommon.exception.GeneralException;
 import zzangdol.moodoodlecommon.response.status.ErrorStatus;
 
@@ -36,21 +35,21 @@ public class JwtProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public JwtResponse generateToken(Member member) {
+    public JwtResponse generateToken(User user) {
 
         long now = (new Date()).getTime();
 
         String accessToken = Jwts.builder()
-                .setSubject(member.getId().toString())
-                .claim("authProvider", member.getAuthProvider())
-                .claim("nickname", member.getNickname())
-                .claim("auth", member.getRole())
+                .setSubject(user.getId().toString())
+                .claim("authProvider", user.getAuthProvider())
+                .claim("nickname", user.getNickname())
+                .claim("auth", user.getRole())
                 .setExpiration(new Date(now + 1800000))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
         String refreshToken = Jwts.builder()
-                .setSubject(member.getId().toString())
+                .setSubject(user.getId().toString())
                 .setExpiration(new Date(now + 604800000))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
@@ -113,7 +112,7 @@ public class JwtProvider {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        User principal = new User(claims.getSubject(), "", authorities);
+        org.springframework.security.core.userdetails.User principal = new org.springframework.security.core.userdetails.User(claims.getSubject(), "", authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }

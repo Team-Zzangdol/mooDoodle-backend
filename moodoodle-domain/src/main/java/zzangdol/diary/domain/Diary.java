@@ -13,7 +13,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import zzangdol.global.BaseTimeEntity;
-import zzangdol.member.domain.Member;
+import zzangdol.user.domain.User;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -29,7 +29,7 @@ public class Diary extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member member;
+    private User user;
 
     @Embedded
     private Painting painting;

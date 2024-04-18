@@ -1,4 +1,4 @@
-package zzangdol.member.domain;
+package zzangdol.user.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -21,7 +21,7 @@ import zzangdol.global.BaseTimeEntity;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Member extends BaseTimeEntity implements UserDetails {
+public class User extends BaseTimeEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,8 +40,8 @@ public class Member extends BaseTimeEntity implements UserDetails {
     private LocalTime notificationTime;
 
     @Builder
-    public Member(String email, String password, String nickname, AuthProvider authProvider, Role role,
-                  LocalTime notificationTime) {
+    public User(String email, String password, String nickname, AuthProvider authProvider, Role role,
+                LocalTime notificationTime) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;

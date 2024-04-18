@@ -10,7 +10,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import zzangdol.global.BaseTimeEntity;
-import zzangdol.member.domain.Member;
+import zzangdol.user.domain.User;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,6 +27,6 @@ public class Report extends BaseTimeEntity {
 
     @ManyToOne
     @JoinColumn(name = "member_id")
-    private Member member;
+    private User user;
 
 }

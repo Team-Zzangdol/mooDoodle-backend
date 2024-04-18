@@ -11,9 +11,9 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import zzangdol.member.domain.Member;
+import zzangdol.user.domain.User;
 import zzangdol.moodoodleapi.jwt.JwtProvider;
-import zzangdol.moodoodleapi.member.implement.MemberQueryService;
+import zzangdol.moodoodleapi.user.implement.UserQueryService;
 import zzangdol.moodoodlecommon.exception.GeneralException;
 import zzangdol.moodoodlecommon.response.status.ErrorStatus;
 
@@ -22,12 +22,12 @@ import zzangdol.moodoodlecommon.response.status.ErrorStatus;
 public class AuthenticationArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final JwtProvider jwtProvider;
-    private final MemberQueryService memberQueryService;
+    private final UserQueryService userQueryService;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         final boolean isRegUserAnnotation = parameter.getParameterAnnotation(AuthMember.class) != null;
-        final boolean isMember = parameter.getParameterType().equals(Member.class);
+        final boolean isMember = parameter.getParameterType().equals(User.class);
         return isRegUserAnnotation && isMember;
     }
 
@@ -47,6 +47,6 @@ public class AuthenticationArgumentResolver implements HandlerMethodArgumentReso
         }
 
         String id = jwtProvider.getAuthentication(token).getName();
-        return memberQueryService.findById(Long.valueOf(id));
+        return userQueryService.findById(Long.valueOf(id));
     }
 }
