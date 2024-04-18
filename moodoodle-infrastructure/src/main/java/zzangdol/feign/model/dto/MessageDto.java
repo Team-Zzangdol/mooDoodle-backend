@@ -1,4 +1,4 @@
-package zzangdol.feign.dto;
+package zzangdol.outer.api.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ContentDto {
+public class MessageDto {
 
-    private String content;
+    private String message;
 
 }

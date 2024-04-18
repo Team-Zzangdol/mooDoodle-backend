@@ -3,8 +3,8 @@ package zzangdol.moodoodleapi.jwt;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import zzangdol.member.dao.MemberRepository;
-import zzangdol.member.domain.Member;
+import zzangdol.user.dao.UserRepository;
+import zzangdol.user.domain.User;
 import zzangdol.moodoodlecommon.exception.GeneralException;
 import zzangdol.moodoodlecommon.exception.custom.MemberNotFoundException;
 import zzangdol.moodoodlecommon.response.status.ErrorStatus;
@@ -17,12 +17,12 @@ public class JwtService {
 
     private final JwtProvider jwtProvider;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final MemberRepository memberRepository;
+    private final UserRepository userRepository;
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 604800L;
 
-    public JwtResponse issueToken(Member member) {
-        JwtResponse jwtResponse = jwtProvider.generateToken(member);
-        saveRefreshToken(jwtResponse.getRefreshToken(), member.getId(), REFRESH_TOKEN_EXPIRE_TIME);
+    public JwtResponse issueToken(User user) {
+        JwtResponse jwtResponse = jwtProvider.generateToken(user);
+        saveRefreshToken(jwtResponse.getRefreshToken(), user.getId(), REFRESH_TOKEN_EXPIRE_TIME);
         return jwtResponse;
     }
 
@@ -32,11 +32,11 @@ public class JwtService {
 
         Claims claims = jwtProvider.parseClaims(refreshToken);
         String id = claims.getSubject();
-        Member member = memberRepository.findById(Long.valueOf(id))
+        User user = userRepository.findById(Long.valueOf(id))
                 .orElseThrow(() -> new MemberNotFoundException());
 
-        JwtResponse jwtResponse = jwtProvider.generateToken(member);
-        saveRefreshToken(jwtResponse.getRefreshToken(), member.getId(), REFRESH_TOKEN_EXPIRE_TIME);
+        JwtResponse jwtResponse = jwtProvider.generateToken(user);
+        saveRefreshToken(jwtResponse.getRefreshToken(), user.getId(), REFRESH_TOKEN_EXPIRE_TIME);
         return jwtResponse;
     }
 
