@@ -14,6 +14,5 @@ public class DiaryUpdateRequest {
 
     private LocalDateTime date;
     private String content;
-    private String imageUrl;
 
 }

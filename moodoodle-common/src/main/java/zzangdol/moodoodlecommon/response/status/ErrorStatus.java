@@ -13,7 +13,7 @@ public enum ErrorStatus implements BaseStatus {
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, 4001, "로그인이 필요합니다."),
     FORBIDDEN(HttpStatus.FORBIDDEN, 4002, "금지된 요청입니다."),
 
-    // Auth (4050 ~ 4051)
+    // Auth (4050 ~ 4099)
     VERIFICATION_CODE_EXPIRED(HttpStatus.GONE, 4050, "인증 코드가 만료되었습니다."),
     INVALID_VERIFICATION_CODE(HttpStatus.BAD_REQUEST, 4051, "유효하지 않은 인증 코드입니다."),
     INVALID_EMAIL_VERIFICATION_TOKEN(HttpStatus.BAD_REQUEST, 4052, "유효하지 않은 이메일 인증 토큰입니다."),
@@ -26,7 +26,10 @@ public enum ErrorStatus implements BaseStatus {
     PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, 4059, "비밀번호가 일치하지 않습니다."),
     AUTHENTICATION_REQUIRED(HttpStatus.BAD_REQUEST, 4060, "인증 정보가 필요합니다."),
     REFRESH_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, 4061, "저장소에 해당 토큰이 존재하지 않습니다."),
-    EMAIL_ALREADY_EXISTS(HttpStatus.CONFLICT, 4062, "이미 사용 중인 이메일입니다.");
+    EMAIL_ALREADY_EXISTS(HttpStatus.CONFLICT, 4062, "이미 사용 중인 이메일입니다."),
+
+    // Diary (4100 ~ 4149)
+    DIARY_NOT_FOUND(HttpStatus.NOT_FOUND, 4100, "존재하지 않는 일기입니다.");
 
     private final HttpStatus httpStatus;
     private final int code;

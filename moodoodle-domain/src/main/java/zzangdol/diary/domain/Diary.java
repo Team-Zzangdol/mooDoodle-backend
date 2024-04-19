@@ -50,4 +50,13 @@ public class Diary extends BaseTimeEntity {
         this.user = user;
         this.painting = painting;
     }
+
+    public void updateDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
+
 }

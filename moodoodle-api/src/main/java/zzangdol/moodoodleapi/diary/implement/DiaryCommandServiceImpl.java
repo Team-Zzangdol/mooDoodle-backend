@@ -11,6 +11,7 @@ import zzangdol.diary.domain.Painting;
 import zzangdol.emotion.domain.Emotion;
 import zzangdol.moodoodleapi.diary.presentation.dto.request.DiaryCreateRequest;
 import zzangdol.moodoodleapi.diary.presentation.dto.request.DiaryUpdateRequest;
+import zzangdol.moodoodlecommon.exception.custom.DiaryNotFoundException;
 import zzangdol.user.domain.User;
 
 @RequiredArgsConstructor
@@ -56,13 +57,16 @@ public class DiaryCommandServiceImpl implements DiaryCommandService {
     }
 
     @Override
-    public Diary updateDiary(User user, DiaryUpdateRequest request) {
-        return null;
+    public Diary updateDiary(User user, Long diaryId, DiaryUpdateRequest request) {
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> DiaryNotFoundException.EXCEPTION);
+        diary.updateDate(request.getDate());
+        diary.updateContent(request.getContent());
+        return diary;
     }
 
     @Override
     public void deleteDiary(User user, Long diaryId) {
-
     }
 
 }

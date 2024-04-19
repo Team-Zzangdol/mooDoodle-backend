@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import zzangdol.emotion.domain.Emotion;
 import zzangdol.moodoodleapi.diary.implement.DiaryCommandService;
 import zzangdol.moodoodleapi.diary.presentation.dto.request.DiaryCreateRequest;
+import zzangdol.moodoodleapi.diary.presentation.dto.request.DiaryUpdateRequest;
 import zzangdol.user.domain.User;
 
 @Component
@@ -24,6 +25,10 @@ public class DiaryFacade {
         // TODO String color = imageColorAnalyzer.analyzeColor(request.getImageUrl());
         String color = "";
         return diaryCommandService.createDiary(user, request, color, emotions).getId();
+    }
+
+    public Long updateDiary(User user, Long diaryId, DiaryUpdateRequest request) {
+        return diaryCommandService.updateDiary(user, diaryId, request).getId();
     }
 
 }
