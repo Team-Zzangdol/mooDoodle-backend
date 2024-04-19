@@ -21,6 +21,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import zzangdol.moodoodlecommon.exception.custom.ExpiredTokenException;
+import zzangdol.moodoodlecommon.exception.custom.InvalidTokenException;
 import zzangdol.user.domain.User;
 import zzangdol.moodoodlecommon.exception.GeneralException;
 import zzangdol.moodoodlecommon.response.status.ErrorStatus;
@@ -69,9 +71,9 @@ public class JwtProvider {
                     .parseClaimsJws(token);
             return Boolean.TRUE;
         } catch (SecurityException | MalformedJwtException e) {
-            throw new GeneralException(ErrorStatus.TOKEN_INVALID);
+            throw InvalidTokenException.EXCEPTION;
         } catch (ExpiredJwtException e) {
-            throw new GeneralException(ErrorStatus.TOKEN_EXPIRED);
+            throw ExpiredTokenException.EXCEPTION;
         } catch (UnsupportedJwtException e) {
             throw new GeneralException(ErrorStatus.TOKEN_UNSUPPORTED);
         } catch (IllegalArgumentException e) {

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import zzangdol.user.dao.UserRepository;
 import zzangdol.user.domain.User;
 import zzangdol.moodoodlecommon.exception.GeneralException;
-import zzangdol.moodoodlecommon.exception.custom.MemberNotFoundException;
+import zzangdol.moodoodlecommon.exception.custom.UserNotFoundException;
 import zzangdol.moodoodlecommon.response.status.ErrorStatus;
 import zzangdol.redis.dao.RefreshTokenRepository;
 import zzangdol.redis.domain.RefreshToken;
@@ -33,7 +33,7 @@ public class JwtService {
         Claims claims = jwtProvider.parseClaims(refreshToken);
         String id = claims.getSubject();
         User user = userRepository.findById(Long.valueOf(id))
-                .orElseThrow(() -> new MemberNotFoundException());
+                .orElseThrow(() -> UserNotFoundException.EXCEPTION);
 
         JwtResponse jwtResponse = jwtProvider.generateToken(user);
         saveRefreshToken(jwtResponse.getRefreshToken(), user.getId(), REFRESH_TOKEN_EXPIRE_TIME);

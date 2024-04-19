@@ -27,6 +27,6 @@ public class Scrap extends BaseTimeEntity {
     private Diary diary;
 
     @ManyToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "user_id")
     private User user;
 }

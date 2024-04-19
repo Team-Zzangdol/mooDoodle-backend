@@ -5,8 +5,7 @@ import java.util.Base64;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import zzangdol.moodoodleapi.auth.presentation.dto.response.EmailVerificationTokenResponse;
-import zzangdol.moodoodlecommon.exception.custom.EmailVerificationTokenException;
-import zzangdol.moodoodlecommon.response.status.ErrorStatus;
+import zzangdol.moodoodlecommon.exception.custom.InvalidTokenException;
 import zzangdol.redis.dao.EmailVerificationTokenRepository;
 import zzangdol.redis.domain.EmailVerificationToken;
 
@@ -43,7 +42,7 @@ public class EmailVerificationTokenService {
     public boolean verifyToken(String id, String token) {
         EmailVerificationToken storedToken = emailVerificationTokenRepository.findById(id).orElse(null);
         if (storedToken == null || !storedToken.getToken().equals(token)) {
-            throw new EmailVerificationTokenException(ErrorStatus.INVALID_EMAIL_VERIFICATION_TOKEN);
+            throw InvalidTokenException.EXCEPTION;
         }
         deleteEmailVerificationToken(id);
         return true;

@@ -22,7 +22,6 @@ import zzangdol.moodoodlecommon.response.ResponseDto;
 import zzangdol.moodoodlecommon.response.status.ErrorStatus;
 
 @RequiredArgsConstructor
-
 @ApiResponse(responseCode = "2000", description = "성공")
 @Tag(name = "1️⃣ Auth API", description = "인증 API")
 @RequestMapping("/api/auth")
@@ -55,7 +54,7 @@ public class AuthController {
 
     @ApiErrorCodeExample({
             ErrorStatus.TOKEN_INVALID,
-            ErrorStatus.MEMBER_NOT_FOUND,
+            ErrorStatus.USER_NOT_FOUND,
             ErrorStatus.EMAIL_ALREADY_EXISTS,
             ErrorStatus.INTERNAL_SERVER_ERROR
     })
@@ -68,7 +67,7 @@ public class AuthController {
 
     @ApiErrorCodeExample({
             ErrorStatus.PASSWORD_MISMATCH,
-            ErrorStatus.MEMBER_NOT_FOUND,
+            ErrorStatus.USER_NOT_FOUND,
             ErrorStatus.INTERNAL_SERVER_ERROR
     })
     @Operation(summary = "사용자 로그인", description = "사용자를 인증하고 Access Token, Refresh Token을 발급합니다.")
@@ -78,7 +77,7 @@ public class AuthController {
     }
 
     @ApiErrorCodeExample({
-            ErrorStatus.MEMBER_NOT_FOUND
+            ErrorStatus.USER_NOT_FOUND
     })
     @Operation(summary = "이메일 사용 가능 여부 확인", description = "제공된 이메일이 등록에 사용 가능한지 확인합니다.")
     @GetMapping("/check-email")
@@ -92,7 +91,7 @@ public class AuthController {
             ErrorStatus.TOKEN_EXPIRED,
             ErrorStatus.TOKEN_UNSUPPORTED,
             ErrorStatus.TOKEN_CLAIMS_EMPTY,
-            ErrorStatus.MEMBER_NOT_FOUND,
+            ErrorStatus.USER_NOT_FOUND,
             ErrorStatus.INTERNAL_SERVER_ERROR
     })
     @Operation(summary = "토큰 재발급", description = "Refresh Token, Access Token을 재발급합니다.")

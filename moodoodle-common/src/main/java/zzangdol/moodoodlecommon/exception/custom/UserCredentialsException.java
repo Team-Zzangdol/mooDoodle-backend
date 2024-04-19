@@ -3,13 +3,15 @@ package zzangdol.moodoodlecommon.exception.custom;
 import zzangdol.moodoodlecommon.exception.GeneralException;
 import zzangdol.moodoodlecommon.response.status.ErrorStatus;
 
-public class MemberCredentialsException extends GeneralException {
+public class UserCredentialsException extends GeneralException {
 
-    public MemberCredentialsException() {
+    public static final GeneralException EXCEPTION = new UserCredentialsException();
+
+    public UserCredentialsException() {
         super(ErrorStatus.INVALID_CREDENTIALS);
     }
 
-    public MemberCredentialsException(ErrorStatus errorStatus) {
+    public UserCredentialsException(ErrorStatus errorStatus) {
         super(errorStatus);
     }
 }
