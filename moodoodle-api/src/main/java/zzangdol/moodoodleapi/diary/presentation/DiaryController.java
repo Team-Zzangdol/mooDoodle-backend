@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,6 +50,18 @@ public class DiaryController {
                                          @PathVariable("diaryId") Long diaryId,
                                          @RequestBody DiaryUpdateRequest request) {
         return ResponseDto.onSuccess(diaryFacade.updateDiary(user, diaryId, request));
+    }
+
+    @ApiErrorCodeExample({
+            ErrorStatus.EMAIL_ALREADY_EXISTS,
+            ErrorStatus.INTERNAL_SERVER_ERROR
+    })
+    @Operation(summary = "일기 삭제", description = "일기를 삭제합니다.")
+    @DeleteMapping("/{diaryId}")
+    public ResponseDto<Boolean> deleteDiary(@AuthUser User user,
+                                            @PathVariable("diaryId") Long diaryId) {
+        diaryFacade.deleteDiary(user, diaryId);
+        return ResponseDto.onSuccess(true);
     }
 
 }

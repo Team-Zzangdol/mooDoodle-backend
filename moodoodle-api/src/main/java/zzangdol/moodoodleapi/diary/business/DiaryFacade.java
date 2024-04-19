@@ -31,4 +31,8 @@ public class DiaryFacade {
         return diaryCommandService.updateDiary(user, diaryId, request).getId();
     }
 
+    public void deleteDiary(User user, Long diaryId) {
+        diaryCommandService.deleteDiary(user, diaryId);
+    }
+
 }

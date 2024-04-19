@@ -67,6 +67,7 @@ public class DiaryCommandServiceImpl implements DiaryCommandService {
 
     @Override
     public void deleteDiary(User user, Long diaryId) {
+        diaryRepository.deleteById(diaryId);
     }
 
 }
