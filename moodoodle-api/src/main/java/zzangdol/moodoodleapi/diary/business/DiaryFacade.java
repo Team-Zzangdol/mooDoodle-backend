@@ -9,7 +9,8 @@ import zzangdol.moodoodleapi.diary.implement.DiaryCommandService;
 import zzangdol.moodoodleapi.diary.implement.DiaryQueryService;
 import zzangdol.moodoodleapi.diary.presentation.dto.request.DiaryCreateRequest;
 import zzangdol.moodoodleapi.diary.presentation.dto.request.DiaryUpdateRequest;
-import zzangdol.moodoodleapi.diary.presentation.dto.response.DiaryDetailResponse;
+import zzangdol.moodoodleapi.diary.presentation.dto.response.DiaryResponse;
+import zzangdol.moodoodleapi.diary.presentation.dto.response.DiaryListResponse;
 import zzangdol.user.domain.User;
 
 @Component
@@ -38,8 +39,12 @@ public class DiaryFacade {
         diaryCommandService.deleteDiary(user, diaryId);
     }
 
-    public DiaryDetailResponse getDiaryById(User user, Long diaryId) {
-        return DiaryMapper.toDiaryDetailResponse(diaryQueryService.getDiaryById(user, diaryId));
+    public DiaryResponse getDiaryById(User user, Long diaryId) {
+        return DiaryMapper.toDiaryResponse(diaryQueryService.getDiaryById(user, diaryId));
+    }
+
+    public DiaryListResponse getMonthlyDiariesByUser(User user, int year, int month) {
+        return DiaryMapper.toDiaryListResponse(diaryQueryService.getMonthlyDiariesByUser(user, year, month));
     }
 
 }

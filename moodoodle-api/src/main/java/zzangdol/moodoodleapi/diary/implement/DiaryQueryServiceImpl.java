@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import zzangdol.diary.dao.DiaryRepository;
+import zzangdol.diary.dao.querydsl.DiaryQueryRepository;
 import zzangdol.diary.domain.Diary;
 import zzangdol.moodoodlecommon.exception.custom.DiaryAccessDeniedException;
 import zzangdol.moodoodlecommon.exception.custom.DiaryNotFoundException;
@@ -16,6 +17,7 @@ import zzangdol.user.domain.User;
 public class DiaryQueryServiceImpl implements DiaryQueryService {
 
     private final DiaryRepository diaryRepository;
+    private final DiaryQueryRepository diaryQueryRepository;
 
     @Override
     public Diary getDiaryById(User user, Long diaryId) {
@@ -29,7 +31,7 @@ public class DiaryQueryServiceImpl implements DiaryQueryService {
 
     @Override
     public List<Diary> getMonthlyDiariesByUser(User user, int year, int month) {
-        return null;
+        return diaryQueryRepository.findDiariesByUserAndMonth(user.getId(), year, month);
     }
 
 }

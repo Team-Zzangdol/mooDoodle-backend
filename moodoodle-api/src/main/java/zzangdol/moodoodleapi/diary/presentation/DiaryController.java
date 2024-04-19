@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import zzangdol.moodoodleapi.diary.business.DiaryFacade;
 import zzangdol.moodoodleapi.diary.presentation.dto.request.DiaryCreateRequest;
 import zzangdol.moodoodleapi.diary.presentation.dto.request.DiaryUpdateRequest;
-import zzangdol.moodoodleapi.diary.presentation.dto.response.DiaryDetailResponse;
+import zzangdol.moodoodleapi.diary.presentation.dto.response.DiaryResponse;
+import zzangdol.moodoodleapi.diary.presentation.dto.response.DiaryListResponse;
 import zzangdol.moodoodleapi.global.annotation.ApiErrorCodeExample;
 import zzangdol.moodoodleapi.global.annotation.AuthUser;
 import zzangdol.moodoodlecommon.response.ResponseDto;
@@ -34,7 +36,10 @@ public class DiaryController {
     @ApiErrorCodeExample({
             ErrorStatus.INTERNAL_SERVER_ERROR
     })
-    @Operation(summary = "일기 생성", description = "일기를 생성합니다.")
+    @Operation(
+            summary = "일기 생성",
+            description = "새로운 일기를 생성합니다."
+    )
     @PostMapping
     public ResponseDto<Long> createDiary(@AuthUser User user, @RequestBody DiaryCreateRequest request) {
         return ResponseDto.onSuccess(diaryFacade.createDiary(user, request));
@@ -44,7 +49,10 @@ public class DiaryController {
             ErrorStatus.DIARY_NOT_FOUND,
             ErrorStatus.INTERNAL_SERVER_ERROR
     })
-    @Operation(summary = "일기 수정", description = "일기를 수정합니다.")
+    @Operation(
+            summary = "일기 수정",
+            description = "지정된 ID의 일기를 수정합니다."
+    )
     @PatchMapping("/{diaryId}")
     public ResponseDto<Long> updateDiary(@AuthUser User user,
                                          @PathVariable("diaryId") Long diaryId,
@@ -56,7 +64,10 @@ public class DiaryController {
             ErrorStatus.DIARY_NOT_FOUND,
             ErrorStatus.INTERNAL_SERVER_ERROR
     })
-    @Operation(summary = "일기 삭제", description = "일기를 삭제합니다.")
+    @Operation(
+            summary = "일기 삭제",
+            description = "지정된 ID의 일기를 삭제합니다. 삭제 성공 시 true를 반환합니다."
+    )
     @DeleteMapping("/{diaryId}")
     public ResponseDto<Boolean> deleteDiary(@AuthUser User user,
                                             @PathVariable("diaryId") Long diaryId) {
@@ -68,11 +79,29 @@ public class DiaryController {
             ErrorStatus.DIARY_NOT_FOUND,
             ErrorStatus.INTERNAL_SERVER_ERROR
     })
-    @Operation(summary = "일기 단건 조회", description = "일기를 조회합니다.")
+    @Operation(
+            summary = "일기 단건 조회",
+            description = "지정된 ID의 일기를 조회합니다. 상세 정보를 반환합니다."
+    )
     @GetMapping("/{diaryId}")
-    public ResponseDto<DiaryDetailResponse> getDiaryById(@AuthUser User user,
-                                                         @PathVariable("diaryId") Long diaryId) {
+    public ResponseDto<DiaryResponse> getDiaryById(@AuthUser User user,
+                                                   @PathVariable("diaryId") Long diaryId) {
         return ResponseDto.onSuccess(diaryFacade.getDiaryById(user, diaryId));
+    }
+
+    @ApiErrorCodeExample({
+            ErrorStatus.DIARY_NOT_FOUND,
+            ErrorStatus.INTERNAL_SERVER_ERROR
+    })
+    @Operation(
+            summary = "일기 월간 조회",
+            description = "사용자가 지정한 연도와 월에 해당하는 모든 일기를 조회합니다. 일기 목록을 반환합니다."
+    )
+    @GetMapping
+    public ResponseDto<DiaryListResponse> getMonthlyDiaries(@AuthUser User user,
+                                                            @RequestParam("year") int year,
+                                                            @RequestParam("month") int month) {
+        return ResponseDto.onSuccess(diaryFacade.getMonthlyDiariesByUser(user, year, month));
     }
 
 }
