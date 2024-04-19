@@ -26,7 +26,7 @@ public class Report extends BaseTimeEntity {
     private Asset asset;
 
     @ManyToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
 }

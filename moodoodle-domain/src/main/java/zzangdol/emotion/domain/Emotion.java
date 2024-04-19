@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import zzangdol.global.BaseTimeEntity;
@@ -24,5 +25,11 @@ public class Emotion extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private EmotionPolarity polarity;
+
+    @Builder
+    public Emotion(String name, EmotionPolarity polarity) {
+        this.name = name;
+        this.polarity = polarity;
+    }
 
 }

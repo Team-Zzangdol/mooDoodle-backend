@@ -11,6 +11,7 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import zzangdol.moodoodlecommon.exception.custom.InvalidTokenException;
 import zzangdol.user.domain.User;
 import zzangdol.moodoodleapi.jwt.JwtProvider;
 import zzangdol.moodoodleapi.user.implement.UserQueryService;
@@ -26,7 +27,7 @@ public class AuthenticationArgumentResolver implements HandlerMethodArgumentReso
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        final boolean isRegUserAnnotation = parameter.getParameterAnnotation(AuthMember.class) != null;
+        final boolean isRegUserAnnotation = parameter.getParameterAnnotation(AuthUser.class) != null;
         final boolean isMember = parameter.getParameterType().equals(User.class);
         return isRegUserAnnotation && isMember;
     }
@@ -43,7 +44,7 @@ public class AuthenticationArgumentResolver implements HandlerMethodArgumentReso
         String token = jwtProvider.resolveToken(request);
 
         if (!StringUtils.hasText(token) || !jwtProvider.validateToken(token)) {
-            throw new GeneralException(ErrorStatus.TOKEN_INVALID);
+            throw InvalidTokenException.EXCEPTION;
         }
 
         String id = jwtProvider.getAuthentication(token).getName();

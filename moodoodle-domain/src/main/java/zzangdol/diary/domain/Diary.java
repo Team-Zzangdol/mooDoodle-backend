@@ -1,5 +1,6 @@
 package zzangdol.diary.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -8,8 +9,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import zzangdol.global.BaseTimeEntity;
@@ -28,10 +33,30 @@ public class Diary extends BaseTimeEntity {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Embedded
     private Painting painting;
+
+
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<DiaryEmotion> diaryEmotions = new ArrayList<>();
+
+    @Builder
+    public Diary(LocalDateTime date, String content, User user, Painting painting) {
+        this.date = date;
+        this.content = content;
+        this.user = user;
+        this.painting = painting;
+    }
+
+    public void updateDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
 
 }

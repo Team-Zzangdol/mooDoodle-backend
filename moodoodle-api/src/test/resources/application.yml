@@ -6,7 +6,27 @@ outer-api:
 
 spring:
   datasource:
-    url: jdbc:h2:mem:test
-    driverClassName: org.h2.Driver
-    username: sa
-    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/moodoodle?useSSL=true&useUnicode=true&serverTimezone=Asia/Seoul
+    username: admin
+    password: 12345678
+  redis:
+    host: localhost
+    port: 6379
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+swagger:
+  user: user
+  password: password
+
+jwt:
+  secret: 8329b5059bde3abdbd0bf12d0bd53372b0f21b02888aa08a4d25a4d0f94428f1
+
+cloud:
+  aws:
+    ses:
+      credentials:
+        access-key: access-key
+        secret-key: secret-key

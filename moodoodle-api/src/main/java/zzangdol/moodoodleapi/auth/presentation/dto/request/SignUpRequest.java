@@ -6,9 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import zzangdol.user.domain.User;
-import zzangdol.user.domain.Role;
-import zzangdol.user.domain.AuthProvider;
 
 @Builder
 @Getter
@@ -27,16 +24,5 @@ public class SignUpRequest {
 
     @Schema(example = "21:00")
     private LocalTime notificationTime;
-
-    public User toEntity(AuthProvider authProvider, Role role, String encodedPassword) {
-        return User.builder()
-                .email(email)
-                .password(encodedPassword)
-                .nickname(nickname)
-                .authProvider(authProvider)
-                .role(role)
-                .notificationTime(notificationTime)
-                .build();
-    }
 
 }

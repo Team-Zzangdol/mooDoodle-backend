@@ -11,9 +11,10 @@ import zzangdol.moodoodleapi.auth.presentation.dto.request.SignUpRequest;
 import zzangdol.moodoodleapi.auth.presentation.dto.response.EmailVerificationTokenResponse;
 import zzangdol.moodoodleapi.jwt.JwtResponse;
 import zzangdol.moodoodleapi.jwt.JwtService;
-import zzangdol.moodoodlecommon.exception.custom.MemberCredentialsException;
+import zzangdol.moodoodlecommon.exception.custom.UserCredentialsException;
 import zzangdol.moodoodlecommon.response.status.ErrorStatus;
 import zzangdol.ses.service.AwsSesService;
+import zzangdol.user.domain.User;
 
 @Component
 @RequiredArgsConstructor
@@ -27,7 +28,7 @@ public class AuthFacade {
 
     public boolean sendVerificationEmail(String email) {
         if (!authService.isEmailAvailable(email)) {
-            throw new MemberCredentialsException(ErrorStatus.EMAIL_ALREADY_EXISTS);
+            throw new UserCredentialsException(ErrorStatus.EMAIL_ALREADY_EXISTS);
         }
         String verificationCode = verificationCodeService.generateAndSaveCode(email);
         return awsSesService.sendVerificationEmail(email, verificationCode);
@@ -35,7 +36,7 @@ public class AuthFacade {
 
     public EmailVerificationTokenResponse verifyEmail(EmailVerificationRequest request) {
         if (!authService.isEmailAvailable(request.getEmail())) {
-            throw new MemberCredentialsException(ErrorStatus.EMAIL_ALREADY_EXISTS);
+            throw new UserCredentialsException(ErrorStatus.EMAIL_ALREADY_EXISTS);
         }
         verificationCodeService.verifyCode(request.getEmail(), request.getCode());
         return emailVerificationTokenService.generateAndSaveCode(request.getEmail());
@@ -43,10 +44,11 @@ public class AuthFacade {
 
     public JwtResponse signUp(String emailVerificationToken, SignUpRequest request) {
         if (!authService.isEmailAvailable(request.getEmail())) {
-            throw new MemberCredentialsException(ErrorStatus.EMAIL_ALREADY_EXISTS);
+            throw new UserCredentialsException(ErrorStatus.EMAIL_ALREADY_EXISTS);
         }
         emailVerificationTokenService.verifyToken(request.getEmail(), emailVerificationToken);
-        return authService.signUp(request);
+        User user = authService.signUp(request);
+        return jwtService.issueToken(user);
     }
 
     public JwtResponse signIn(SignInRequest request) {
