@@ -6,8 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import zzangdol.emotion.domain.Emotion;
 import zzangdol.moodoodleapi.diary.implement.DiaryCommandService;
+import zzangdol.moodoodleapi.diary.implement.DiaryQueryService;
 import zzangdol.moodoodleapi.diary.presentation.dto.request.DiaryCreateRequest;
 import zzangdol.moodoodleapi.diary.presentation.dto.request.DiaryUpdateRequest;
+import zzangdol.moodoodleapi.diary.presentation.dto.response.DiaryDetailResponse;
 import zzangdol.user.domain.User;
 
 @Component
@@ -15,6 +17,7 @@ import zzangdol.user.domain.User;
 public class DiaryFacade {
 
     private final DiaryCommandService diaryCommandService;
+    private final DiaryQueryService diaryQueryService;
 //    private final TextEmotionAnalysisModelClient textEmotionAnalysisModelClient;
 //    private final ImageColorAnalyzer imageColorAnalyzer;
 
@@ -33,6 +36,10 @@ public class DiaryFacade {
 
     public void deleteDiary(User user, Long diaryId) {
         diaryCommandService.deleteDiary(user, diaryId);
+    }
+
+    public DiaryDetailResponse getDiaryById(User user, Long diaryId) {
+        return DiaryMapper.toDiaryDetailResponse(diaryQueryService.getDiaryById(user, diaryId));
     }
 
 }

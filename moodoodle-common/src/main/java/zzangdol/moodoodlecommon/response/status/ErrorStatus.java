@@ -29,7 +29,8 @@ public enum ErrorStatus implements BaseStatus {
     EMAIL_ALREADY_EXISTS(HttpStatus.CONFLICT, 4062, "이미 사용 중인 이메일입니다."),
 
     // Diary (4100 ~ 4149)
-    DIARY_NOT_FOUND(HttpStatus.NOT_FOUND, 4100, "존재하지 않는 일기입니다.");
+    DIARY_NOT_FOUND(HttpStatus.NOT_FOUND, 4100, "존재하지 않는 일기입니다."),
+    DIARY_ACCESS_DENIED(HttpStatus.FORBIDDEN, 4101, "일기 접근이 거부되었습니다.");
 
     private final HttpStatus httpStatus;
     private final int code;

@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import zzangdol.moodoodleapi.diary.business.DiaryFacade;
 import zzangdol.moodoodleapi.diary.presentation.dto.request.DiaryCreateRequest;
 import zzangdol.moodoodleapi.diary.presentation.dto.request.DiaryUpdateRequest;
+import zzangdol.moodoodleapi.diary.presentation.dto.response.DiaryDetailResponse;
 import zzangdol.moodoodleapi.global.annotation.ApiErrorCodeExample;
 import zzangdol.moodoodleapi.global.annotation.AuthUser;
 import zzangdol.moodoodlecommon.response.ResponseDto;
@@ -30,7 +32,6 @@ public class DiaryController {
     private final DiaryFacade diaryFacade;
 
     @ApiErrorCodeExample({
-            ErrorStatus.EMAIL_ALREADY_EXISTS,
             ErrorStatus.INTERNAL_SERVER_ERROR
     })
     @Operation(summary = "일기 생성", description = "일기를 생성합니다.")
@@ -40,7 +41,6 @@ public class DiaryController {
     }
 
     @ApiErrorCodeExample({
-            ErrorStatus.EMAIL_ALREADY_EXISTS,
             ErrorStatus.DIARY_NOT_FOUND,
             ErrorStatus.INTERNAL_SERVER_ERROR
     })
@@ -53,7 +53,7 @@ public class DiaryController {
     }
 
     @ApiErrorCodeExample({
-            ErrorStatus.EMAIL_ALREADY_EXISTS,
+            ErrorStatus.DIARY_NOT_FOUND,
             ErrorStatus.INTERNAL_SERVER_ERROR
     })
     @Operation(summary = "일기 삭제", description = "일기를 삭제합니다.")
@@ -62,6 +62,17 @@ public class DiaryController {
                                             @PathVariable("diaryId") Long diaryId) {
         diaryFacade.deleteDiary(user, diaryId);
         return ResponseDto.onSuccess(true);
+    }
+
+    @ApiErrorCodeExample({
+            ErrorStatus.DIARY_NOT_FOUND,
+            ErrorStatus.INTERNAL_SERVER_ERROR
+    })
+    @Operation(summary = "일기 단건 조회", description = "일기를 조회합니다.")
+    @GetMapping("/{diaryId}")
+    public ResponseDto<DiaryDetailResponse> getDiaryById(@AuthUser User user,
+                                                         @PathVariable("diaryId") Long diaryId) {
+        return ResponseDto.onSuccess(diaryFacade.getDiaryById(user, diaryId));
     }
 
 }
