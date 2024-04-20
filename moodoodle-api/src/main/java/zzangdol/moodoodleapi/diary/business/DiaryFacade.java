@@ -13,8 +13,8 @@ import zzangdol.moodoodleapi.diary.presentation.dto.response.DiaryResponse;
 import zzangdol.moodoodleapi.diary.presentation.dto.response.DiaryListResponse;
 import zzangdol.user.domain.User;
 
-@Component
 @RequiredArgsConstructor
+@Component
 public class DiaryFacade {
 
     private final DiaryCommandService diaryCommandService;

@@ -16,8 +16,8 @@ import zzangdol.moodoodlecommon.response.status.ErrorStatus;
 import zzangdol.ses.service.AwsSesService;
 import zzangdol.user.domain.User;
 
-@Component
 @RequiredArgsConstructor
+@Component
 public class AuthFacade {
 
     private final AuthService authService;
