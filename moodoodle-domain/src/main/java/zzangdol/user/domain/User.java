@@ -30,6 +30,7 @@ public class User extends BaseTimeEntity implements UserDetails {
     private String email;
     private String password;
     private String nickname;
+    private LocalTime notificationTime;
 
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
@@ -37,7 +38,6 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private LocalTime notificationTime;
 
     @Builder
     public User(String email, String password, String nickname, AuthProvider authProvider, Role role,
