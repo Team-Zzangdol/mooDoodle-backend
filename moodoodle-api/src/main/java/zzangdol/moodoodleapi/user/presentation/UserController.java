@@ -1,5 +1,6 @@
 package zzangdol.moodoodleapi.user.presentation;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,10 @@ public class UserController {
 
     private final UserFacade userFacade;
 
+    @Operation(
+            summary = "사용자 정보 조회 🔑",
+            description = "Access Token 을 통해 사용자의 정보를 조회합니다."
+    )
     @GetMapping
     public ResponseDto<UserInfoResponse> getUserInfo(@AuthUser User user) {
         return ResponseDto.onSuccess(userFacade.getUserInfo(user));

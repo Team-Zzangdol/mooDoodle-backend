@@ -37,7 +37,7 @@ public class DiaryController {
             ErrorStatus.INTERNAL_SERVER_ERROR
     })
     @Operation(
-            summary = "일기 생성",
+            summary = "일기 생성 🔑",
             description = "새로운 일기를 생성합니다."
     )
     @PostMapping
@@ -50,7 +50,7 @@ public class DiaryController {
             ErrorStatus.INTERNAL_SERVER_ERROR
     })
     @Operation(
-            summary = "일기 수정",
+            summary = "일기 수정 🔑",
             description = "지정된 ID의 일기를 수정합니다."
     )
     @PatchMapping("/{diaryId}")
@@ -65,7 +65,7 @@ public class DiaryController {
             ErrorStatus.INTERNAL_SERVER_ERROR
     })
     @Operation(
-            summary = "일기 삭제",
+            summary = "일기 삭제 🔑",
             description = "지정된 ID의 일기를 삭제합니다. 삭제 성공 시 true를 반환합니다."
     )
     @DeleteMapping("/{diaryId}")
@@ -80,7 +80,7 @@ public class DiaryController {
             ErrorStatus.INTERNAL_SERVER_ERROR
     })
     @Operation(
-            summary = "일기 단건 조회",
+            summary = "일기 단건 조회 🔑",
             description = "지정된 ID의 일기를 조회합니다. 상세 정보를 반환합니다."
     )
     @GetMapping("/{diaryId}")
@@ -94,7 +94,7 @@ public class DiaryController {
             ErrorStatus.INTERNAL_SERVER_ERROR
     })
     @Operation(
-            summary = "일기 월간 조회",
+            summary = "일기 월간 조회 🔑",
             description = "사용자가 지정한 연도와 월에 해당하는 모든 일기를 조회합니다. 일기 목록을 반환합니다."
     )
     @GetMapping
