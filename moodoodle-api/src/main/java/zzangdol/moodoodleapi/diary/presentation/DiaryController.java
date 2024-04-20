@@ -27,7 +27,7 @@ import zzangdol.user.domain.User;
 @RequiredArgsConstructor
 @ApiResponse(responseCode = "2000", description = "성공")
 @Tag(name = "3️⃣ Diary API", description = "일기 API")
-@RequestMapping("/api/diary")
+@RequestMapping("/api/diaries")
 @RestController
 public class DiaryController {
 
