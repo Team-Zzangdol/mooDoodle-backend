@@ -7,10 +7,11 @@ import org.springframework.stereotype.Component;
 import zzangdol.emotion.domain.Emotion;
 import zzangdol.moodoodleapi.diary.implement.DiaryCommandService;
 import zzangdol.moodoodleapi.diary.implement.DiaryQueryService;
+import zzangdol.moodoodleapi.diary.implement.ImageColorAnalyzer;
 import zzangdol.moodoodleapi.diary.presentation.dto.request.DiaryCreateRequest;
 import zzangdol.moodoodleapi.diary.presentation.dto.request.DiaryUpdateRequest;
-import zzangdol.moodoodleapi.diary.presentation.dto.response.DiaryResponse;
 import zzangdol.moodoodleapi.diary.presentation.dto.response.DiaryListResponse;
+import zzangdol.moodoodleapi.diary.presentation.dto.response.DiaryResponse;
 import zzangdol.user.domain.User;
 
 @RequiredArgsConstructor
@@ -20,14 +21,12 @@ public class DiaryFacade {
     private final DiaryCommandService diaryCommandService;
     private final DiaryQueryService diaryQueryService;
 //    private final TextEmotionAnalysisModelClient textEmotionAnalysisModelClient;
-//    private final ImageColorAnalyzer imageColorAnalyzer;
+    private final ImageColorAnalyzer imageColorAnalyzer;
 
     public Long createDiary(User user, DiaryCreateRequest request) {
         // TODO List<Emotion> emotions = textEmotionAnalysisModelClient.analyzeEmotion(request.getContent());
         List<Emotion> emotions = new ArrayList<>();
-
-        // TODO String color = imageColorAnalyzer.analyzeColor(request.getImageUrl());
-        String color = "";
+         String color = imageColorAnalyzer.analyzeAverageColorAsHex(request.getImageUrl());
         return diaryCommandService.createDiary(user, request, color, emotions).getId();
     }
 

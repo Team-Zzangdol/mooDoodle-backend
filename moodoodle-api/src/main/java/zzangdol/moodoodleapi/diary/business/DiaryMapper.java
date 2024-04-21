@@ -5,8 +5,8 @@ import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import zzangdol.diary.domain.Diary;
-import zzangdol.moodoodleapi.diary.presentation.dto.response.DiaryResponse;
 import zzangdol.moodoodleapi.diary.presentation.dto.response.DiaryListResponse;
+import zzangdol.moodoodleapi.diary.presentation.dto.response.DiaryResponse;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DiaryMapper {
