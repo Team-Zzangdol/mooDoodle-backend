@@ -3,6 +3,7 @@ package zzangdol.diary.presentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +42,7 @@ public class DiaryController {
             description = "새로운 일기를 생성합니다."
     )
     @PostMapping
-    public ResponseDto<Long> createDiary(@AuthUser User user, @RequestBody DiaryCreateRequest request) {
+    public ResponseDto<Long> createDiary(@AuthUser User user, @Valid @RequestBody DiaryCreateRequest request) {
         Long diary = diaryFacade.createDiary(user, request);
         return ResponseDto.onSuccess(diary);
     }
