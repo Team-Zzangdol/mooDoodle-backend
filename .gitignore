@@ -34,7 +34,7 @@ out/
 /.nb-gradle/
 
 ### QueryDSL ###
-/src/main/generated/
+moodoodle-domain/src/main/generated/
 
 ### submodule ###
 moodoodle-api/src/main/resources/*.yml
