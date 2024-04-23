@@ -112,7 +112,7 @@ class DiaryCommandServiceTest {
                 .hasMessageContaining("일기는 오늘 날짜 이후로 생성할 수 없습니다.");
     }
 
-    @DisplayName("일기 생성 시 중복된 날짜에 대한 예외를 발생시킨다")
+    @DisplayName("일기 생성 시 중복된 날짜에 대한 예외를 발생시킨다.")
     @Test
     void shouldNotCreateDiaryWithDuplicatedDate() {
         // given
@@ -203,6 +203,19 @@ class DiaryCommandServiceTest {
                 .containsExactlyElementsOf(emotions);
     }
 
+    @Test
+    @DisplayName("존재하지 않는 일기를 수정하려 할 때 예외를 발생시킨다.")
+    void throwExceptionWhenUPDATENonExistentDiary() {
+        // given
+        Long nonExistentDiaryId = 999L;  // 존재하지 않는 ID
+        DiaryUpdateRequest request = buildValidDiaryUpdateRequest(null, LocalDateTime.of(2023, 1, 1, 0, 0));
+
+        // when & then
+        assertThrows(DiaryNotFoundException.class, () -> {
+            diaryCommandService.updateDiary(user, nonExistentDiaryId, request);
+        });
+    }
+
     @DisplayName("일기는 오늘 날짜 이후로 수정할 수 없다.")
     @Test
     void shouldNotUpdateDiaryWithFutureDate() {
@@ -218,7 +231,7 @@ class DiaryCommandServiceTest {
                 .hasMessageContaining("일기는 오늘 날짜 이후로 생성할 수 없습니다.");
     }
 
-    @DisplayName("일기 수정 시 중복된 날짜에 대한 예외를 발생시킨다")
+    @DisplayName("일기 수정 시 중복된 날짜에 대한 예외를 발생시킨다.")
     @Test
     void shouldNotUpdateDiaryWithDuplicatedDate() {
         // given
@@ -237,7 +250,7 @@ class DiaryCommandServiceTest {
     }
 
     @Test
-    @DisplayName("다른 사용자의 일기를 수정하려 할 때 접근 거부 예외를 발생시킨다")
+    @DisplayName("다른 사용자의 일기를 수정하려 할 때 접근 거부 예외를 발생시킨다.")
     void shouldThrowAccessDeniedWhenUpdatingOtherUsersDiary() {
         // given
         User otherUser = User.builder().build();
@@ -256,7 +269,7 @@ class DiaryCommandServiceTest {
 
 
     @Test
-    @DisplayName("일기를 성공적으로 삭제한다")
+    @DisplayName("일기를 성공적으로 삭제한다.")
     void deleteDiarySuccessfully() {
         // given
         DiaryCreateRequest createRequest = buildValidDiaryCreateRequest(LocalDateTime.of(2024, 1, 1, 0, 0));
@@ -272,7 +285,7 @@ class DiaryCommandServiceTest {
     }
 
     @Test
-    @DisplayName("존재하지 않는 일기를 삭제하려 할 때 예외를 발생시킨다")
+    @DisplayName("존재하지 않는 일기를 삭제하려 할 때 예외를 발생시킨다.")
     void throwExceptionWhenDeleteNonExistentDiary() {
         // given
         Long nonExistentDiaryId = 999L;  // 존재하지 않는 ID
@@ -284,7 +297,7 @@ class DiaryCommandServiceTest {
     }
 
     @Test
-    @DisplayName("다른 사용자의 일기를 삭제하려 할 때 접근 거부 예외를 발생시킨다")
+    @DisplayName("다른 사용자의 일기를 삭제하려 할 때 접근 거부 예외를 발생시킨다.")
     void shouldThrowAccessDeniedWhenDeletingOtherUsersDiary() {
         // given
         User otherUser = User.builder().build();
