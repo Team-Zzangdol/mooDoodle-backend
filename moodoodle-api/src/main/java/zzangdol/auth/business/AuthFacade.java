@@ -6,6 +6,7 @@ import zzangdol.auth.implement.AuthService;
 import zzangdol.auth.implement.EmailVerificationTokenService;
 import zzangdol.auth.implement.VerificationCodeService;
 import zzangdol.auth.presentation.dto.request.EmailVerificationRequest;
+import zzangdol.auth.presentation.dto.request.RefreshTokenRequest;
 import zzangdol.auth.presentation.dto.request.SignInRequest;
 import zzangdol.auth.presentation.dto.request.SignUpRequest;
 import zzangdol.auth.presentation.dto.response.EmailVerificationTokenResponse;
@@ -59,8 +60,12 @@ public class AuthFacade {
         return authService.isEmailAvailable(email);
     }
 
-    public JwtResponse reissueToken(String refreshToken) {
-        return jwtService.reissueToken(refreshToken);
+    public JwtResponse reissueToken(RefreshTokenRequest request) {
+        return jwtService.reissueToken(request.getRefreshToken());
     }
 
+    public boolean signOut(RefreshTokenRequest request) {
+        jwtService.invalidateToken(request.getRefreshToken());
+        return true;
+    }
 }

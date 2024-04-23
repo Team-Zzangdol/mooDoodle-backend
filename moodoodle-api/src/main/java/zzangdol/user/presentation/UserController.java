@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,6 +42,14 @@ public class UserController {
     @PatchMapping
     public ResponseDto<UserInfoResponse> updateUserInfo(@AuthUser User user, @RequestBody UserInfoUpdateRequest request) {
         return ResponseDto.onSuccess(userFacade.updateUserInfo(user, request));
+    }
+
+    @Operation(
+            summary = "회원 탈퇴 🔑",
+            description = "현재 로그인된 사용자의 계정을 탈퇴하고, 모든 관련 데이터를 삭제합니다.")
+    @DeleteMapping("/withdraw")
+    public ResponseDto<Boolean> withDrawUser(@AuthUser User user) {
+        return ResponseDto.onSuccess(userFacade.withDrawUser(user));
     }
 
 }

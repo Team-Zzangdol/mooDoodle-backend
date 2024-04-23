@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import zzangdol.auth.business.AuthFacade;
 import zzangdol.auth.presentation.dto.request.EmailVerificationRequest;
+import zzangdol.auth.presentation.dto.request.RefreshTokenRequest;
 import zzangdol.auth.presentation.dto.request.SignInRequest;
 import zzangdol.auth.presentation.dto.request.SignUpRequest;
 import zzangdol.auth.presentation.dto.response.EmailVerificationTokenResponse;
@@ -96,8 +98,14 @@ public class AuthController {
     })
     @Operation(summary = "토큰 재발급", description = "Refresh Token, Access Token을 재발급합니다.")
     @PostMapping("/reissue")
-    public ResponseDto<JwtResponse> reissue(@RequestParam String refreshToken) {
-        return ResponseDto.onSuccess(authFacade.reissueToken(refreshToken));
+    public ResponseDto<JwtResponse> reissue(@RequestParam RefreshTokenRequest request) {
+        return ResponseDto.onSuccess(authFacade.reissueToken(request));
+    }
+
+    @Operation(summary = "로그아웃", description = "사용자의 Refresh Token을 받아 해당 토큰을 무효화합니다.")
+    @DeleteMapping("/sign-out")
+    public ResponseDto<Boolean> signOut(@RequestParam RefreshTokenRequest request) {
+        return ResponseDto.onSuccess(authFacade.signOut(request));
     }
 
 }
