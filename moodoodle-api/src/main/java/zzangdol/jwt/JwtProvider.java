@@ -63,13 +63,13 @@ public class JwtProvider {
                 .build();
     }
 
-    public Boolean validateToken(String token) {
+    public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token);
-            return Boolean.TRUE;
+            return true;
         } catch (SecurityException | MalformedJwtException e) {
             throw InvalidTokenException.EXCEPTION;
         } catch (ExpiredJwtException e) {

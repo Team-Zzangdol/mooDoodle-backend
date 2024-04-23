@@ -21,7 +21,7 @@ public class UserFacade {
         return UserMapper.toUserInfoResponse(userCommandService.updateUserInfo(user, request));
     }
 
-    public Boolean withDrawUser(User user) {
+    public boolean withDrawUser(User user) {
         userCommandService.withDrawUser(user);
         return true;
     }

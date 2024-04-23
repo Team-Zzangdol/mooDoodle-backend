@@ -55,4 +55,9 @@ public class JwtService {
         refreshTokenRepository.save(refreshToken);
     }
 
+    public void invalidateToken(String refreshToken) {
+        if (refreshTokenRepository.existsById(refreshToken)) {
+            refreshTokenRepository.deleteById(refreshToken);
+        }
+    }
 }
