@@ -1,6 +1,6 @@
-package zzangdol.moodoodlecommon.exception.custom;
+package zzangdol.exception.custom;
 
-import zzangdol.moodoodlecommon.exception.GeneralException;
+import zzangdol.exception.GeneralException;
 import zzangdol.response.status.ErrorStatus;
 
 public class UserNotFoundException extends GeneralException {

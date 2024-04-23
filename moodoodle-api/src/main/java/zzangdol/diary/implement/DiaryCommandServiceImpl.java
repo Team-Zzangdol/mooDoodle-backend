@@ -15,9 +15,9 @@ import zzangdol.diary.presentation.dto.request.DiaryCreateRequest;
 import zzangdol.diary.presentation.dto.request.DiaryUpdateRequest;
 import zzangdol.emotion.domain.Emotion;
 import zzangdol.exception.custom.DiaryAccessDeniedException;
-import zzangdol.moodoodlecommon.exception.custom.DiaryDateOutOfBoundsException;
-import zzangdol.moodoodlecommon.exception.custom.DiaryDuplicateDateException;
-import zzangdol.moodoodlecommon.exception.custom.DiaryNotFoundException;
+import zzangdol.exception.custom.DiaryDateOutOfBoundsException;
+import zzangdol.exception.custom.DiaryDuplicateDateException;
+import zzangdol.exception.custom.DiaryNotFoundException;
 import zzangdol.user.domain.User;
 
 @Slf4j

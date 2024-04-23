@@ -21,11 +21,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import zzangdol.moodoodlecommon.exception.custom.ExpiredTokenException;
-import zzangdol.moodoodlecommon.exception.custom.InvalidTokenException;
-import zzangdol.user.domain.User;
-import zzangdol.moodoodlecommon.exception.GeneralException;
+import zzangdol.exception.GeneralException;
+import zzangdol.exception.custom.ExpiredTokenException;
+import zzangdol.exception.custom.InvalidTokenException;
 import zzangdol.response.status.ErrorStatus;
+import zzangdol.user.domain.User;
 
 @Component
 public class JwtProvider {
