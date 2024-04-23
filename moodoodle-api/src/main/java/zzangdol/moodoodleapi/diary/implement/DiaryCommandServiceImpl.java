@@ -1,5 +1,7 @@
 package zzangdol.moodoodleapi.diary.implement;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,8 @@ import zzangdol.diary.domain.Painting;
 import zzangdol.emotion.domain.Emotion;
 import zzangdol.moodoodleapi.diary.presentation.dto.request.DiaryCreateRequest;
 import zzangdol.moodoodleapi.diary.presentation.dto.request.DiaryUpdateRequest;
+import zzangdol.moodoodlecommon.exception.custom.DiaryDateOutOfBoundsException;
+import zzangdol.moodoodlecommon.exception.custom.DiaryDuplicateDateException;
 import zzangdol.moodoodlecommon.exception.custom.DiaryNotFoundException;
 import zzangdol.user.domain.User;
 
@@ -24,9 +28,23 @@ public class DiaryCommandServiceImpl implements DiaryCommandService {
     @Override
     public Diary createDiary(User user, DiaryCreateRequest request, String color,
                                            List<Emotion> emotions) {
+        validateDiaryDate(request.getDate());
+        checkDiaryDuplication(user, request.getDate());
         Painting painting = buildPainting(request, color);
         Diary diary = buildDiary(user, request, emotions, painting);
         return diaryRepository.save(diary);
+    }
+
+    private void checkDiaryDuplication(User user, LocalDateTime date) {
+        if (diaryRepository.existsByDateAndUserId(date, user.getId())) {
+            throw DiaryDuplicateDateException.EXCEPTION;
+        }
+    }
+
+    private void validateDiaryDate(LocalDateTime date) {
+        if (date.toLocalDate().isAfter(LocalDate.now())) {
+            throw DiaryDateOutOfBoundsException.EXCEPTION;
+        }
     }
 
     private Diary buildDiary(User user, DiaryCreateRequest request, List<Emotion> emotions, Painting painting) {
