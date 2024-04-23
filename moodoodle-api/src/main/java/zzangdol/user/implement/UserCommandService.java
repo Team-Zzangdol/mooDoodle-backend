@@ -7,4 +7,6 @@ public interface UserCommandService {
 
     User updateUserInfo(User user, UserInfoUpdateRequest request);
 
+    void withDrawUser(User user);
+
 }

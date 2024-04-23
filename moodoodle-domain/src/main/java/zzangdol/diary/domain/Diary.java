@@ -40,7 +40,7 @@ public class Diary extends BaseTimeEntity {
     private Painting painting;
 
 
-    @OneToMany(mappedBy = "diary", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DiaryEmotion> diaryEmotions = new ArrayList<>();
 
     @Builder
