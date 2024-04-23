@@ -1,4 +1,4 @@
-package zzangdol.moodoodleapi;
+package zzangdol;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

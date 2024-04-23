@@ -20,6 +20,7 @@ import zzangdol.diary.presentation.dto.request.DiaryCreateRequest;
 import zzangdol.diary.presentation.dto.request.DiaryUpdateRequest;
 import zzangdol.emotion.dao.EmotionRepository;
 import zzangdol.emotion.domain.Emotion;
+import zzangdol.exception.custom.DiaryAccessDeniedException;
 import zzangdol.moodoodlecommon.exception.custom.DiaryDateOutOfBoundsException;
 import zzangdol.moodoodlecommon.exception.custom.DiaryDuplicateDateException;
 import zzangdol.user.dao.UserRepository;
@@ -247,7 +248,7 @@ class DiaryCommandServiceTest {
         DiaryUpdateRequest updateRequest = buildValidDiaryUpdateRequest("updated content", LocalDateTime.now());
 
         // when & then
-        assertThrows(zzangdol.moodoodlecommon.exception.custom.DiaryAccessDeniedException.class, () -> {
+        assertThrows(DiaryAccessDeniedException.class, () -> {
             diaryCommandService.updateDiary(otherUser, diary.getId(), updateRequest);
         });
     }
@@ -292,7 +293,7 @@ class DiaryCommandServiceTest {
         Diary diary = diaryCommandService.createDiary(user, createRequest, "FFFFFF", emotions);
 
         // when & then
-        assertThrows(zzangdol.moodoodlecommon.exception.custom.DiaryAccessDeniedException.class, () -> {
+        assertThrows(DiaryAccessDeniedException.class, () -> {
             diaryCommandService.deleteDiary(otherUser, diary.getId());
         });
     }

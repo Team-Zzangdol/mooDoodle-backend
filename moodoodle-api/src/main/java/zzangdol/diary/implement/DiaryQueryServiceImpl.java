@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import zzangdol.diary.dao.DiaryRepository;
 import zzangdol.diary.dao.querydsl.DiaryQueryRepository;
 import zzangdol.diary.domain.Diary;
-import zzangdol.moodoodlecommon.exception.custom.DiaryAccessDeniedException;
+import zzangdol.exception.custom.DiaryAccessDeniedException;
 import zzangdol.moodoodlecommon.exception.custom.DiaryNotFoundException;
 import zzangdol.user.domain.User;
 
