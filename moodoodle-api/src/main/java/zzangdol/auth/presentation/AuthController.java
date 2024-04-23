@@ -36,7 +36,7 @@ public class AuthController {
     })
     @Operation(summary = "인증 이메일 발송", description = "지정된 이메일 주소로 인증 이메일을 발송합니다.")
     @PostMapping("/send-verification-email")
-    public ResponseDto<Boolean> sendVerificationEmail(@RequestParam String email) {
+    public ResponseDto<Boolean> sendVerificationEmail(@RequestParam("email") String email) {
         return ResponseDto.onSuccess(authFacade.sendVerificationEmail(email));
     }
 

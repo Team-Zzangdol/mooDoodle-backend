@@ -5,10 +5,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import zzangdol.global.annotation.AuthUser;
 import zzangdol.user.business.UserFacade;
+import zzangdol.user.presentation.dto.request.UserInfoUpdateRequest;
 import zzangdol.user.presentation.dto.response.UserInfoResponse;
 import zzangdol.response.ResponseDto;
 import zzangdol.user.domain.User;
@@ -29,6 +32,15 @@ public class UserController {
     @GetMapping
     public ResponseDto<UserInfoResponse> getUserInfo(@AuthUser User user) {
         return ResponseDto.onSuccess(userFacade.getUserInfo(user));
+    }
+
+    @Operation(
+            summary = "사용자 정보 수정 🔑",
+            description = "사용자의 정보를 수정합니다."
+    )
+    @PatchMapping
+    public ResponseDto<UserInfoResponse> updateUserInfo(@AuthUser User user, @RequestBody UserInfoUpdateRequest request) {
+        return ResponseDto.onSuccess(userFacade.updateUserInfo(user, request));
     }
 
 }

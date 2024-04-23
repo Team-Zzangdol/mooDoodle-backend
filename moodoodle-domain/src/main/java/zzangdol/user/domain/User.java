@@ -38,7 +38,6 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-
     @Builder
     public User(String email, String password, String nickname, AuthProvider authProvider, Role role,
                 LocalTime notificationTime) {
@@ -79,4 +78,17 @@ public class User extends BaseTimeEntity implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public void updateNickname(String nickname) {
+        if (nickname != null) {
+            this.nickname = nickname;
+        }
+    }
+
+    public void updateNotificationTime(LocalTime notificationTime) {
+        if (notificationTime != null) {
+            this.notificationTime = notificationTime;
+        }
+    }
+
 }
