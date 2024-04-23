@@ -21,8 +21,9 @@ import zzangdol.diary.presentation.dto.request.DiaryUpdateRequest;
 import zzangdol.emotion.dao.EmotionRepository;
 import zzangdol.emotion.domain.Emotion;
 import zzangdol.exception.custom.DiaryAccessDeniedException;
-import zzangdol.moodoodlecommon.exception.custom.DiaryDateOutOfBoundsException;
-import zzangdol.moodoodlecommon.exception.custom.DiaryDuplicateDateException;
+import zzangdol.exception.custom.DiaryDateOutOfBoundsException;
+import zzangdol.exception.custom.DiaryDuplicateDateException;
+import zzangdol.exception.custom.DiaryNotFoundException;
 import zzangdol.user.dao.UserRepository;
 import zzangdol.user.domain.User;
 
@@ -277,7 +278,7 @@ class DiaryCommandServiceTest {
         Long nonExistentDiaryId = 999L;  // 존재하지 않는 ID
 
         // when & then
-        assertThrows(zzangdol.moodoodlecommon.exception.custom.DiaryNotFoundException.class, () -> {
+        assertThrows(DiaryNotFoundException.class, () -> {
             diaryCommandService.deleteDiary(user, nonExistentDiaryId);
         });
     }

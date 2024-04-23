@@ -2,8 +2,12 @@ package zzangdol.diary.presentation;
 
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -21,6 +25,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import zzangdol.diary.business.DiaryFacade;
 import zzangdol.diary.presentation.dto.request.DiaryCreateRequest;
+import zzangdol.diary.presentation.dto.request.DiaryUpdateRequest;
 import zzangdol.global.annotation.AuthenticationArgumentResolver;
 import zzangdol.user.domain.AuthProvider;
 import zzangdol.user.domain.Role;
@@ -141,6 +146,66 @@ class DiaryControllerTest {
                 .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
                 .andExpect(jsonPath("$.code").value(4000))
                 .andExpect(jsonPath("$.result.content").value("content는 필수값입니다."));
+    }
+
+    @WithMockUser(username = "회원", roles = {"MEMBER"})
+    @DisplayName("[PATCH] 일기 수정 테스트 - 정상")
+    @Test
+    void updateDiary() throws Exception {
+        // given
+        DiaryUpdateRequest request = DiaryUpdateRequest.builder()
+                .content("content")
+                .date(LocalDateTime.of(2024, 1, 1, 0, 0))
+                .build();
+
+        User user = User.builder()
+                .email("test@example.com")
+                .password("password")
+                .role(Role.MEMBER)
+                .authProvider(AuthProvider.DEFAULT)
+                .notificationTime(LocalTime.now())
+                .build();
+
+        Long expectedDiaryId = 42L;
+        when(diaryFacade.updateDiary(any(User.class), any(Long.class), any(DiaryUpdateRequest.class))).thenReturn(
+                expectedDiaryId);
+        when(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).thenReturn(user);
+        when(authenticationArgumentResolver.supportsParameter(any())).thenReturn(true);
+
+        // when & then
+        mockMvc.perform(patch("/api/diaries/{diaryId}", expectedDiaryId)
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result").value(expectedDiaryId));
+    }
+
+    @WithMockUser(username = "회원", roles = {"MEMBER"})
+    @DisplayName("[DELETE] 일기 삭제 테스트 - 정상")
+    @Test
+    void deleteDiary() throws Exception {
+        // given
+
+        Long diaryId = 42L;
+        User user = User.builder()
+                .email("test@example.com")
+                .password("password")
+                .role(Role.MEMBER)
+                .authProvider(AuthProvider.DEFAULT)
+                .notificationTime(LocalTime.now())
+                .build();
+
+        doNothing().when(diaryFacade).deleteDiary(user, diaryId);
+        when(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).thenReturn(user);
+        when(authenticationArgumentResolver.supportsParameter(any())).thenReturn(true);
+
+        // when & then
+        mockMvc.perform(delete("/api/diaries/{diaryId}", diaryId)
+                        .with(csrf()))
+                .andExpect(status().isOk());
+
+        verify(diaryFacade).deleteDiary(user, diaryId);
     }
 
 }
