@@ -1,4 +1,4 @@
-package zzangdol.moodoodleapi.diary.implement;
+package zzangdol.diary.implement;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -16,7 +16,7 @@ import zzangdol.diary.dao.DiaryRepository;
 import zzangdol.diary.domain.Diary;
 import zzangdol.emotion.dao.EmotionRepository;
 import zzangdol.emotion.domain.Emotion;
-import zzangdol.moodoodleapi.diary.presentation.dto.request.DiaryCreateRequest;
+import zzangdol.diary.presentation.dto.request.DiaryCreateRequest;
 import zzangdol.moodoodlecommon.exception.custom.DiaryDateOutOfBoundsException;
 import zzangdol.moodoodlecommon.exception.custom.DiaryDuplicateDateException;
 import zzangdol.user.dao.UserRepository;
