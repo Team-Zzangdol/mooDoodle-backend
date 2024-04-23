@@ -19,6 +19,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import zzangdol.helper.SpringEnvironmentHelper;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -31,7 +32,7 @@ public class SecurityConfig {
     @Value("${swagger.password}")
     private String swaggerPassword;
 
-//    private final SpringEnvironmentHelper springEnvironmentHelper;
+    private final SpringEnvironmentHelper springEnvironmentHelper;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
