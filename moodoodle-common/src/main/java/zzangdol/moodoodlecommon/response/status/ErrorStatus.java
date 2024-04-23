@@ -30,7 +30,9 @@ public enum ErrorStatus implements BaseStatus {
 
     // Diary (4100 ~ 4149)
     DIARY_NOT_FOUND(HttpStatus.NOT_FOUND, 4100, "존재하지 않는 일기입니다."),
-    DIARY_ACCESS_DENIED(HttpStatus.FORBIDDEN, 4101, "일기 접근이 거부되었습니다.");
+    DIARY_ACCESS_DENIED(HttpStatus.FORBIDDEN, 4101, "일기 접근이 거부되었습니다."),
+    DIARY_DATE_OUT_OF_BOUNDS(HttpStatus.BAD_REQUEST, 4102, "일기는 오늘 날짜 이후로 생성할 수 없습니다."),
+    DIARY_DATE_DUPLICATION(HttpStatus.CONFLICT, 4103, "해당 날짜에 이미 일기가 존재합니다.");
 
     private final HttpStatus httpStatus;
     private final int code;

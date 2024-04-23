@@ -1,6 +1,7 @@
 package zzangdol.moodoodleapi.diary.implement;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,6 +17,8 @@ import zzangdol.diary.domain.Diary;
 import zzangdol.emotion.dao.EmotionRepository;
 import zzangdol.emotion.domain.Emotion;
 import zzangdol.moodoodleapi.diary.presentation.dto.request.DiaryCreateRequest;
+import zzangdol.moodoodlecommon.exception.custom.DiaryDateOutOfBoundsException;
+import zzangdol.moodoodlecommon.exception.custom.DiaryDuplicateDateException;
 import zzangdol.user.dao.UserRepository;
 import zzangdol.user.domain.User;
 
@@ -40,6 +43,7 @@ class DiaryCommandServiceTest {
     private User user;
     private Emotion emotion1;
     private Emotion emotion2;
+    private List<Emotion> emotions;
 
 
     @BeforeEach
@@ -53,6 +57,7 @@ class DiaryCommandServiceTest {
         emotion1 = Emotion.builder().name("happy").build();
         emotion2 = Emotion.builder().name("sad").build();
         emotionRepository.saveAll(List.of(emotion1, emotion2));
+        emotions = List.of(emotion1, emotion2);
     }
 
     @AfterEach
@@ -67,7 +72,6 @@ class DiaryCommandServiceTest {
     @Test
     void createDiary() {
         // given
-        List<Emotion> emotions = List.of(emotion1, emotion2);
         DiaryCreateRequest request = buildValidDiaryCreateRequest();
 
         // when
@@ -84,6 +88,36 @@ class DiaryCommandServiceTest {
                 .hasSize(2)
                 .extracting("emotion")
                 .containsExactlyElementsOf(emotions);
+    }
+
+    @DisplayName("일기는 오늘 날짜 이후로 생성할 수 없다.")
+    @Test
+    void shouldNotCreateDiaryWithFutureDate() {
+        // given
+        LocalDateTime futureDate = LocalDateTime.now().plusDays(1);
+        DiaryCreateRequest request = DiaryCreateRequest.builder()
+                .date(futureDate)
+                .content("content")
+                .imageUrl("imageUrl")
+                .build();
+
+        // when & then
+        assertThatThrownBy(() -> diaryCommandService.createDiary(user, request, "FFFFFF", emotions))
+                .isInstanceOf(DiaryDateOutOfBoundsException.class)
+                .hasMessageContaining("일기는 오늘 날짜 이후로 생성할 수 없습니다.");
+    }
+
+    @DisplayName("한 날짜에는 하나의 일기만 작성할 수 있다.")
+    @Test
+    void shouldNotCreateDiaryWithDuplicatedDate() {
+        // given
+        DiaryCreateRequest request = buildValidDiaryCreateRequest();
+        diaryCommandService.createDiary(user, request, "FFFFFF", emotions);
+
+        // when & then
+        assertThatThrownBy(() -> diaryCommandService.createDiary(user, request, "FFFFFF", emotions))
+                .isInstanceOf(DiaryDuplicateDateException.class)
+                .hasMessageContaining("해당 날짜에 이미 일기가 존재합니다.");
     }
 
     private DiaryCreateRequest buildValidDiaryCreateRequest() {
