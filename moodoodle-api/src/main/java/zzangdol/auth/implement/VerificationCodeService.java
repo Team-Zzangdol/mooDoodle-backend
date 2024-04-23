@@ -3,10 +3,10 @@ package zzangdol.auth.implement;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import zzangdol.moodoodlecommon.exception.custom.VerificationCodeException;
-import zzangdol.response.status.ErrorStatus;
+import zzangdol.exception.custom.VerificationCodeException;
 import zzangdol.redis.dao.VerificationCodeRepository;
 import zzangdol.redis.domain.VerificationCode;
+import zzangdol.response.status.ErrorStatus;
 
 @RequiredArgsConstructor
 @Service

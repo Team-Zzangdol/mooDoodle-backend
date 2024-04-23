@@ -1,5 +1,6 @@
 package zzangdol.diary.implement;
 
+import groovy.util.logging.Slf4j;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,14 +11,16 @@ import zzangdol.diary.dao.DiaryRepository;
 import zzangdol.diary.domain.Diary;
 import zzangdol.diary.domain.DiaryEmotion;
 import zzangdol.diary.domain.Painting;
-import zzangdol.emotion.domain.Emotion;
 import zzangdol.diary.presentation.dto.request.DiaryCreateRequest;
 import zzangdol.diary.presentation.dto.request.DiaryUpdateRequest;
-import zzangdol.moodoodlecommon.exception.custom.DiaryDateOutOfBoundsException;
-import zzangdol.moodoodlecommon.exception.custom.DiaryDuplicateDateException;
-import zzangdol.moodoodlecommon.exception.custom.DiaryNotFoundException;
+import zzangdol.emotion.domain.Emotion;
+import zzangdol.exception.custom.DiaryAccessDeniedException;
+import zzangdol.exception.custom.DiaryDateOutOfBoundsException;
+import zzangdol.exception.custom.DiaryDuplicateDateException;
+import zzangdol.exception.custom.DiaryNotFoundException;
 import zzangdol.user.domain.User;
 
+@Slf4j
 @RequiredArgsConstructor
 @Transactional
 @Service
@@ -27,7 +30,7 @@ public class DiaryCommandServiceImpl implements DiaryCommandService {
 
     @Override
     public Diary createDiary(User user, DiaryCreateRequest request, String color,
-                                           List<Emotion> emotions) {
+                             List<Emotion> emotions) {
         validateDiaryDate(request.getDate());
         checkDiaryDuplication(user, request.getDate());
         Painting painting = buildPainting(request, color);
@@ -35,15 +38,15 @@ public class DiaryCommandServiceImpl implements DiaryCommandService {
         return diaryRepository.save(diary);
     }
 
-    private void checkDiaryDuplication(User user, LocalDateTime date) {
-        if (diaryRepository.existsByDateAndUserId(date, user.getId())) {
-            throw DiaryDuplicateDateException.EXCEPTION;
-        }
-    }
-
     private void validateDiaryDate(LocalDateTime date) {
         if (date.toLocalDate().isAfter(LocalDate.now())) {
             throw DiaryDateOutOfBoundsException.EXCEPTION;
+        }
+    }
+
+    private void checkDiaryDuplication(User user, LocalDateTime date) {
+        if (diaryRepository.existsByDateAndUserId(date, user.getId())) {
+            throw DiaryDuplicateDateException.EXCEPTION;
         }
     }
 
@@ -78,6 +81,11 @@ public class DiaryCommandServiceImpl implements DiaryCommandService {
     public Diary updateDiary(User user, Long diaryId, DiaryUpdateRequest request) {
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> DiaryNotFoundException.EXCEPTION);
+        checkDiaryOwnership(user, diary);
+        if (request.getDate() != null) {
+            validateDiaryDate(request.getDate());
+            checkDiaryDuplication(user, request.getDate());
+        }
         diary.updateDate(request.getDate());
         diary.updateContent(request.getContent());
         return diary;
@@ -85,7 +93,16 @@ public class DiaryCommandServiceImpl implements DiaryCommandService {
 
     @Override
     public void deleteDiary(User user, Long diaryId) {
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> DiaryNotFoundException.EXCEPTION);
+        checkDiaryOwnership(user, diary);
         diaryRepository.deleteById(diaryId);
+    }
+
+    private void checkDiaryOwnership(User user, Diary diary) {
+        if (!diary.getUser().getId().equals(user.getId())) {
+            throw DiaryAccessDeniedException.EXCEPTION;
+        }
     }
 
 }

@@ -3,13 +3,13 @@ package zzangdol.jwt;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import zzangdol.user.dao.UserRepository;
-import zzangdol.user.domain.User;
-import zzangdol.moodoodlecommon.exception.GeneralException;
-import zzangdol.moodoodlecommon.exception.custom.UserNotFoundException;
-import zzangdol.response.status.ErrorStatus;
+import zzangdol.exception.GeneralException;
+import zzangdol.exception.custom.UserNotFoundException;
 import zzangdol.redis.dao.RefreshTokenRepository;
 import zzangdol.redis.domain.RefreshToken;
+import zzangdol.response.status.ErrorStatus;
+import zzangdol.user.dao.UserRepository;
+import zzangdol.user.domain.User;
 
 @RequiredArgsConstructor
 @Service

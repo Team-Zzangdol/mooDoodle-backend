@@ -11,12 +11,12 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import zzangdol.moodoodlecommon.exception.custom.InvalidTokenException;
-import zzangdol.user.domain.User;
+import zzangdol.exception.GeneralException;
+import zzangdol.exception.custom.InvalidTokenException;
 import zzangdol.jwt.JwtProvider;
-import zzangdol.user.implement.UserQueryService;
-import zzangdol.moodoodlecommon.exception.GeneralException;
 import zzangdol.response.status.ErrorStatus;
+import zzangdol.user.domain.User;
+import zzangdol.user.implement.UserQueryService;
 
 @RequiredArgsConstructor
 @Component

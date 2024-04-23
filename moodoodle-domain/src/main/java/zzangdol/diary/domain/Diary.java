@@ -52,11 +52,15 @@ public class Diary extends BaseTimeEntity {
     }
 
     public void updateDate(LocalDateTime date) {
-        this.date = date;
+        if (date != null) {
+            this.date = date;
+        }
     }
 
     public void updateContent(String content) {
-        this.content = content;
+        if (content != null) {
+            this.content = content;
+        }
     }
 
 }

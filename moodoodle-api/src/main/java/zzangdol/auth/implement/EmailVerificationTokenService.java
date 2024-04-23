@@ -5,7 +5,7 @@ import java.util.Base64;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import zzangdol.auth.presentation.dto.response.EmailVerificationTokenResponse;
-import zzangdol.moodoodlecommon.exception.custom.InvalidTokenException;
+import zzangdol.exception.custom.InvalidTokenException;
 import zzangdol.redis.dao.EmailVerificationTokenRepository;
 import zzangdol.redis.domain.EmailVerificationToken;
 

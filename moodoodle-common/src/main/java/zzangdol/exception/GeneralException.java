@@ -1,4 +1,4 @@
-package zzangdol.moodoodlecommon.exception;
+package zzangdol.exception;
 
 import lombok.Getter;
 import zzangdol.response.status.ErrorStatus;

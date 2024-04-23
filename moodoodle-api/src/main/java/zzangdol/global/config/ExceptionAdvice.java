@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import zzangdol.moodoodlecommon.exception.GeneralException;
+import zzangdol.exception.GeneralException;
 import zzangdol.response.ResponseDto;
 import zzangdol.response.status.ErrorStatus;
 
