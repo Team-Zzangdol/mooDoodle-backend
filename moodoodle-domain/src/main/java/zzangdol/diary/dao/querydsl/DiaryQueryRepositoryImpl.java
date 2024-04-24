@@ -13,7 +13,7 @@ public class DiaryQueryRepositoryImpl implements DiaryQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<Diary> findDiariesByUserAndMonth(Long userId, int year, int month) {
+    public List<Diary> findDiariesByUserAndYearAndMonth(Long userId, int year, int month) {
         QDiary qDiary = QDiary.diary;
 
         return queryFactory.selectFrom(qDiary)

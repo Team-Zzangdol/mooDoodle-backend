@@ -20,18 +20,22 @@ public class DiaryQueryServiceImpl implements DiaryQueryService {
     private final DiaryQueryRepository diaryQueryRepository;
 
     @Override
-    public Diary getDiaryById(User user, Long diaryId) {
+    public Diary getDiaryByUser(User user, Long diaryId) {
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> DiaryNotFoundException.EXCEPTION);
-        if (!diary.getUser().equals(user)) {
-            throw DiaryAccessDeniedException.EXCEPTION;
-        }
+        checkDiaryOwnership(user, diary);
         return diary;
     }
 
     @Override
     public List<Diary> getMonthlyDiariesByUser(User user, int year, int month) {
-        return diaryQueryRepository.findDiariesByUserAndMonth(user.getId(), year, month);
+        return diaryQueryRepository.findDiariesByUserAndYearAndMonth(user.getId(), year, month);
+    }
+
+    private void checkDiaryOwnership(User user, Diary diary) {
+        if (!diary.getUser().getId().equals(user.getId())) {
+            throw DiaryAccessDeniedException.EXCEPTION;
+        }
     }
 
 }

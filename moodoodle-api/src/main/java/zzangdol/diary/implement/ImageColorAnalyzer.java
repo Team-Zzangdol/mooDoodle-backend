@@ -14,7 +14,7 @@ public class ImageColorAnalyzer {
             int[] averageColor = getAverageColor(imageUrl);
             return rgbToHex(averageColor[0], averageColor[1], averageColor[2]);
         } catch (Exception e) {
-            return "#ffffff";
+            return "#FFFFFF";
         }
     }
 

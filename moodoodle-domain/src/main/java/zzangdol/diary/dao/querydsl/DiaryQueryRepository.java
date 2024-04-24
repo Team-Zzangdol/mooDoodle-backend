@@ -5,6 +5,6 @@ import zzangdol.diary.domain.Diary;
 
 public interface DiaryQueryRepository {
 
-    List<Diary> findDiariesByUserAndMonth(Long userId, int year, int month);
+    List<Diary> findDiariesByUserAndYearAndMonth(Long userId, int year, int month);
 
 }

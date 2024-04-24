@@ -98,13 +98,13 @@ public class AuthController {
     })
     @Operation(summary = "토큰 재발급", description = "Refresh Token, Access Token을 재발급합니다.")
     @PostMapping("/reissue")
-    public ResponseDto<JwtResponse> reissue(@RequestParam RefreshTokenRequest request) {
+    public ResponseDto<JwtResponse> reissue(@RequestBody RefreshTokenRequest request) {
         return ResponseDto.onSuccess(authFacade.reissueToken(request));
     }
 
     @Operation(summary = "로그아웃", description = "사용자의 Refresh Token을 받아 해당 토큰을 무효화합니다.")
     @DeleteMapping("/sign-out")
-    public ResponseDto<Boolean> signOut(@RequestParam RefreshTokenRequest request) {
+    public ResponseDto<Boolean> signOut(@RequestBody RefreshTokenRequest request) {
         return ResponseDto.onSuccess(authFacade.signOut(request));
     }
 

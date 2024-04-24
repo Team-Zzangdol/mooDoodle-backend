@@ -80,13 +80,13 @@ class DiaryCommandServiceTest {
         DiaryCreateRequest request = buildValidDiaryCreateRequest(LocalDateTime.of(2024, 1, 1, 0, 0));
 
         // when
-        Diary createdDiary = diaryCommandService.createDiary(user, request, "FFFFFF", emotions);
+        Diary createdDiary = diaryCommandService.createDiary(user, request, "#FFFFFF", emotions);
 
         // then
         assertThat(createdDiary).isNotNull();
         assertThat(createdDiary.getId()).isNotNull();
         assertThat(createdDiary.getContent()).isEqualTo("content");
-        assertThat(createdDiary.getPainting().getColor()).isEqualTo("FFFFFF");
+        assertThat(createdDiary.getPainting().getColor()).isEqualTo("#FFFFFF");
         assertThat(createdDiary.getDate()).isEqualTo(LocalDateTime.of(2024, 1, 1, 0, 0));
 
         assertThat(createdDiary.getDiaryEmotions())
@@ -107,7 +107,7 @@ class DiaryCommandServiceTest {
                 .build();
 
         // when & then
-        assertThatThrownBy(() -> diaryCommandService.createDiary(user, request, "FFFFFF", emotions))
+        assertThatThrownBy(() -> diaryCommandService.createDiary(user, request, "#FFFFFF", emotions))
                 .isInstanceOf(DiaryDateOutOfBoundsException.class)
                 .hasMessageContaining("일기는 오늘 날짜 이후로 생성할 수 없습니다.");
     }
@@ -117,10 +117,10 @@ class DiaryCommandServiceTest {
     void shouldNotCreateDiaryWithDuplicatedDate() {
         // given
         DiaryCreateRequest request = buildValidDiaryCreateRequest(LocalDateTime.of(2024, 1, 1, 0, 0));
-        diaryCommandService.createDiary(user, request, "FFFFFF", emotions);
+        diaryCommandService.createDiary(user, request, "#FFFFFF", emotions);
 
         // when & then
-        assertThatThrownBy(() -> diaryCommandService.createDiary(user, request, "FFFFFF", emotions))
+        assertThatThrownBy(() -> diaryCommandService.createDiary(user, request, "#FFFFFF", emotions))
                 .isInstanceOf(DiaryDuplicateDateException.class)
                 .hasMessageContaining("해당 날짜에 이미 일기가 존재합니다.");
     }
@@ -130,7 +130,7 @@ class DiaryCommandServiceTest {
     void updateDiary() {
         // given
         DiaryCreateRequest createRequest = buildValidDiaryCreateRequest(LocalDateTime.of(2024, 1, 1, 0, 0));
-        Diary createdDiary = diaryCommandService.createDiary(user, createRequest, "FFFFFF", emotions);
+        Diary createdDiary = diaryCommandService.createDiary(user, createRequest, "#FFFFFF", emotions);
 
         DiaryUpdateRequest updateRequest = buildValidDiaryUpdateRequest(
                 "updated content",
@@ -144,7 +144,7 @@ class DiaryCommandServiceTest {
         assertThat(updatedDiary).isNotNull();
         assertThat(updatedDiary.getId()).isNotNull();
         assertThat(updatedDiary.getContent()).isEqualTo("updated content");
-        assertThat(updatedDiary.getPainting().getColor()).isEqualTo("FFFFFF");
+        assertThat(updatedDiary.getPainting().getColor()).isEqualTo("#FFFFFF");
         assertThat(updatedDiary.getDate()).isEqualTo(LocalDateTime.of(2023, 1, 1, 0, 0));
 
         assertThat(createdDiary.getDiaryEmotions())
@@ -158,7 +158,7 @@ class DiaryCommandServiceTest {
     void updateDiaryContentOnly() {
         // given
         DiaryCreateRequest createRequest = buildValidDiaryCreateRequest(LocalDateTime.of(2024, 1, 1, 0, 0));
-        Diary createdDiary = diaryCommandService.createDiary(user, createRequest, "FFFFFF", emotions);
+        Diary createdDiary = diaryCommandService.createDiary(user, createRequest, "#FFFFFF", emotions);
 
         DiaryUpdateRequest updateRequest = buildValidDiaryUpdateRequest("updated content", null);
 
@@ -169,7 +169,7 @@ class DiaryCommandServiceTest {
         assertThat(updatedDiary).isNotNull();
         assertThat(updatedDiary.getId()).isNotNull();
         assertThat(updatedDiary.getContent()).isEqualTo("updated content");
-        assertThat(updatedDiary.getPainting().getColor()).isEqualTo("FFFFFF");
+        assertThat(updatedDiary.getPainting().getColor()).isEqualTo("#FFFFFF");
         assertThat(updatedDiary.getDate()).isEqualTo(LocalDateTime.of(2024, 1, 1, 0, 0));
 
         assertThat(createdDiary.getDiaryEmotions())
@@ -183,7 +183,7 @@ class DiaryCommandServiceTest {
     void updateDiaryDateOnly() {
         // given
         DiaryCreateRequest createRequest = buildValidDiaryCreateRequest(LocalDateTime.of(2024, 1, 1, 0, 0));
-        Diary createdDiary = diaryCommandService.createDiary(user, createRequest, "FFFFFF", emotions);
+        Diary createdDiary = diaryCommandService.createDiary(user, createRequest, "#FFFFFF", emotions);
 
         DiaryUpdateRequest updateRequest = buildValidDiaryUpdateRequest(null, LocalDateTime.of(2023, 1, 1, 0, 0));
 
@@ -194,7 +194,7 @@ class DiaryCommandServiceTest {
         assertThat(updatedDiary).isNotNull();
         assertThat(updatedDiary.getId()).isNotNull();
         assertThat(updatedDiary.getContent()).isEqualTo("content");
-        assertThat(updatedDiary.getPainting().getColor()).isEqualTo("FFFFFF");
+        assertThat(updatedDiary.getPainting().getColor()).isEqualTo("#FFFFFF");
         assertThat(updatedDiary.getDate()).isEqualTo(LocalDateTime.of(2023, 1, 1, 0, 0));
 
         assertThat(createdDiary.getDiaryEmotions())
@@ -221,7 +221,7 @@ class DiaryCommandServiceTest {
     void shouldNotUpdateDiaryWithFutureDate() {
         // given
         DiaryCreateRequest createRequest = buildValidDiaryCreateRequest(LocalDateTime.of(2024, 1, 1, 0, 0));
-        Diary createdDiary = diaryCommandService.createDiary(user, createRequest, "FFFFFF", emotions);
+        Diary createdDiary = diaryCommandService.createDiary(user, createRequest, "#FFFFFF", emotions);
 
         DiaryUpdateRequest updateRequest = buildValidDiaryUpdateRequest(null, LocalDateTime.now().plusDays(1));
 
@@ -236,10 +236,10 @@ class DiaryCommandServiceTest {
     void shouldNotUpdateDiaryWithDuplicatedDate() {
         // given
         DiaryCreateRequest createRequest1 = buildValidDiaryCreateRequest(LocalDateTime.of(2024, 1, 1, 0, 0));
-        diaryCommandService.createDiary(user, createRequest1, "FFFFFF", emotions);
+        diaryCommandService.createDiary(user, createRequest1, "#FFFFFF", emotions);
 
         DiaryCreateRequest createRequest2 = buildValidDiaryCreateRequest(LocalDateTime.of(2023, 1, 1, 0, 0));
-        Diary createdDiary = diaryCommandService.createDiary(user, createRequest2, "FFFFFF", emotions);
+        Diary createdDiary = diaryCommandService.createDiary(user, createRequest2, "#FFFFFF", emotions);
 
         DiaryUpdateRequest updateRequest = buildValidDiaryUpdateRequest(null, LocalDateTime.of(2024, 1, 1, 0, 0));
 
@@ -257,7 +257,7 @@ class DiaryCommandServiceTest {
         userRepository.save(otherUser);
 
         DiaryCreateRequest createRequest = buildValidDiaryCreateRequest(LocalDateTime.of(2024, 1, 1, 0, 0));
-        Diary diary = diaryCommandService.createDiary(user, createRequest, "FFFFFF", emotions);
+        Diary diary = diaryCommandService.createDiary(user, createRequest, "#FFFFFF", emotions);
 
         DiaryUpdateRequest updateRequest = buildValidDiaryUpdateRequest("updated content", LocalDateTime.now());
 
@@ -273,7 +273,7 @@ class DiaryCommandServiceTest {
     void deleteDiarySuccessfully() {
         // given
         DiaryCreateRequest createRequest = buildValidDiaryCreateRequest(LocalDateTime.of(2024, 1, 1, 0, 0));
-        Diary createdDiary = diaryCommandService.createDiary(user, createRequest, "FFFFFF", emotions);
+        Diary createdDiary = diaryCommandService.createDiary(user, createRequest, "#FFFFFF", emotions);
 
         // when
         diaryCommandService.deleteDiary(user, createdDiary.getId());
@@ -304,7 +304,7 @@ class DiaryCommandServiceTest {
         userRepository.save(otherUser);
 
         DiaryCreateRequest createRequest = buildValidDiaryCreateRequest(LocalDateTime.of(2024, 1, 1, 0, 0));
-        Diary diary = diaryCommandService.createDiary(user, createRequest, "FFFFFF", emotions);
+        Diary diary = diaryCommandService.createDiary(user, createRequest, "#FFFFFF", emotions);
 
         // when & then
         assertThrows(DiaryAccessDeniedException.class, () -> {
