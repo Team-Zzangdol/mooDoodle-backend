@@ -31,7 +31,7 @@ public class DiaryQueryServiceImpl implements DiaryQueryService {
 
     @Override
     public List<Diary> getMonthlyDiariesByUser(User user, int year, int month) {
-        return diaryQueryRepository.findDiariesByUserAndMonth(user.getId(), year, month);
+        return diaryQueryRepository.findDiariesByUserAndYearAndMonth(user.getId(), year, month);
     }
 
 }
