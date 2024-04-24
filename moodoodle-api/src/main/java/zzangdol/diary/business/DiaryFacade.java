@@ -38,8 +38,8 @@ public class DiaryFacade {
         diaryCommandService.deleteDiary(user, diaryId);
     }
 
-    public DiaryResponse getDiaryById(User user, Long diaryId) {
-        return DiaryMapper.toDiaryResponse(diaryQueryService.getDiaryById(user, diaryId));
+    public DiaryResponse getDiaryByUser(User user, Long diaryId) {
+        return DiaryMapper.toDiaryResponse(diaryQueryService.getDiaryByUser(user, diaryId));
     }
 
     public DiaryListResponse getMonthlyDiariesByUser(User user, int year, int month) {

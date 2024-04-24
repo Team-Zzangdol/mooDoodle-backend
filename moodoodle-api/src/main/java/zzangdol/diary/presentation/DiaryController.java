@@ -86,9 +86,9 @@ public class DiaryController {
             description = "지정된 ID의 일기를 조회합니다. 상세 정보를 반환합니다."
     )
     @GetMapping("/{diaryId}")
-    public ResponseDto<DiaryResponse> getDiaryById(@AuthUser User user,
+    public ResponseDto<DiaryResponse> getDiaryByUser(@AuthUser User user,
                                                    @PathVariable("diaryId") Long diaryId) {
-        return ResponseDto.onSuccess(diaryFacade.getDiaryById(user, diaryId));
+        return ResponseDto.onSuccess(diaryFacade.getDiaryByUser(user, diaryId));
     }
 
     @ApiErrorCodeExample({

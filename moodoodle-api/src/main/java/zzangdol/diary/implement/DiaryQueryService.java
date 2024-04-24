@@ -6,7 +6,7 @@ import zzangdol.user.domain.User;
 
 public interface DiaryQueryService {
 
-    Diary getDiaryById(User user, Long diaryId);
+    Diary getDiaryByUser(User user, Long diaryId);
 
     List<Diary> getMonthlyDiariesByUser(User user, int year, int month);
 
