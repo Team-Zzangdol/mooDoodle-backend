@@ -2,11 +2,13 @@ package zzangdol.diary.presentation;
 
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -15,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Arrays;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import zzangdol.diary.business.DiaryFacade;
 import zzangdol.diary.presentation.dto.request.DiaryCreateRequest;
 import zzangdol.diary.presentation.dto.request.DiaryUpdateRequest;
+import zzangdol.diary.presentation.dto.response.DiaryListResponse;
+import zzangdol.diary.presentation.dto.response.DiaryResponse;
 import zzangdol.global.annotation.AuthenticationArgumentResolver;
 import zzangdol.user.domain.AuthProvider;
 import zzangdol.user.domain.Role;
@@ -206,6 +211,89 @@ class DiaryControllerTest {
                 .andExpect(status().isOk());
 
         verify(diaryFacade).deleteDiary(user, diaryId);
+    }
+
+    @WithMockUser(username = "회원", roles = {"MEMBER"})
+    @DisplayName("[GET] 일기 단건 조회 테스트 - 정상")
+    @Test
+    void getDiaryByUser() throws Exception {
+        // given
+        DiaryResponse diaryResponse = DiaryResponse.builder()
+                .id(1L)
+                .date(LocalDateTime.of(2024, 1, 1, 0, 0))
+                .content("content")
+                .imageUrl("imageUrl")
+                .color("#FFFFFF")
+                .build();
+
+        User user = User.builder()
+                .email("test@example.com")
+                .password("password")
+                .role(Role.MEMBER)
+                .authProvider(AuthProvider.DEFAULT)
+                .notificationTime(LocalTime.now())
+                .build();
+
+        when(diaryFacade.getDiaryByUser(any(User.class), eq(1L))).thenReturn(diaryResponse);
+        when(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).thenReturn(user);
+        when(authenticationArgumentResolver.supportsParameter(any())).thenReturn(true);
+
+        // when & then
+        mockMvc.perform(get("/api/diaries/{diaryId}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result.id").value(1L))
+                .andExpect(jsonPath("$.result.content").value("content"))
+                .andExpect(jsonPath("$.result.imageUrl").value("imageUrl"))
+                .andExpect(jsonPath("$.result.color").value("#FFFFFF"));
+    }
+
+    @WithMockUser(username = "회원", roles = {"MEMBER"})
+    @DisplayName("[GET] 월간 일기 목록 조회 테스트 - 정상")
+    @Test
+    void getMonthlyDiaries() throws Exception {
+        // given
+        DiaryListResponse diaryListResponse = DiaryListResponse.builder()
+                .diaries(Arrays.asList(
+                        DiaryResponse.builder()
+                                .id(1L)
+                                .date(LocalDateTime.of(2024, 4, 1, 0, 0))
+                                .content("content1")
+                                .imageUrl("imageUrl1")
+                                .color("#111111")
+                                .build(),
+                        DiaryResponse.builder()
+                                .id(2L)
+                                .date(LocalDateTime.of(2024, 4, 20, 0, 0))
+                                .content("content2")
+                                .imageUrl("imageUrl2")
+                                .color("#222222")
+                                .build()
+                ))
+                .build();
+
+        User user = User.builder()
+                .email("test@example.com")
+                .password("password")
+                .role(Role.MEMBER)
+                .authProvider(AuthProvider.DEFAULT)
+                .notificationTime(LocalTime.now())
+                .build();
+
+        when(diaryFacade.getMonthlyDiariesByUser(any(User.class), eq(2024), eq(4))).thenReturn(diaryListResponse);
+        when(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).thenReturn(user);
+        when(authenticationArgumentResolver.supportsParameter(any())).thenReturn(true);
+
+        // when & then
+        mockMvc.perform(get("/api/diaries")
+                        .param("year", "2024")
+                        .param("month", "4")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result.diaries[0].id").value(1L))
+                .andExpect(jsonPath("$.result.diaries[0].content").value("content1"))
+                .andExpect(jsonPath("$.result.diaries[1].id").value(2L))
+                .andExpect(jsonPath("$.result.diaries[1].content").value("content2"));
     }
 
 }
