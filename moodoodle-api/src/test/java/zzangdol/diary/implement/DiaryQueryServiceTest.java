@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import zzangdol.diary.dao.DiaryRepository;
 import zzangdol.diary.domain.Diary;
 import zzangdol.exception.custom.DiaryAccessDeniedException;
+import zzangdol.exception.custom.DiaryNotFoundException;
 import zzangdol.user.dao.UserRepository;
 import zzangdol.user.domain.User;
 
@@ -98,6 +99,18 @@ class DiaryQueryServiceTest {
         // when & then
         assertThrows(DiaryAccessDeniedException.class, () -> {
             diaryQueryService.getDiaryByUser(otherUser, diary.getId());
+        });
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 일기를 조회하려 할 때 예외를 발생시킨다.")
+    void throwExceptionWhenGetNonExistentDiary() {
+        // given
+        Long nonExistentDiaryId = 999L;  // 존재하지 않는 ID
+
+        // when & then
+        assertThrows(DiaryNotFoundException.class, () -> {
+            diaryQueryService.getDiaryByUser(user, nonExistentDiaryId);
         });
     }
 
