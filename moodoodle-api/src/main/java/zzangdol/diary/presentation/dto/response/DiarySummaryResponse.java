@@ -1,6 +1,6 @@
 package zzangdol.diary.presentation.dto.response;
 
-import java.util.List;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,8 +10,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DiaryListResponse {
+public class DiarySummaryResponse {
 
-    private List<DiarySummaryResponse> diaries;
+    private LocalDate date;
+    private Long id;
+    private String imageUrl;
 
 }
