@@ -1,6 +1,7 @@
 package zzangdol.diary.presentation;
 
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
@@ -15,9 +16,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,7 @@ import zzangdol.diary.presentation.dto.request.DiaryCreateRequest;
 import zzangdol.diary.presentation.dto.request.DiaryUpdateRequest;
 import zzangdol.diary.presentation.dto.response.DiaryListResponse;
 import zzangdol.diary.presentation.dto.response.DiaryResponse;
+import zzangdol.diary.presentation.dto.response.DiarySummaryResponse;
 import zzangdol.global.annotation.AuthenticationArgumentResolver;
 import zzangdol.user.domain.AuthProvider;
 import zzangdol.user.domain.Role;
@@ -253,23 +257,30 @@ class DiaryControllerTest {
     @Test
     void getMonthlyDiaries() throws Exception {
         // given
+        List<DiarySummaryResponse> diaryResponses = new ArrayList<>();
+        for (int i = 1; i <= 30; i++) {
+            if (i == 1) {
+                diaryResponses.add(DiarySummaryResponse.builder()
+                        .date(LocalDate.of(2024, 4, i))
+                        .id(1L)
+                        .imageUrl("https://example.com/imageUrl1")
+                        .build());
+            } else if (i == 20) {
+                diaryResponses.add(DiarySummaryResponse.builder()
+                        .date(LocalDate.of(2024, 4, i))
+                        .id(2L)
+                        .imageUrl("https://example.com/imageUrl2")
+                        .build());
+            } else {
+                diaryResponses.add(DiarySummaryResponse.builder()
+                        .date(LocalDate.of(2024, 4, i))
+                        .id(null)
+                        .imageUrl(null)
+                        .build());
+            }
+        }
         DiaryListResponse diaryListResponse = DiaryListResponse.builder()
-                .diaries(Arrays.asList(
-                        DiaryResponse.builder()
-                                .id(1L)
-                                .date(LocalDateTime.of(2024, 4, 1, 0, 0))
-                                .content("content1")
-                                .imageUrl("imageUrl1")
-                                .color("#111111")
-                                .build(),
-                        DiaryResponse.builder()
-                                .id(2L)
-                                .date(LocalDateTime.of(2024, 4, 20, 0, 0))
-                                .content("content2")
-                                .imageUrl("imageUrl2")
-                                .color("#222222")
-                                .build()
-                ))
+                .diaries(diaryResponses)
                 .build();
 
         User user = User.builder()
@@ -290,10 +301,16 @@ class DiaryControllerTest {
                         .param("month", "4")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result.diaries", hasSize(30)))
+                .andExpect(jsonPath("$.result.diaries[0].date").value("2024-04-01"))
                 .andExpect(jsonPath("$.result.diaries[0].id").value(1L))
-                .andExpect(jsonPath("$.result.diaries[0].content").value("content1"))
-                .andExpect(jsonPath("$.result.diaries[1].id").value(2L))
-                .andExpect(jsonPath("$.result.diaries[1].content").value("content2"));
+                .andExpect(jsonPath("$.result.diaries[0].imageUrl").value("https://example.com/imageUrl1"))
+                .andExpect(jsonPath("$.result.diaries[19].date").value("2024-04-20"))
+                .andExpect(jsonPath("$.result.diaries[19].id").value(2L))
+                .andExpect(jsonPath("$.result.diaries[19].imageUrl").value("https://example.com/imageUrl2"))
+                .andExpect(jsonPath("$.result.diaries[1].date").value("2024-04-02"))
+                .andExpect(jsonPath("$.result.diaries[1].id").doesNotExist())
+                .andExpect(jsonPath("$.result.diaries[1].imageUrl").doesNotExist());
     }
 
 }

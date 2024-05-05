@@ -43,7 +43,7 @@ public class DiaryFacade {
     }
 
     public DiaryListResponse getMonthlyDiariesByUser(User user, int year, int month) {
-        return DiaryMapper.toDiaryListResponse(diaryQueryService.getMonthlyDiariesByUser(user, year, month));
+        return DiaryMapper.toDiaryListResponse(diaryQueryService.getMonthlyDiariesByUser(user, year, month), year, month);
     }
 
 }
