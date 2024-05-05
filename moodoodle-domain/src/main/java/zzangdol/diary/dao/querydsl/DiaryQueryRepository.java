@@ -7,4 +7,6 @@ public interface DiaryQueryRepository {
 
     List<Diary> findDiariesByUserAndYearAndMonth(Long userId, int year, int month);
 
+    List<Diary> findDiariesByUserAndYearAndMonthAndWeek(Long userId, int year, int month, int week);
+
 }
