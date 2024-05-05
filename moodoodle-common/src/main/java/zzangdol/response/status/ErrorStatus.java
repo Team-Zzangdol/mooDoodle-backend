@@ -35,7 +35,9 @@ public enum ErrorStatus implements BaseStatus {
     DIARY_DATE_DUPLICATION(HttpStatus.CONFLICT, 4103, "해당 날짜에 이미 일기가 존재합니다."),
 
     // Report (4150 ~ 4199)
-    REPORT_EMOTION_DATA_MISSING(HttpStatus.BAD_REQUEST, 4150, "일기에 감정 데이터가 존재하지 않습니다.");
+    REPORT_NOT_FOUND(HttpStatus.NOT_FOUND, 4150, "리포트가 존재하지 않습니다."),
+    REPORT_ACCESS_DENIED(HttpStatus.FORBIDDEN, 4151, "리포트 접근이 거부되었습니다."),
+    REPORT_EMOTION_DATA_MISSING(HttpStatus.BAD_REQUEST, 4152, "일기에 감정 데이터가 존재하지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final int code;
