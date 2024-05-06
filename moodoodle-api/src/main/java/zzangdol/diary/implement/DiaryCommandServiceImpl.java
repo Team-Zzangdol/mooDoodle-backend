@@ -83,11 +83,17 @@ public class DiaryCommandServiceImpl implements DiaryCommandService {
         checkDiaryOwnership(user, diary);
         if (request.getDate() != null) {
             validateDiaryDate(request.getDate());
-            checkDiaryDuplication(user, request.getDate());
+            checkDuplicateDiaryExcludingSelf(user, request.getDate(), diaryId);
         }
         diary.updateDate(request.getDate());
         diary.updateContent(request.getContent());
         return diary;
+    }
+
+    private void checkDuplicateDiaryExcludingSelf(User user, LocalDate date, Long diaryId) {
+        if (diaryRepository.existsByDateAndUserIdAndIdNot(date, user.getId(), diaryId)) {
+            throw DiaryDuplicateDateException.EXCEPTION;
+        }
     }
 
     @Override
