@@ -10,7 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
@@ -29,7 +29,7 @@ public class Diary extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime date;
+    private LocalDate date;
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -44,14 +44,14 @@ public class Diary extends BaseTimeEntity {
     private List<DiaryEmotion> diaryEmotions = new ArrayList<>();
 
     @Builder
-    public Diary(LocalDateTime date, String content, User user, Painting painting) {
+    public Diary(LocalDate date, String content, User user, Painting painting) {
         this.date = date;
         this.content = content;
         this.user = user;
         this.painting = painting;
     }
 
-    public void updateDate(LocalDateTime date) {
+    public void updateDate(LocalDate date) {
         if (date != null) {
             this.date = date;
         }

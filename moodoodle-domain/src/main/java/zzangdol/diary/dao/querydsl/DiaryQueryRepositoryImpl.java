@@ -10,7 +10,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import zzangdol.diary.domain.Diary;
-import zzangdol.diary.domain.QDiary;
 
 @Repository
 @RequiredArgsConstructor
