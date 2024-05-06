@@ -39,9 +39,9 @@ public class ReportController {
     @PostMapping
     public ResponseDto<Long> createReport(
             @AuthUser User user,
-            @RequestParam int year,
-            @RequestParam int month,
-            @RequestParam int week) {
+            @RequestParam("year") int year,
+            @RequestParam("month") int month,
+            @RequestParam("week") int week) {
         return ResponseDto.onSuccess(reportFacade.createReport(user, year, month, week));
     }
 
