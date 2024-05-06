@@ -17,7 +17,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +61,7 @@ class DiaryControllerTest {
         // given
         DiaryCreateRequest request = DiaryCreateRequest.builder()
                 .content("content")
-                .date(LocalDateTime.of(2024, 1, 1, 0, 0))
+                .date(LocalDate.of(2024, 1, 1))
                 .imageUrl("imageUrl")
                 .build();
 
@@ -129,7 +128,7 @@ class DiaryControllerTest {
         // given
         DiaryCreateRequest request = DiaryCreateRequest.builder()
                 .content("")
-                .date(LocalDateTime.of(2024, 1, 1, 0, 0))
+                .date(LocalDate.of(2024, 1, 1))
                 .imageUrl("imageUrl")
                 .build();
 
@@ -164,7 +163,7 @@ class DiaryControllerTest {
         // given
         DiaryUpdateRequest request = DiaryUpdateRequest.builder()
                 .content("content")
-                .date(LocalDateTime.of(2024, 1, 1, 0, 0))
+                .date(LocalDate.of(2024, 1, 1))
                 .build();
 
         User user = User.builder()
@@ -224,7 +223,7 @@ class DiaryControllerTest {
         // given
         DiaryResponse diaryResponse = DiaryResponse.builder()
                 .id(1L)
-                .date(LocalDateTime.of(2024, 1, 1, 0, 0))
+                .date(LocalDate.of(2024, 1, 1))
                 .content("content")
                 .imageUrl("imageUrl")
                 .color("#FFFFFF")
