@@ -2,7 +2,7 @@ package zzangdol.diary.dao.querydsl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,10 +52,10 @@ class DiaryQueryRepositoryTest {
     @Test
     void findDiariesByUserAndYearAndMonth() {
         // given
-        Diary diary1 = buildDiary(LocalDateTime.of(2024, 4, 1, 0, 0));
-        Diary diary2 = buildDiary(LocalDateTime.of(2024, 4, 30, 23, 59));
-        Diary diary3 = buildDiary(LocalDateTime.of(2024, 5, 1, 0, 0));
-        Diary diary4 = buildDiary(LocalDateTime.of(2024, 3, 31, 23, 59));
+        Diary diary1 = buildDiary(LocalDate.of(2024, 4, 1));
+        Diary diary2 = buildDiary(LocalDate.of(2024, 4, 30));
+        Diary diary3 = buildDiary(LocalDate.of(2024, 5, 1));
+        Diary diary4 = buildDiary(LocalDate.of(2024, 3, 31));
         diaryRepository.saveAll(List.of(diary1, diary2, diary3, diary4));
 
         Long userId = user.getId();
@@ -70,7 +70,32 @@ class DiaryQueryRepositoryTest {
         assertThat(result).hasSize(2);
     }
 
-    private Diary buildDiary(LocalDateTime date) {
+    @DisplayName("특정 사용자의 특정 연도, 월, 주에 대한 일기 목록을 조회한다.")
+    @Test
+    void findDiariesByUserAndYearAndMonthAndWeek() {
+        // given
+        Diary diary1 = buildDiary(LocalDate.of(2024, 4, 28));   // Week 5 of April
+        Diary diary2 = buildDiary(LocalDate.of(2024, 4, 29));   // Week 1 of May
+        Diary diary3 = buildDiary(LocalDate.of(2024, 5, 1));   // Week 1 of May
+        Diary diary4 = buildDiary(LocalDate.of(2024, 5, 4));   // Week 1 of May
+        Diary diary5 = buildDiary(LocalDate.of(2024, 5, 5));   // Week 1 of May
+        Diary diary6 = buildDiary(LocalDate.of(2024, 5, 6));   // Week 2 of May
+        diaryRepository.saveAll(List.of(diary1, diary2, diary3, diary4, diary5, diary6));
+
+        Long userId = user.getId();
+        int year = 2024;
+        int month = 5;
+        int week = 1;
+
+        // when
+        List<Diary> result = diaryQueryRepository.findDiariesByUserAndYearAndMonthAndWeek(userId, year, month, week);
+
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result).hasSize(4);
+    }
+
+    private Diary buildDiary(LocalDate date) {
         return Diary.builder()
                 .user(user)
                 .content("content")
