@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import zzangdol.emotion.domain.Emotion;
@@ -29,5 +30,12 @@ public class ReportEmotion {
     @ManyToOne
     @JoinColumn(name = "emotion_id")
     private Emotion emotion;
+
+    @Builder
+    public ReportEmotion(int percentage, Report report, Emotion emotion) {
+        this.percentage = percentage;
+        this.report = report;
+        this.emotion = emotion;
+    }
 
 }

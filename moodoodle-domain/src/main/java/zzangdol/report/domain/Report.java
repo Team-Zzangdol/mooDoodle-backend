@@ -11,6 +11,7 @@ import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import zzangdol.global.BaseTimeEntity;
@@ -35,5 +36,20 @@ public class Report extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "report", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReportEmotion> reportEmotions = new ArrayList<>();
+
+    private double positivePercentage;
+    private double negativePercentage;
+
+    @Builder
+    public Report(User user, double positivePercentage, double negativePercentage, Asset asset) {
+        this.user = user;
+        this.positivePercentage = positivePercentage;
+        this.negativePercentage = negativePercentage;
+        this.asset = asset;
+    }
+
+    public void addReportEmotion(ReportEmotion reportEmotion) {
+        this.reportEmotions.add(reportEmotion);
+    }
 
 }
