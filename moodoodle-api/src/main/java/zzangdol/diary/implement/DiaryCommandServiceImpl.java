@@ -2,7 +2,6 @@ package zzangdol.diary.implement;
 
 import groovy.util.logging.Slf4j;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,13 +37,13 @@ public class DiaryCommandServiceImpl implements DiaryCommandService {
         return diaryRepository.save(diary);
     }
 
-    private void validateDiaryDate(LocalDateTime date) {
-        if (date.toLocalDate().isAfter(LocalDate.now())) {
+    private void validateDiaryDate(LocalDate date) {
+        if (date.isAfter(LocalDate.now())) {
             throw DiaryDateOutOfBoundsException.EXCEPTION;
         }
     }
 
-    private void checkDiaryDuplication(User user, LocalDateTime date) {
+    private void checkDiaryDuplication(User user, LocalDate date) {
         if (diaryRepository.existsByDateAndUserId(date, user.getId())) {
             throw DiaryDuplicateDateException.EXCEPTION;
         }

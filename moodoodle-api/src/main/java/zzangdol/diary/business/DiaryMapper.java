@@ -28,7 +28,7 @@ public class DiaryMapper {
 
     public static DiarySummaryResponse toDiarySummaryResponse(Diary diary) {
         return DiarySummaryResponse.builder()
-                .date(diary.getDate().toLocalDate())
+                .date(diary.getDate())
                 .id(diary.getId())
                 .imageUrl(diary.getPainting().getImageUrl())
                 .build();
@@ -41,7 +41,7 @@ public class DiaryMapper {
 
         Map<LocalDate, Diary> diaryMap = diaries.stream()
                 .collect(Collectors.toMap(
-                        diary -> diary.getDate().toLocalDate(),
+                        diary -> diary.getDate(),
                         diary -> diary,
                         (existing, replacement) -> existing
                 ));
