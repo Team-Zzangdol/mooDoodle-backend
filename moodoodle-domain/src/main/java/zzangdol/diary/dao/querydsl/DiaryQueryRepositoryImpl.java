@@ -3,14 +3,17 @@ package zzangdol.diary.dao.querydsl;
 import static zzangdol.diary.domain.QDiary.diary;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import zzangdol.diary.domain.Diary;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class DiaryQueryRepositoryImpl implements DiaryQueryRepository {
@@ -29,21 +32,37 @@ public class DiaryQueryRepositoryImpl implements DiaryQueryRepository {
 
     @Override
     public List<Diary> findDiariesByUserAndYearAndMonthAndWeek(Long userId, int year, int month, int week) {
-        QDiary diary = QDiary.diary;
-
-        LocalDate firstDayOfMonth = LocalDate.of(year, month, 1);
-        LocalDate firstSunday = firstDayOfMonth.with(DayOfWeek.SUNDAY);
-        LocalDate weekStartDate = firstSunday.plusWeeks(week - 1);
-        LocalDate weekEndDate = weekStartDate.plusWeeks(1);
-
-        LocalDateTime startDateTime = weekStartDate.atStartOfDay();
-        LocalDateTime endDateTime = weekEndDate.atStartOfDay();
+        LocalDate weekStartDate = getStartDateOfWeek(year, month, week);
+        LocalDate weekEndDate = weekStartDate.plusDays(6);
 
         return queryFactory
                 .selectFrom(diary)
                 .where(diary.user.id.eq(userId)
-                        .and(diary.date.between(startDateTime, endDateTime)))
+                        .and(diary.date.between(weekStartDate, weekEndDate)))
                 .fetch();
+    }
+
+    public static LocalDate getStartDateOfWeek(int year, int month, int weekOfMonth) {
+        Calendar calendar = Calendar.getInstance(Locale.KOREA);
+        calendar.clear();
+
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month - 1);
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
+        calendar.setMinimalDaysInFirstWeek(4);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+
+        while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.THURSDAY) {
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+            calendar.add(Calendar.DAY_OF_MONTH, -1);
+        }
+
+        calendar.add(Calendar.WEEK_OF_MONTH, weekOfMonth - 1);
+
+        return LocalDate.ofInstant(calendar.toInstant(), ZoneId.systemDefault());
     }
 
 }

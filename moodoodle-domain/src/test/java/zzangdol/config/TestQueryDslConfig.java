@@ -7,6 +7,8 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import zzangdol.diary.dao.querydsl.DiaryQueryRepository;
 import zzangdol.diary.dao.querydsl.DiaryQueryRepositoryImpl;
+import zzangdol.report.dao.querydsl.AssetQueryRepository;
+import zzangdol.report.dao.querydsl.AssetQueryRepositoryImpl;
 
 @TestConfiguration
 public class TestQueryDslConfig {
@@ -22,6 +24,11 @@ public class TestQueryDslConfig {
     @Bean
     public DiaryQueryRepository diaryQueryRepository() {
         return new DiaryQueryRepositoryImpl(jpaQueryFactory());
+    }
+
+    @Bean
+    public AssetQueryRepository assetQueryRepository() {
+        return new AssetQueryRepositoryImpl(jpaQueryFactory());
     }
 
 }

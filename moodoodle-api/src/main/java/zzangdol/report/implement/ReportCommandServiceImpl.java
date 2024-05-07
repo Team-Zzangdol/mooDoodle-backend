@@ -47,9 +47,9 @@ public class ReportCommandServiceImpl implements ReportCommandService {
             diary.getDiaryEmotions().forEach(diaryEmotion -> {
                 Emotion emotion = diaryEmotion.getEmotion();
                 emotionCounts.merge(emotion, 1, Integer::sum);
-                if (emotion.getPolarity() == EmotionPolarity.POSITIVE) {
+                if (emotion.getPolarity().equals(EmotionPolarity.POSITIVE)) {
                     positiveCount.getAndIncrement();
-                } else if (emotion.getPolarity() == EmotionPolarity.NEGATIVE) {
+                } else {
                     negativeCount.getAndIncrement();
                 }
             });

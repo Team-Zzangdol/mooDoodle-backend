@@ -3,7 +3,7 @@ package zzangdol.diary.implement;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,7 +50,7 @@ class DiaryQueryServiceTest {
     @Test
     void getDiaryByUser() {
         // given
-        Diary diary = buildDiary(LocalDateTime.of(2024, 4, 1, 0, 0));
+        Diary diary = buildDiary(LocalDate.of(2024, 4, 1));
         diary = diaryRepository.save(diary);
 
         // when
@@ -60,17 +60,17 @@ class DiaryQueryServiceTest {
         assertThat(result).isNotNull();
         assertThat(result.getId()).isEqualTo(diary.getId());
         assertThat(result.getContent()).isEqualTo("content");
-        assertThat(result.getDate()).isEqualTo(LocalDateTime.of(2024, 4, 1, 0, 0));
+        assertThat(result.getDate()).isEqualTo(LocalDate.of(2024, 4, 1));
     }
 
     @DisplayName("특정 사용자의 특정 연도와 월에 대한 일기 목록을 조회한다.")
     @Test
     void getMonthlyDiariesByUser() {
         // given
-        Diary diary1 = buildDiary(LocalDateTime.of(2024, 4, 1, 0, 0));
-        Diary diary2 = buildDiary(LocalDateTime.of(2024, 4, 30, 23, 59));
-        Diary diary3 = buildDiary(LocalDateTime.of(2024, 5, 1, 0, 0));
-        Diary diary4 = buildDiary(LocalDateTime.of(2024, 3, 31, 23, 59));
+        Diary diary1 = buildDiary(LocalDate.of(2024, 4, 1));
+        Diary diary2 = buildDiary(LocalDate.of(2024, 4, 30));
+        Diary diary3 = buildDiary(LocalDate.of(2024, 5, 1));
+        Diary diary4 = buildDiary(LocalDate.of(2024, 3, 31));
         diaryRepository.saveAll(List.of(diary1, diary2, diary3, diary4));
 
         int year = 2024;
@@ -84,15 +84,15 @@ class DiaryQueryServiceTest {
         assertThat(result).hasSize(2);
         assertThat(result).extracting("date")
                 .containsExactlyInAnyOrder(
-                        LocalDateTime.of(2024, 4, 1, 0, 0),
-                        LocalDateTime.of(2024, 4, 30, 23, 59));
+                        LocalDate.of(2024, 4, 1),
+                        LocalDate.of(2024, 4, 30));
     }
 
     @DisplayName("다른 사용자의 일기를 조회하려 할 때 접근 거부 예외를 발생시킨다.")
     @Test
     void accessDeniedWhenUserIsNotOwner() {
         // given
-        Diary diary = buildDiary(LocalDateTime.of(2024, 4, 1, 0, 0));
+        Diary diary = buildDiary(LocalDate.of(2024, 4, 1));
         diaryRepository.save(diary);
         User otherUser = User.builder().build();
 
@@ -114,7 +114,7 @@ class DiaryQueryServiceTest {
         });
     }
 
-    private Diary buildDiary(LocalDateTime date) {
+    private Diary buildDiary(LocalDate date) {
         return Diary.builder()
                 .user(user)
                 .content("content")

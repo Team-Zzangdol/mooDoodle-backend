@@ -18,7 +18,7 @@ public class AssetQueryRepositoryImpl implements AssetQueryRepository{
 
     @Override
     public Optional<Asset> findRandomAsset() {
-        long count = queryFactory.selectFrom(asset).stream().count();
+        int count = queryFactory.selectFrom(asset).fetch().size();
 
         if (count > 0) {
             int index = (int) (Math.random() * count);

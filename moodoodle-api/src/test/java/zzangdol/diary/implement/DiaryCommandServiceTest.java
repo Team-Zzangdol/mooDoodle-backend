@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.junit.jupiter.api.AfterEach;
@@ -77,7 +77,7 @@ class DiaryCommandServiceTest {
     @Test
     void createDiary() {
         // given
-        DiaryCreateRequest request = buildValidDiaryCreateRequest(LocalDateTime.of(2024, 1, 1, 0, 0));
+        DiaryCreateRequest request = buildValidDiaryCreateRequest(LocalDate.of(2024, 1, 1));
 
         // when
         Diary createdDiary = diaryCommandService.createDiary(user, request, "#FFFFFF", emotions);
@@ -87,7 +87,7 @@ class DiaryCommandServiceTest {
         assertThat(createdDiary.getId()).isNotNull();
         assertThat(createdDiary.getContent()).isEqualTo("content");
         assertThat(createdDiary.getPainting().getColor()).isEqualTo("#FFFFFF");
-        assertThat(createdDiary.getDate()).isEqualTo(LocalDateTime.of(2024, 1, 1, 0, 0));
+        assertThat(createdDiary.getDate()).isEqualTo(LocalDate.of(2024, 1, 1));
 
         assertThat(createdDiary.getDiaryEmotions())
                 .hasSize(2)
@@ -99,7 +99,7 @@ class DiaryCommandServiceTest {
     @Test
     void shouldNotCreateDiaryWithFutureDate() {
         // given
-        LocalDateTime futureDate = LocalDateTime.now().plusDays(1);
+        LocalDate futureDate = LocalDate.now().plusDays(1);
         DiaryCreateRequest request = DiaryCreateRequest.builder()
                 .date(futureDate)
                 .content("content")
@@ -116,7 +116,7 @@ class DiaryCommandServiceTest {
     @Test
     void shouldNotCreateDiaryWithDuplicatedDate() {
         // given
-        DiaryCreateRequest request = buildValidDiaryCreateRequest(LocalDateTime.of(2024, 1, 1, 0, 0));
+        DiaryCreateRequest request = buildValidDiaryCreateRequest(LocalDate.of(2024, 1, 1));
         diaryCommandService.createDiary(user, request, "#FFFFFF", emotions);
 
         // when & then
@@ -129,12 +129,12 @@ class DiaryCommandServiceTest {
     @Test
     void updateDiary() {
         // given
-        DiaryCreateRequest createRequest = buildValidDiaryCreateRequest(LocalDateTime.of(2024, 1, 1, 0, 0));
+        DiaryCreateRequest createRequest = buildValidDiaryCreateRequest(LocalDate.of(2024, 1, 1));
         Diary createdDiary = diaryCommandService.createDiary(user, createRequest, "#FFFFFF", emotions);
 
         DiaryUpdateRequest updateRequest = buildValidDiaryUpdateRequest(
                 "updated content",
-                LocalDateTime.of(2023, 1, 1, 0, 0)
+                LocalDate.of(2024, 1, 1)
         );
 
         // when
@@ -145,7 +145,7 @@ class DiaryCommandServiceTest {
         assertThat(updatedDiary.getId()).isNotNull();
         assertThat(updatedDiary.getContent()).isEqualTo("updated content");
         assertThat(updatedDiary.getPainting().getColor()).isEqualTo("#FFFFFF");
-        assertThat(updatedDiary.getDate()).isEqualTo(LocalDateTime.of(2023, 1, 1, 0, 0));
+        assertThat(updatedDiary.getDate()).isEqualTo(LocalDate.of(2024, 1, 1));
 
         assertThat(createdDiary.getDiaryEmotions())
                 .hasSize(2)
@@ -157,7 +157,7 @@ class DiaryCommandServiceTest {
     @Test
     void updateDiaryContentOnly() {
         // given
-        DiaryCreateRequest createRequest = buildValidDiaryCreateRequest(LocalDateTime.of(2024, 1, 1, 0, 0));
+        DiaryCreateRequest createRequest = buildValidDiaryCreateRequest(LocalDate.of(2024, 1, 1));
         Diary createdDiary = diaryCommandService.createDiary(user, createRequest, "#FFFFFF", emotions);
 
         DiaryUpdateRequest updateRequest = buildValidDiaryUpdateRequest("updated content", null);
@@ -170,7 +170,7 @@ class DiaryCommandServiceTest {
         assertThat(updatedDiary.getId()).isNotNull();
         assertThat(updatedDiary.getContent()).isEqualTo("updated content");
         assertThat(updatedDiary.getPainting().getColor()).isEqualTo("#FFFFFF");
-        assertThat(updatedDiary.getDate()).isEqualTo(LocalDateTime.of(2024, 1, 1, 0, 0));
+        assertThat(updatedDiary.getDate()).isEqualTo(LocalDate.of(2024, 1, 1));
 
         assertThat(createdDiary.getDiaryEmotions())
                 .hasSize(2)
@@ -182,10 +182,10 @@ class DiaryCommandServiceTest {
     @Test
     void updateDiaryDateOnly() {
         // given
-        DiaryCreateRequest createRequest = buildValidDiaryCreateRequest(LocalDateTime.of(2024, 1, 1, 0, 0));
+        DiaryCreateRequest createRequest = buildValidDiaryCreateRequest(LocalDate.of(2024, 1, 1));
         Diary createdDiary = diaryCommandService.createDiary(user, createRequest, "#FFFFFF", emotions);
 
-        DiaryUpdateRequest updateRequest = buildValidDiaryUpdateRequest(null, LocalDateTime.of(2023, 1, 1, 0, 0));
+        DiaryUpdateRequest updateRequest = buildValidDiaryUpdateRequest(null, LocalDate.of(2024, 1, 1));
 
         // when
         Diary updatedDiary = diaryCommandService.updateDiary(user, createdDiary.getId(), updateRequest);
@@ -195,7 +195,7 @@ class DiaryCommandServiceTest {
         assertThat(updatedDiary.getId()).isNotNull();
         assertThat(updatedDiary.getContent()).isEqualTo("content");
         assertThat(updatedDiary.getPainting().getColor()).isEqualTo("#FFFFFF");
-        assertThat(updatedDiary.getDate()).isEqualTo(LocalDateTime.of(2023, 1, 1, 0, 0));
+        assertThat(updatedDiary.getDate()).isEqualTo(LocalDate.of(2024, 1, 1));
 
         assertThat(createdDiary.getDiaryEmotions())
                 .hasSize(2)
@@ -208,7 +208,7 @@ class DiaryCommandServiceTest {
     void throwExceptionWhenUPDATENonExistentDiary() {
         // given
         Long nonExistentDiaryId = 999L;  // 존재하지 않는 ID
-        DiaryUpdateRequest request = buildValidDiaryUpdateRequest(null, LocalDateTime.of(2023, 1, 1, 0, 0));
+        DiaryUpdateRequest request = buildValidDiaryUpdateRequest(null, LocalDate.of(2024, 1, 1));
 
         // when & then
         assertThrows(DiaryNotFoundException.class, () -> {
@@ -220,10 +220,10 @@ class DiaryCommandServiceTest {
     @Test
     void shouldNotUpdateDiaryWithFutureDate() {
         // given
-        DiaryCreateRequest createRequest = buildValidDiaryCreateRequest(LocalDateTime.of(2024, 1, 1, 0, 0));
+        DiaryCreateRequest createRequest = buildValidDiaryCreateRequest(LocalDate.of(2024, 1, 1));
         Diary createdDiary = diaryCommandService.createDiary(user, createRequest, "#FFFFFF", emotions);
 
-        DiaryUpdateRequest updateRequest = buildValidDiaryUpdateRequest(null, LocalDateTime.now().plusDays(1));
+        DiaryUpdateRequest updateRequest = buildValidDiaryUpdateRequest(null, LocalDate.now().plusDays(1));
 
         // when & then
         assertThatThrownBy(() -> diaryCommandService.updateDiary(user, createdDiary.getId(), updateRequest))
@@ -235,13 +235,13 @@ class DiaryCommandServiceTest {
     @Test
     void shouldNotUpdateDiaryWithDuplicatedDate() {
         // given
-        DiaryCreateRequest createRequest1 = buildValidDiaryCreateRequest(LocalDateTime.of(2024, 1, 1, 0, 0));
+        DiaryCreateRequest createRequest1 = buildValidDiaryCreateRequest(LocalDate.of(2024, 1, 1));
         diaryCommandService.createDiary(user, createRequest1, "#FFFFFF", emotions);
 
-        DiaryCreateRequest createRequest2 = buildValidDiaryCreateRequest(LocalDateTime.of(2023, 1, 1, 0, 0));
+        DiaryCreateRequest createRequest2 = buildValidDiaryCreateRequest(LocalDate.of(2023, 1, 1));
         Diary createdDiary = diaryCommandService.createDiary(user, createRequest2, "#FFFFFF", emotions);
 
-        DiaryUpdateRequest updateRequest = buildValidDiaryUpdateRequest(null, LocalDateTime.of(2024, 1, 1, 0, 0));
+        DiaryUpdateRequest updateRequest = buildValidDiaryUpdateRequest(null, LocalDate.of(2024, 1, 1));
 
         // when & then
         assertThatThrownBy(() -> diaryCommandService.updateDiary(user, createdDiary.getId(), updateRequest))
@@ -256,10 +256,10 @@ class DiaryCommandServiceTest {
         User otherUser = User.builder().build();
         userRepository.save(otherUser);
 
-        DiaryCreateRequest createRequest = buildValidDiaryCreateRequest(LocalDateTime.of(2024, 1, 1, 0, 0));
+        DiaryCreateRequest createRequest = buildValidDiaryCreateRequest(LocalDate.of(2024, 1, 1));
         Diary diary = diaryCommandService.createDiary(user, createRequest, "#FFFFFF", emotions);
 
-        DiaryUpdateRequest updateRequest = buildValidDiaryUpdateRequest("updated content", LocalDateTime.now());
+        DiaryUpdateRequest updateRequest = buildValidDiaryUpdateRequest("updated content", LocalDate.now());
 
         // when & then
         assertThrows(DiaryAccessDeniedException.class, () -> {
@@ -272,7 +272,7 @@ class DiaryCommandServiceTest {
     @DisplayName("일기를 성공적으로 삭제한다.")
     void deleteDiarySuccessfully() {
         // given
-        DiaryCreateRequest createRequest = buildValidDiaryCreateRequest(LocalDateTime.of(2024, 1, 1, 0, 0));
+        DiaryCreateRequest createRequest = buildValidDiaryCreateRequest(LocalDate.of(2024, 1, 1));
         Diary createdDiary = diaryCommandService.createDiary(user, createRequest, "#FFFFFF", emotions);
 
         // when
@@ -303,7 +303,7 @@ class DiaryCommandServiceTest {
         User otherUser = User.builder().build();
         userRepository.save(otherUser);
 
-        DiaryCreateRequest createRequest = buildValidDiaryCreateRequest(LocalDateTime.of(2024, 1, 1, 0, 0));
+        DiaryCreateRequest createRequest = buildValidDiaryCreateRequest(LocalDate.of(2024, 1, 1));
         Diary diary = diaryCommandService.createDiary(user, createRequest, "#FFFFFF", emotions);
 
         // when & then
@@ -312,7 +312,7 @@ class DiaryCommandServiceTest {
         });
     }
 
-    private DiaryCreateRequest buildValidDiaryCreateRequest(LocalDateTime date) {
+    private DiaryCreateRequest buildValidDiaryCreateRequest(LocalDate date) {
         return DiaryCreateRequest.builder()
                 .content("content")
                 .date(date)
@@ -320,7 +320,7 @@ class DiaryCommandServiceTest {
                 .build();
     }
 
-    private DiaryUpdateRequest buildValidDiaryUpdateRequest(String content, LocalDateTime date) {
+    private DiaryUpdateRequest buildValidDiaryUpdateRequest(String content, LocalDate date) {
         return DiaryUpdateRequest.builder()
                 .content(content)
                 .date(date)
