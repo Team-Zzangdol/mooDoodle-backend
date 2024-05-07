@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 import zzangdol.diary.business.DiaryFacade;
 import zzangdol.diary.presentation.dto.request.DiaryCreateRequest;
 import zzangdol.diary.presentation.dto.request.DiaryUpdateRequest;
-import zzangdol.diary.presentation.dto.response.DiaryResponse;
+import zzangdol.diary.presentation.dto.request.ImageCreateRequest;
 import zzangdol.diary.presentation.dto.response.DiaryListResponse;
+import zzangdol.diary.presentation.dto.response.DiaryResponse;
+import zzangdol.diary.presentation.dto.response.ImageListResponse;
 import zzangdol.global.annotation.ApiErrorCodeExample;
 import zzangdol.global.annotation.AuthUser;
 import zzangdol.response.ResponseDto;
@@ -39,12 +41,24 @@ public class DiaryController {
     })
     @Operation(
             summary = "일기 생성 🔑",
-            description = "새로운 일기를 생성합니다."
+            description = "새로운 일기를 생성합니다. (모델 연동 X)"
     )
     @PostMapping
     public ResponseDto<Long> createDiary(@AuthUser User user, @Valid @RequestBody DiaryCreateRequest request) {
         Long diary = diaryFacade.createDiary(user, request);
         return ResponseDto.onSuccess(diary);
+    }
+
+    @ApiErrorCodeExample({
+            ErrorStatus.INTERNAL_SERVER_ERROR
+    })
+    @Operation(
+            summary = "일기 이미지 생성 🔑",
+            description = "일기 내용을 사용하여 이미지를 생성합니다. (모델 연동 X)"
+    )
+    @PostMapping("/images")
+    public ResponseDto<ImageListResponse> createDiaryImage(@AuthUser User user, @Valid @RequestBody ImageCreateRequest request) {
+        return ResponseDto.onSuccess(diaryFacade.createDiaryImage(user, request));
     }
 
     @ApiErrorCodeExample({
