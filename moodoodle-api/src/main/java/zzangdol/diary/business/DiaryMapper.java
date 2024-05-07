@@ -12,6 +12,7 @@ import zzangdol.diary.domain.Diary;
 import zzangdol.diary.presentation.dto.response.DiaryListResponse;
 import zzangdol.diary.presentation.dto.response.DiaryResponse;
 import zzangdol.diary.presentation.dto.response.DiarySummaryResponse;
+import zzangdol.diary.presentation.dto.response.ImageListResponse;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DiaryMapper {
@@ -54,6 +55,12 @@ public class DiaryMapper {
 
         return DiaryListResponse.builder()
                 .diaries(diarySummaryResponses)
+                .build();
+    }
+
+    public static ImageListResponse toImageResponse(List<String> imageUrls) {
+        return ImageListResponse.builder()
+                .imageUrls(imageUrls)
                 .build();
     }
 
