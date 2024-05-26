@@ -23,12 +23,15 @@ public class Emotion extends BaseTimeEntity {
 
     private String name;
 
+    private String imageUrl;
+
     @Enumerated(EnumType.STRING)
     private EmotionPolarity polarity;
 
     @Builder
-    public Emotion(String name, EmotionPolarity polarity) {
+    public Emotion(String name, String imageUrl, EmotionPolarity polarity) {
         this.name = name;
+        this.imageUrl = imageUrl;
         this.polarity = polarity;
     }
 

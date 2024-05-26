@@ -13,17 +13,24 @@ import zzangdol.diary.presentation.dto.response.DiaryListResponse;
 import zzangdol.diary.presentation.dto.response.DiaryResponse;
 import zzangdol.diary.presentation.dto.response.DiarySummaryResponse;
 import zzangdol.diary.presentation.dto.response.ImageListResponse;
+import zzangdol.emotion.business.EmotionMapper;
+import zzangdol.emotion.presentation.dto.response.EmotionResponse;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DiaryMapper {
 
     public static DiaryResponse toDiaryResponse(Diary diary) {
+        List<EmotionResponse> emotions = diary.getDiaryEmotions().stream()
+                .map(diaryEmotion -> EmotionMapper.toEmotionResponse(diaryEmotion.getEmotion()))
+                .collect(Collectors.toList());
+
         return DiaryResponse.builder()
                 .id(diary.getId())
                 .date(diary.getDate())
                 .content(diary.getContent())
                 .imageUrl(diary.getPainting().getImageUrl())
                 .color(diary.getPainting().getColor())
+                .emotions(emotions)
                 .build();
     }
 
