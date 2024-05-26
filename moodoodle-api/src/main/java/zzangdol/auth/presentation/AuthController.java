@@ -83,7 +83,7 @@ public class AuthController {
     })
     @Operation(summary = "이메일 사용 가능 여부 확인", description = "제공된 이메일이 등록에 사용 가능한지 확인합니다.")
     @GetMapping("/check-email")
-    public ResponseDto<Boolean> checkEmailAvailability(@RequestParam String email) {
+    public ResponseDto<Boolean> checkEmailAvailability(@RequestParam("email") String email) {
         return ResponseDto.onSuccess(authFacade.isEmailAvailable(email));
     }
 

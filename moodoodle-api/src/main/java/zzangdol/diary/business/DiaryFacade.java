@@ -13,6 +13,7 @@ import zzangdol.diary.presentation.dto.request.ImageCreateRequest;
 import zzangdol.diary.presentation.dto.response.DiaryListResponse;
 import zzangdol.diary.presentation.dto.response.DiaryResponse;
 import zzangdol.diary.presentation.dto.response.ImageListResponse;
+import zzangdol.emotion.dao.querydsl.EmotionQueryRepository;
 import zzangdol.emotion.domain.Emotion;
 import zzangdol.user.domain.User;
 
@@ -22,13 +23,14 @@ public class DiaryFacade {
 
     private final DiaryCommandService diaryCommandService;
     private final DiaryQueryService diaryQueryService;
+    private final EmotionQueryRepository emotionQueryRepository;    // TODO 구현 후 제거
 //    private final TextEmotionAnalysisModelClient textEmotionAnalysisModelClient;
 //    private final Text2ImageModelClient text2ImageModelClient;
     private final ImageColorAnalyzer imageColorAnalyzer;
 
     public Long createDiary(User user, DiaryCreateRequest request) {
         // TODO List<Emotion> emotions = textEmotionAnalysisModelClient.analyzeEmotion(request.getContent());
-        List<Emotion> emotions = new ArrayList<>();
+        List<Emotion> emotions = emotionQueryRepository.findRandomEmotions(3);
          String color = imageColorAnalyzer.analyzeAverageColorAsHex(request.getImageUrl());
         return diaryCommandService.createDiary(user, request, color, emotions).getId();
     }
@@ -36,6 +38,10 @@ public class DiaryFacade {
     public ImageListResponse createDiaryImage(User user, ImageCreateRequest request) {
 //        List<String> imageUrls = text2ImageModelClient.generateImage(request.getContent());
         List<String> imageUrls = new ArrayList<>();
+        imageUrls.add("https://moodoodle-diary-image.s3.ap-northeast-2.amazonaws.com/diary_image_1.png");
+        imageUrls.add("https://moodoodle-diary-image.s3.ap-northeast-2.amazonaws.com/diary_image_2.png");
+        imageUrls.add("https://moodoodle-diary-image.s3.ap-northeast-2.amazonaws.com/diary_image_3.png");
+        imageUrls.add("https://moodoodle-diary-image.s3.ap-northeast-2.amazonaws.com/diary_image_4.png");
         return DiaryMapper.toImageResponse(imageUrls);
     }
 
