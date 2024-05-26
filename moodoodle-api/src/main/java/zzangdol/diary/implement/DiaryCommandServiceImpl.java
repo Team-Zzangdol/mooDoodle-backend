@@ -33,7 +33,9 @@ public class DiaryCommandServiceImpl implements DiaryCommandService {
         validateDiaryDate(request.getDate());
         checkDiaryDuplication(user, request.getDate());
         Painting painting = buildPainting(request, color);
-        Diary diary = buildDiary(user, request, emotions, painting);
+        Diary diary = buildDiary(user, request, painting);
+        diary = diaryRepository.save(diary);
+        addEmotionsToDiary(diary, emotions);
         return diaryRepository.save(diary);
     }
 
@@ -49,23 +51,24 @@ public class DiaryCommandServiceImpl implements DiaryCommandService {
         }
     }
 
-    private Diary buildDiary(User user, DiaryCreateRequest request, List<Emotion> emotions, Painting painting) {
+    private Diary buildDiary(User user, DiaryCreateRequest request, Painting painting) {
         Diary diary = Diary.builder()
                 .date(request.getDate())
                 .content(request.getContent())
                 .user(user)
                 .painting(painting)
                 .build();
-        emotions.forEach(emotion -> addEmotionToDiary(diary, emotion));
         return diary;
     }
 
-    private void addEmotionToDiary(Diary diary, Emotion emotion) {
-        DiaryEmotion diaryEmotion = DiaryEmotion.builder()
-                .diary(diary)
-                .emotion(emotion)
-                .build();
-        diaryEmotion.addDiaryEmotion(diary);
+    private void addEmotionsToDiary(Diary diary, List<Emotion> emotions) {
+        emotions.forEach(emotion -> {
+            DiaryEmotion diaryEmotion = DiaryEmotion.builder()
+                    .diary(diary)
+                    .emotion(emotion)
+                    .build();
+            diaryEmotion.addDiaryEmotion(diary);
+        });
     }
 
     private Painting buildPainting(DiaryCreateRequest request, String color) {
