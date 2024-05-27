@@ -11,6 +11,7 @@ import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import zzangdol.diary.domain.Diary;
@@ -37,4 +38,9 @@ public class Scrap extends BaseTimeEntity {
     @OneToMany(mappedBy = "scrap", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ScrapCategory> scrapCategories = new ArrayList<>();
 
+    @Builder
+    public Scrap(User user, Diary diary) {
+        this.user = user;
+        this.diary = diary;
+    }
 }

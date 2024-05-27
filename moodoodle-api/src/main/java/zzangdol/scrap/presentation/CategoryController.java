@@ -37,7 +37,7 @@ public class CategoryController {
             description = "새로운 카테고리를 생성합니다. name의 최대 길이는 15입니다."
     )
     @PostMapping
-    public ResponseDto<Long> createDiary(@AuthUser User user, @Valid @RequestBody CategoryCreateRequest request) {
+    public ResponseDto<Long> createCategory(@AuthUser User user, @Valid @RequestBody CategoryCreateRequest request) {
         Long diary = categoryFacade.createCategory(user, request);
         return ResponseDto.onSuccess(diary);
     }
@@ -50,7 +50,7 @@ public class CategoryController {
             description = "사용자의 카테고리 목록을 반환합니다. 카테고리가 존재하지 않으면 빈 리스트를 반환합니다."
     )
     @GetMapping
-    public ResponseDto<CategoryListResponse> getMonthlyDiaries(@AuthUser User user) {
+    public ResponseDto<CategoryListResponse> getCategoriesByUser(@AuthUser User user) {
         return ResponseDto.onSuccess(categoryFacade.getCategoriesByUser(user));
     }
 
