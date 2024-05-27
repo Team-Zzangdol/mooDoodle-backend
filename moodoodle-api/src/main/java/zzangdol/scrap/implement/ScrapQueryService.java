@@ -7,4 +7,6 @@ public interface ScrapQueryService {
 
     Scrap getScrapByUserAndDiary(User user, Long diaryId);
 
+    boolean isDiaryScrappedByUser(User user, Long diaryId);
+
 }

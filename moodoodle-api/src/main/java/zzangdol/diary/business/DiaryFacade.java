@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import zzangdol.diary.domain.Diary;
 import zzangdol.diary.implement.DiaryCommandService;
 import zzangdol.diary.implement.DiaryQueryService;
 import zzangdol.diary.implement.ImageColorAnalyzer;
@@ -15,6 +16,7 @@ import zzangdol.diary.presentation.dto.response.DiaryResponse;
 import zzangdol.diary.presentation.dto.response.ImageListResponse;
 import zzangdol.emotion.dao.querydsl.EmotionQueryRepository;
 import zzangdol.emotion.domain.Emotion;
+import zzangdol.scrap.implement.ScrapQueryService;
 import zzangdol.user.domain.User;
 
 @RequiredArgsConstructor
@@ -23,6 +25,7 @@ public class DiaryFacade {
 
     private final DiaryCommandService diaryCommandService;
     private final DiaryQueryService diaryQueryService;
+    private final ScrapQueryService scrapQueryService;
     private final EmotionQueryRepository emotionQueryRepository;    // TODO 구현 후 제거
 //    private final TextEmotionAnalysisModelClient textEmotionAnalysisModelClient;
 //    private final Text2ImageModelClient text2ImageModelClient;
@@ -54,7 +57,9 @@ public class DiaryFacade {
     }
 
     public DiaryResponse getDiaryByUser(User user, Long diaryId) {
-        return DiaryMapper.toDiaryResponse(diaryQueryService.getDiaryByUser(user, diaryId));
+        Diary diary = diaryQueryService.getDiaryByUser(user, diaryId);
+        boolean isScrapped = scrapQueryService.isDiaryScrappedByUser(user, diaryId);
+        return DiaryMapper.toDiaryResponse(diary, isScrapped);
     }
 
     public DiaryListResponse getMonthlyDiariesByUser(User user, int year, int month) {

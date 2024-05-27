@@ -15,6 +15,6 @@ public class ScrapCategoryResponse {
     private String name;
     private String imageUrl;
     private int scrapCount;
-    private boolean isScraped;
+    private Boolean isScrapped;
 
 }

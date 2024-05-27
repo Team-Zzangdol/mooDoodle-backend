@@ -22,13 +22,13 @@ public class CategoryMapper {
                 .build();
     }
 
-    public static ScrapCategoryResponse toScrapCategoryResponse(Category category, boolean isScraped, String latestImageUrl) {
+    public static ScrapCategoryResponse toScrapCategoryResponse(Category category, boolean isScrapped, String latestImageUrl) {
         return ScrapCategoryResponse.builder()
                 .categoryId(category.getId())
                 .name(category.getName())
                 .imageUrl(latestImageUrl != null ? latestImageUrl : Constants.DEFAULT_IMAGE_URL)
                 .scrapCount(category.getScrapCategories().size())
-                .isScraped(isScraped)
+                .isScrapped(isScrapped)
                 .build();
     }
 

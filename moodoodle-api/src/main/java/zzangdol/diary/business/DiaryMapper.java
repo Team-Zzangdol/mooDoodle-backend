@@ -21,7 +21,7 @@ import zzangdol.emotion.presentation.dto.response.EmotionResponse;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DiaryMapper {
 
-    public static DiaryResponse toDiaryResponse(Diary diary) {
+    public static DiaryResponse toDiaryResponse(Diary diary, boolean isScrapped) {
         List<EmotionResponse> emotions = diary.getDiaryEmotions().stream()
                 .map(diaryEmotion -> EmotionMapper.toEmotionResponse(diaryEmotion.getEmotion()))
                 .collect(Collectors.toList());
@@ -32,6 +32,8 @@ public class DiaryMapper {
                 .content(diary.getContent())
                 .imageUrl(diary.getPainting().getImageUrl())
                 .color(diary.getPainting().getColor())
+                .dayOfWeek(diary.getDate().getDayOfWeek())
+                .isScrapped(isScrapped)
                 .emotions(emotions)
                 .build();
     }

@@ -44,9 +44,9 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
         List<Category> categories = getCategoriesByUser(user);
         return categories.stream()
                 .map(category -> {
-                    boolean isScraped = scrapRepository.existsByCategoryAndUserAndDiary(category, user, diaryId);
+                    boolean isScrapped = scrapRepository.existsByCategoryAndUserAndDiary(category, user, diaryId);
                     String latestImageUrl = categoryRepository.findLatestDiaryImageUrlByCategoryId(category.getId());
-                    return CategoryMapper.toScrapCategoryResponse(category, isScraped, latestImageUrl);
+                    return CategoryMapper.toScrapCategoryResponse(category, isScrapped, latestImageUrl);
                 })
                 .collect(Collectors.toList());
     }
