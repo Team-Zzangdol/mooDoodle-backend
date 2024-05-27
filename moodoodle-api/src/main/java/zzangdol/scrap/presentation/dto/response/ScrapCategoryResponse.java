@@ -9,11 +9,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryResponse {
+public class ScrapCategoryResponse {
 
     private Long id;
     private String name;
     private String imageUrl;
     private int scrapCount;
+    private boolean isScraped;
 
 }

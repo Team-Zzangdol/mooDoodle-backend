@@ -11,7 +11,7 @@ import zzangdol.report.domain.Asset;
 
 @Repository
 @RequiredArgsConstructor
-public class AssetQueryRepositoryImpl implements AssetQueryRepository{
+public class AssetQueryRepositoryImpl implements AssetQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 

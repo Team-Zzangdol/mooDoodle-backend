@@ -1,5 +1,6 @@
 package zzangdol.scrap.presentation.dto.response;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,11 +10,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryResponse {
+public class ScrapCategoryListResponse {
 
-    private Long id;
-    private String name;
-    private String imageUrl;
-    private int scrapCount;
+    private List<ScrapCategoryResponse> categories;
 
 }

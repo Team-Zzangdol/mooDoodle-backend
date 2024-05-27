@@ -1,11 +1,15 @@
 package zzangdol.scrap.business;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import zzangdol.scrap.implement.CategoryCommandService;
 import zzangdol.scrap.implement.CategoryQueryService;
 import zzangdol.scrap.presentation.dto.request.CategoryCreateRequest;
 import zzangdol.scrap.presentation.dto.response.CategoryListResponse;
+import zzangdol.scrap.presentation.dto.response.CategoryResponse;
+import zzangdol.scrap.presentation.dto.response.ScrapCategoryListResponse;
+import zzangdol.scrap.presentation.dto.response.ScrapCategoryResponse;
 import zzangdol.user.domain.User;
 
 @RequiredArgsConstructor
@@ -20,7 +24,13 @@ public class CategoryFacade {
     }
 
     public CategoryListResponse getCategoriesByUser(User user) {
-        return CategoryMapper.toCategoryListResponse(categoryQueryService.getCategoriesByUser(user));
+        List<CategoryResponse> categoryResponses = categoryQueryService.getCategoryResponsesByUser(user);
+        return CategoryMapper.toCategoryListResponse(categoryResponses);
+    }
+
+    public ScrapCategoryListResponse getScrapCategoriesByUser(User user, Long diaryId) {
+        List<ScrapCategoryResponse> categoryResponses = categoryQueryService.getScrapCategoryResponsesByUser(user, diaryId);
+        return CategoryMapper.toScrapCategoryListResponse(categoryResponses);
     }
 
 }

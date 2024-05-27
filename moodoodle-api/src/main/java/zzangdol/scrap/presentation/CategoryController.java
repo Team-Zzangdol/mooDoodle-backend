@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import zzangdol.global.annotation.ApiErrorCodeExample;
 import zzangdol.global.annotation.AuthUser;
@@ -17,6 +18,7 @@ import zzangdol.response.status.ErrorStatus;
 import zzangdol.scrap.business.CategoryFacade;
 import zzangdol.scrap.presentation.dto.request.CategoryCreateRequest;
 import zzangdol.scrap.presentation.dto.response.CategoryListResponse;
+import zzangdol.scrap.presentation.dto.response.ScrapCategoryListResponse;
 import zzangdol.user.domain.User;
 
 @RequiredArgsConstructor
@@ -46,12 +48,24 @@ public class CategoryController {
             ErrorStatus.INTERNAL_SERVER_ERROR
     })
     @Operation(
-            summary = "카테고리 목록 조회 🔑",
+            summary = "[스크랩 탭] 카테고리 목록 조회 🔑",
             description = "사용자의 카테고리 목록을 반환합니다. 카테고리가 존재하지 않으면 빈 리스트를 반환합니다."
     )
     @GetMapping
     public ResponseDto<CategoryListResponse> getCategoriesByUser(@AuthUser User user) {
         return ResponseDto.onSuccess(categoryFacade.getCategoriesByUser(user));
+    }
+
+    @ApiErrorCodeExample({
+            ErrorStatus.INTERNAL_SERVER_ERROR
+    })
+    @Operation(
+            summary = "[바텀시트] 스크랩 카테고리 목록 조회 🔑",
+            description = "사용자의 카테고리 목록을 반환합니다. 카테고리가 존재하지 않으면 빈 리스트를 반환합니다."
+    )
+    @GetMapping("/scraps")
+    public ResponseDto<ScrapCategoryListResponse> getScrapCategoriesByUser(@AuthUser User user, @RequestParam Long diaryId) {
+        return ResponseDto.onSuccess(categoryFacade.getScrapCategoriesByUser(user, diaryId));
     }
 
 }
