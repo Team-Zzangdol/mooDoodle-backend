@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CategoryResponse {
 
-    private Long id;
+    private Long categoryId;
     private String name;
     private String imageUrl;
     private int scrapCount;

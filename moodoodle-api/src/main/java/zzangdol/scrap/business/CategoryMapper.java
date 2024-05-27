@@ -15,7 +15,7 @@ public class CategoryMapper {
 
     public static CategoryResponse toCategoryResponse(Category category, String latestImageUrl) {
         return CategoryResponse.builder()
-                .id(category.getId())
+                .categoryId(category.getId())
                 .name(category.getName())
                 .imageUrl(latestImageUrl != null ? latestImageUrl : Constants.DEFAULT_IMAGE_URL)
                 .scrapCount(category.getScrapCategories().size())
@@ -24,7 +24,7 @@ public class CategoryMapper {
 
     public static ScrapCategoryResponse toScrapCategoryResponse(Category category, boolean isScraped, String latestImageUrl) {
         return ScrapCategoryResponse.builder()
-                .id(category.getId())
+                .categoryId(category.getId())
                 .name(category.getName())
                 .imageUrl(latestImageUrl != null ? latestImageUrl : Constants.DEFAULT_IMAGE_URL)
                 .scrapCount(category.getScrapCategories().size())

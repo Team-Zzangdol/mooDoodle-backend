@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,9 +66,22 @@ public class ScrapController {
     @PostMapping("/{scrapId}/categories")
     public ResponseDto<Void> addCategoryToScrap(@AuthUser User user,
                                                 @PathVariable("scrapId") Long scrapId,
-                                                @RequestParam Long categoryId) {
+                                                @RequestParam("categoryId") Long categoryId) {
         scrapFacade.addCategoryToScrap(user, scrapId, categoryId);
         return ResponseDto.onSuccess();
+    }
+
+    @ApiErrorCodeExample({
+            ErrorStatus.INTERNAL_SERVER_ERROR,
+            ErrorStatus.SCRAP_NOT_FOUND
+    })
+    @Operation(
+            summary = "특정 다이어리의 스크랩 ID 반환 🔑",
+            description = "특정 사용자가 특정 다이어리를 스크랩한 경우 스크랩 ID를 반환합니다."
+    )
+    @GetMapping("/{diaryId}")
+    public ResponseDto<Long> getScrapId(@AuthUser User user, @PathVariable("diaryId") Long diaryId) {
+        return ResponseDto.onSuccess(scrapFacade.getScrapByUserAndDiary(user, diaryId));
     }
 
 }

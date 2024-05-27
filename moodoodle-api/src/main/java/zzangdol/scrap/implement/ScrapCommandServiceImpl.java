@@ -8,6 +8,7 @@ import zzangdol.diary.dao.DiaryRepository;
 import zzangdol.diary.domain.Diary;
 import zzangdol.exception.custom.CategoryNotFoundException;
 import zzangdol.exception.custom.DiaryNotFoundException;
+import zzangdol.exception.custom.ScrapDuplicateException;
 import zzangdol.exception.custom.ScrapNotFoundException;
 import zzangdol.scrap.dao.CategoryRepository;
 import zzangdol.scrap.dao.ScrapRepository;
@@ -28,10 +29,17 @@ public class ScrapCommandServiceImpl implements ScrapCommandService {
 
     @Override
     public Scrap createScrap(User user, Long diaryId) {
+        checkScrapDuplication(user, diaryId);
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> DiaryNotFoundException.EXCEPTION);
         Scrap scrap = buildScrap(user, diary);
         return scrapRepository.save(scrap);
+    }
+
+    private void checkScrapDuplication(User user, Long diaryId) {
+        if (scrapRepository.findScrapByUserAndDiaryId(user, diaryId).isPresent()) {
+            throw ScrapDuplicateException.EXCEPTION;
+        }
     }
 
     private Scrap buildScrap(User user, Diary diary) {
