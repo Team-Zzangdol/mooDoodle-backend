@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,5 +39,21 @@ public class ScrapController {
         return ResponseDto.onSuccess(scrapFacade.createScrap(user, diaryId));
     }
 
+    @ApiErrorCodeExample({
+            ErrorStatus.INTERNAL_SERVER_ERROR,
+            ErrorStatus.SCRAP_NOT_FOUND,
+            ErrorStatus.CATEGORY_NOT_FOUND
+    })
+    @Operation(
+            summary = "스크랩에 카테고리 추가 🔑",
+            description = "기존 스크랩에 카테고리를 추가합니다."
+    )
+    @PostMapping("/{scrapId}/categories")
+    public ResponseDto<Void> addCategoryToScrap(@AuthUser User user,
+                                                @PathVariable("scrapId") Long scrapId,
+                                                @RequestParam Long categoryId) {
+        scrapFacade.addCategoryToScrap(user, scrapId, categoryId);
+        return ResponseDto.onSuccess();
+    }
 
 }

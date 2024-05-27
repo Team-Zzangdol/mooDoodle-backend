@@ -16,6 +16,10 @@ public class ResponseDto<T> {
     private final String message;
     private T result;
 
+    public static <T> ResponseDto<T> onSuccess() {
+        return new ResponseDto<>(true, 2000, SuccessStatus.SUCCESS.getMessage(), null);
+    }
+
     public static <T> ResponseDto<T> onSuccess(T result) {
         return new ResponseDto<>(true, 2000, SuccessStatus.SUCCESS.getMessage(), result);
     }

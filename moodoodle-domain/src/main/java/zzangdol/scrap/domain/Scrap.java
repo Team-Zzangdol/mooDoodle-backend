@@ -43,4 +43,10 @@ public class Scrap extends BaseTimeEntity {
         this.user = user;
         this.diary = diary;
     }
+
+    public void addCategory(ScrapCategory scrapCategory) {
+        this.scrapCategories.add(scrapCategory);
+        scrapCategory.setScrap(this);
+    }
+
 }

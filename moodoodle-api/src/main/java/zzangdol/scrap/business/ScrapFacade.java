@@ -14,4 +14,8 @@ public class ScrapFacade {
     public Long createScrap(User user, Long diaryId) {
         return scrapCommandService.createScrap(user, diaryId).getId();
     }
+
+    public void addCategoryToScrap(User user, Long scrapId, Long categoryId) {
+        scrapCommandService.addCategoryToScrap(user, scrapId, categoryId);
+    }
 }

@@ -7,4 +7,6 @@ public interface ScrapCommandService {
 
     Scrap createScrap(User user, Long diaryId);
 
+    void addCategoryToScrap(User user, Long scrapId, Long categoryId);
+
 }

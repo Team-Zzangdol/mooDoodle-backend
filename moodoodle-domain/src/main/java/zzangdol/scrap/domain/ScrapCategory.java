@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import zzangdol.global.BaseTimeEntity;
@@ -27,5 +28,19 @@ public class ScrapCategory extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @Builder
+    public ScrapCategory(Scrap scrap, Category category) {
+        this.scrap = scrap;
+        this.category = category;
+    }
+
+    public void setScrap(Scrap scrap) {
+        this.scrap = scrap;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 
 }

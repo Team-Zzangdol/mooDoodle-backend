@@ -40,4 +40,9 @@ public class Category extends BaseTimeEntity {
         this.name = name;
         this.user = user;
     }
+
+    public void addScrapCategory(ScrapCategory scrapCategory) {
+        this.scrapCategories.add(scrapCategory);
+        scrapCategory.setCategory(this);
+    }
 }
