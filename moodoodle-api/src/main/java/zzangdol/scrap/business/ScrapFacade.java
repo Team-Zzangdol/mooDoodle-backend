@@ -18,4 +18,9 @@ public class ScrapFacade {
     public void addCategoryToScrap(User user, Long scrapId, Long categoryId) {
         scrapCommandService.addCategoryToScrap(user, scrapId, categoryId);
     }
+
+    public Boolean deleteScrap(User user, Long scrapId) {
+        scrapCommandService.deleteScrap(user, scrapId);
+        return true;
+    }
 }

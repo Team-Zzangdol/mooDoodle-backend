@@ -9,4 +9,6 @@ public interface ScrapCommandService {
 
     void addCategoryToScrap(User user, Long scrapId, Long categoryId);
 
+    void deleteScrap(User user, Long scrapId);
+
 }

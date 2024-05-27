@@ -52,6 +52,13 @@ public class ScrapCommandServiceImpl implements ScrapCommandService {
         category.addScrapCategory(scrapCategory);
     }
 
+    @Override
+    public void deleteScrap(User user, Long scrapId) {
+        Scrap scrap = scrapRepository.findById(scrapId)
+                .orElseThrow(() -> ScrapNotFoundException.EXCEPTION);
+        scrapRepository.delete(scrap);
+    }
+
     private ScrapCategory buildScrapCategory(Scrap scrap, Category category) {
         return ScrapCategory.builder()
                 .scrap(scrap)

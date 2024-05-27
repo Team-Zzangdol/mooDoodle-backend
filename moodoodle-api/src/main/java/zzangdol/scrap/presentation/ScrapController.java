@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +38,19 @@ public class ScrapController {
     @PostMapping
     public ResponseDto<Long> createScrap(@AuthUser User user, @Valid @RequestParam("diaryId") Long diaryId) {
         return ResponseDto.onSuccess(scrapFacade.createScrap(user, diaryId));
+    }
+
+    @ApiErrorCodeExample({
+            ErrorStatus.INTERNAL_SERVER_ERROR,
+            ErrorStatus.SCRAP_NOT_FOUND
+    })
+    @Operation(
+            summary = "스크랩 삭제 🔑",
+            description = "스크랩을 삭제합니다."
+    )
+    @DeleteMapping("/{scrapId}")
+    public ResponseDto<Boolean> deleteScrap(@AuthUser User user, @PathVariable("scrapId") Long scrapId) {
+        return ResponseDto.onSuccess(scrapFacade.deleteScrap(user, scrapId));
     }
 
     @ApiErrorCodeExample({
