@@ -11,6 +11,7 @@ import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import zzangdol.global.BaseTimeEntity;
@@ -31,7 +32,12 @@ public class Category extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "scrap", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ScrapCategory> scrapCategories = new ArrayList<>();
 
+    @Builder
+    public Category(String name, User user) {
+        this.name = name;
+        this.user = user;
+    }
 }

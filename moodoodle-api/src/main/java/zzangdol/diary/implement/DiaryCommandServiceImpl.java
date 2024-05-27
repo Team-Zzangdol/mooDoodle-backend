@@ -52,13 +52,12 @@ public class DiaryCommandServiceImpl implements DiaryCommandService {
     }
 
     private Diary buildDiary(User user, DiaryCreateRequest request, Painting painting) {
-        Diary diary = Diary.builder()
+        return Diary.builder()
                 .date(request.getDate())
                 .content(request.getContent())
                 .user(user)
                 .painting(painting)
                 .build();
-        return diary;
     }
 
     private void addEmotionsToDiary(Diary diary, List<Emotion> emotions) {
