@@ -9,6 +9,8 @@ import java.util.stream.IntStream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import zzangdol.diary.domain.Diary;
+import zzangdol.diary.presentation.dto.response.CategoryDiaryListResponse;
+import zzangdol.diary.presentation.dto.response.CategoryDiaryResponse;
 import zzangdol.diary.presentation.dto.response.DiaryListResponse;
 import zzangdol.diary.presentation.dto.response.DiaryResponse;
 import zzangdol.diary.presentation.dto.response.DiarySummaryResponse;
@@ -71,5 +73,20 @@ public class DiaryMapper {
                 .build();
     }
 
+    public static CategoryDiaryResponse toCategoryDiaryResponse(Diary diary) {
+        return CategoryDiaryResponse.builder()
+                .id(diary.getId())
+                .imageUrl(diary.getPainting().getImageUrl())
+                .build();
+    }
+
+    public static CategoryDiaryListResponse toCategoryDiaryListResponse(List<Diary> diaries) {
+        List<CategoryDiaryResponse> diaryResponses = diaries.stream()
+                .map(DiaryMapper::toCategoryDiaryResponse)
+                .collect(Collectors.toList());
+        return CategoryDiaryListResponse.builder()
+                .diaries(diaryResponses)
+                .build();
+    }
 
 }

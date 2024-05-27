@@ -6,11 +6,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import zzangdol.diary.presentation.dto.response.CategoryDiaryListResponse;
 import zzangdol.global.annotation.ApiErrorCodeExample;
 import zzangdol.global.annotation.AuthUser;
 import zzangdol.response.ResponseDto;
@@ -66,6 +68,19 @@ public class CategoryController {
     @GetMapping("/scraps")
     public ResponseDto<ScrapCategoryListResponse> getScrapCategoriesByUser(@AuthUser User user, @RequestParam Long diaryId) {
         return ResponseDto.onSuccess(categoryFacade.getScrapCategoriesByUser(user, diaryId));
+    }
+
+    @ApiErrorCodeExample({
+            ErrorStatus.INTERNAL_SERVER_ERROR,
+            ErrorStatus.CATEGORY_NOT_FOUND
+    })
+    @Operation(
+            summary = "스크랩 카테고리에 속한 일기 목록 조회 🔑",
+            description = "특정 스크랩 카테고리에 속한 일기 목록을 조회합니다."
+    )
+    @GetMapping("/{categoryId}/diaries")
+    public ResponseDto<CategoryDiaryListResponse> getDiariesByCategory(@AuthUser User user, @PathVariable("categoryId") Long categoryId) {
+        return ResponseDto.onSuccess(categoryFacade.getDiariesByCategory(user, categoryId));
     }
 
 }

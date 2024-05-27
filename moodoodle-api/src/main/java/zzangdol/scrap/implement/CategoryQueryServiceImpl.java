@@ -5,10 +5,12 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import zzangdol.diary.domain.Diary;
 import zzangdol.scrap.business.CategoryMapper;
 import zzangdol.scrap.dao.CategoryRepository;
 import zzangdol.scrap.dao.ScrapRepository;
 import zzangdol.scrap.domain.Category;
+import zzangdol.scrap.domain.Scrap;
 import zzangdol.scrap.presentation.dto.response.CategoryResponse;
 import zzangdol.scrap.presentation.dto.response.ScrapCategoryResponse;
 import zzangdol.user.domain.User;
@@ -46,6 +48,14 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
                     String latestImageUrl = categoryRepository.findLatestDiaryImageUrlByCategoryId(category.getId());
                     return CategoryMapper.toScrapCategoryResponse(category, isScraped, latestImageUrl);
                 })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Diary> getDiariesByCategory(User user, Long categoryId) {
+        List<Scrap> scraps = scrapRepository.findScrapsByUserAndCategory(user, categoryId);
+        return scraps.stream()
+                .map(Scrap::getDiary)
                 .collect(Collectors.toList());
     }
 

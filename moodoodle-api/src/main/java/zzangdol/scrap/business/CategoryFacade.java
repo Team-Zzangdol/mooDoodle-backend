@@ -3,6 +3,9 @@ package zzangdol.scrap.business;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import zzangdol.diary.business.DiaryMapper;
+import zzangdol.diary.domain.Diary;
+import zzangdol.diary.presentation.dto.response.CategoryDiaryListResponse;
 import zzangdol.scrap.implement.CategoryCommandService;
 import zzangdol.scrap.implement.CategoryQueryService;
 import zzangdol.scrap.presentation.dto.request.CategoryCreateRequest;
@@ -33,4 +36,8 @@ public class CategoryFacade {
         return CategoryMapper.toScrapCategoryListResponse(categoryResponses);
     }
 
+    public CategoryDiaryListResponse getDiariesByCategory(User user, Long categoryId) {
+        List<Diary> diariesByCategory = categoryQueryService.getDiariesByCategory(user, categoryId);
+        return DiaryMapper.toCategoryDiaryListResponse(diariesByCategory);
+    }
 }
