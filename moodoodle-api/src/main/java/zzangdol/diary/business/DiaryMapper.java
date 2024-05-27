@@ -9,6 +9,8 @@ import java.util.stream.IntStream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import zzangdol.diary.domain.Diary;
+import zzangdol.diary.presentation.dto.response.CategoryDiaryListResponse;
+import zzangdol.diary.presentation.dto.response.CategoryDiaryResponse;
 import zzangdol.diary.presentation.dto.response.DiaryListResponse;
 import zzangdol.diary.presentation.dto.response.DiaryResponse;
 import zzangdol.diary.presentation.dto.response.DiarySummaryResponse;
@@ -19,7 +21,7 @@ import zzangdol.emotion.presentation.dto.response.EmotionResponse;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DiaryMapper {
 
-    public static DiaryResponse toDiaryResponse(Diary diary) {
+    public static DiaryResponse toDiaryResponse(Diary diary, boolean isScrapped) {
         List<EmotionResponse> emotions = diary.getDiaryEmotions().stream()
                 .map(diaryEmotion -> EmotionMapper.toEmotionResponse(diaryEmotion.getEmotion()))
                 .collect(Collectors.toList());
@@ -30,6 +32,8 @@ public class DiaryMapper {
                 .content(diary.getContent())
                 .imageUrl(diary.getPainting().getImageUrl())
                 .color(diary.getPainting().getColor())
+                .dayOfWeek(diary.getDate().getDayOfWeek())
+                .isScrapped(isScrapped)
                 .emotions(emotions)
                 .build();
     }
@@ -71,5 +75,20 @@ public class DiaryMapper {
                 .build();
     }
 
+    public static CategoryDiaryResponse toCategoryDiaryResponse(Diary diary) {
+        return CategoryDiaryResponse.builder()
+                .id(diary.getId())
+                .imageUrl(diary.getPainting().getImageUrl())
+                .build();
+    }
+
+    public static CategoryDiaryListResponse toCategoryDiaryListResponse(List<Diary> diaries) {
+        List<CategoryDiaryResponse> diaryResponses = diaries.stream()
+                .map(DiaryMapper::toCategoryDiaryResponse)
+                .collect(Collectors.toList());
+        return CategoryDiaryListResponse.builder()
+                .diaries(diaryResponses)
+                .build();
+    }
 
 }

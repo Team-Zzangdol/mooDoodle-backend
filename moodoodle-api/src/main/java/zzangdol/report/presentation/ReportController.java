@@ -20,7 +20,7 @@ import zzangdol.user.domain.User;
 
 @RequiredArgsConstructor
 @ApiResponse(responseCode = "2000", description = "성공")
-@Tag(name = "4️⃣ Report API", description = "리포트 API")
+@Tag(name = "6️⃣ Report API", description = "리포트 API")
 @RequestMapping("/api/reports")
 @RestController
 public class ReportController {

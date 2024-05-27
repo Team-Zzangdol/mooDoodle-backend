@@ -18,6 +18,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import zzangdol.global.BaseTimeEntity;
+import zzangdol.scrap.domain.Scrap;
 import zzangdol.user.domain.User;
 
 @Getter
@@ -42,6 +43,9 @@ public class Diary extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DiaryEmotion> diaryEmotions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Scrap> scraps = new ArrayList<>();
 
     @Builder
     public Diary(LocalDate date, String content, User user, Painting painting) {

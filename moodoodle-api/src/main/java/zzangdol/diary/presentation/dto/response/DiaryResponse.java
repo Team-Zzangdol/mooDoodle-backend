@@ -1,5 +1,6 @@
 package zzangdol.diary.presentation.dto.response;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,8 @@ public class DiaryResponse {
     private String content;
     private String imageUrl;
     private String color;
+    private DayOfWeek dayOfWeek;
+    private Boolean isScrapped;
     private List<EmotionResponse> emotions;
 
 }
