@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import zzangdol.diary.dao.DiaryRepository;
-import zzangdol.diary.dao.querydsl.DiaryQueryRepository;
 import zzangdol.diary.domain.Diary;
 import zzangdol.exception.custom.DiaryAccessDeniedException;
 import zzangdol.exception.custom.DiaryNotFoundException;
@@ -17,7 +16,6 @@ import zzangdol.user.domain.User;
 public class DiaryQueryServiceImpl implements DiaryQueryService {
 
     private final DiaryRepository diaryRepository;
-    private final DiaryQueryRepository diaryQueryRepository;
 
     @Override
     public Diary getDiaryByUser(User user, Long diaryId) {
@@ -29,7 +27,7 @@ public class DiaryQueryServiceImpl implements DiaryQueryService {
 
     @Override
     public List<Diary> getMonthlyDiariesByUser(User user, int year, int month) {
-        return diaryQueryRepository.findDiariesByUserAndYearAndMonth(user.getId(), year, month);
+        return diaryRepository.findDiariesByUserAndYearAndMonth(user.getId(), year, month);
     }
 
     private void checkDiaryOwnership(User user, Diary diary) {

@@ -6,6 +6,7 @@ import zzangdol.report.domain.Asset;
 import zzangdol.report.domain.Report;
 import zzangdol.report.domain.ReportEmotion;
 import zzangdol.report.presentation.dto.response.AssetResponse;
+import zzangdol.report.presentation.dto.response.LatestReportResponse;
 import zzangdol.report.presentation.dto.response.ReportEmotionResponse;
 import zzangdol.report.presentation.dto.response.ReportResponse;
 
@@ -31,14 +32,22 @@ public class ReportMapper {
                 .collect(Collectors.toList());
     }
 
-    public static ReportResponse toReportResponse(Report report) {
+    public static ReportResponse toReportResponse(Report report, Long prevReportId, Long nextReportId) {
         return ReportResponse.builder()
                 .id(report.getId())
-                .asset(toAssetResponse(report.getAsset()))
+                .prevReportId(prevReportId)
+                .nextReportId(nextReportId)
+                .asset(report.getAsset() != null ? toAssetResponse(report.getAsset()) : null)
                 .emotions(toReportEmotionResponseList(report.getReportEmotions()))
                 .positivePercentage(report.getPositivePercentage())
                 .negativePercentage(report.getNegativePercentage())
                 .build();
     }
 
+    public static LatestReportResponse toLatestReportResponse(Report report, Boolean isRead) {
+        return LatestReportResponse.builder()
+                .reportId(report.getId())
+                .isRead(isRead)
+                .build();
+    }
 }

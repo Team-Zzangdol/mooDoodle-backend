@@ -31,6 +31,7 @@ public class User extends BaseTimeEntity implements UserDetails {
     private String password;
     private String nickname;
     private LocalTime notificationTime;
+    private Boolean isRead;
 
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
@@ -91,4 +92,7 @@ public class User extends BaseTimeEntity implements UserDetails {
         }
     }
 
+    public void setRead(Boolean read) {
+        isRead = read;
+    }
 }

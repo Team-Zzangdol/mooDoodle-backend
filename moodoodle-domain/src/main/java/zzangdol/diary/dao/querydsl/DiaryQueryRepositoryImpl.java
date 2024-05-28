@@ -42,6 +42,14 @@ public class DiaryQueryRepositoryImpl implements DiaryQueryRepository {
                 .fetch();
     }
 
+    @Override
+    public List<Diary> findDiariesBetweenByUser(Long userId, LocalDate startDate, LocalDate endDate) {
+        return queryFactory.selectFrom(diary)
+                .where(diary.user.id.eq(userId)
+                        .and(diary.date.between(startDate, endDate)))
+                .fetch();
+    }
+
     public static LocalDate getStartDateOfWeek(int year, int month, int weekOfMonth) {
         Calendar calendar = Calendar.getInstance(Locale.KOREA);
         calendar.clear();
