@@ -10,10 +10,13 @@ import zzangdol.auth.presentation.dto.request.RefreshTokenRequest;
 import zzangdol.auth.presentation.dto.request.SignInRequest;
 import zzangdol.auth.presentation.dto.request.SignUpRequest;
 import zzangdol.auth.presentation.dto.response.EmailVerificationTokenResponse;
+import zzangdol.constant.Constants;
 import zzangdol.exception.custom.UserCredentialsException;
 import zzangdol.jwt.JwtResponse;
 import zzangdol.jwt.JwtService;
 import zzangdol.response.status.ErrorStatus;
+import zzangdol.scrap.implement.CategoryCommandService;
+import zzangdol.scrap.presentation.dto.request.CategoryCreateRequest;
 import zzangdol.ses.service.AwsSesService;
 import zzangdol.user.domain.User;
 
@@ -26,6 +29,7 @@ public class AuthFacade {
     private final AwsSesService awsSesService;
     private final VerificationCodeService verificationCodeService;
     private final EmailVerificationTokenService emailVerificationTokenService;
+    private final CategoryCommandService categoryCommandService;
 
     public boolean sendVerificationEmail(String email) {
         if (!authService.isEmailAvailable(email)) {
@@ -49,6 +53,7 @@ public class AuthFacade {
         }
         emailVerificationTokenService.verifyToken(request.getEmail(), emailVerificationToken);
         User user = authService.signUp(request);
+        categoryCommandService.createCategory(user, new CategoryCreateRequest(Constants.DEFAULT_CATEGORY_NAME));
         return jwtService.issueToken(user);
     }
 
