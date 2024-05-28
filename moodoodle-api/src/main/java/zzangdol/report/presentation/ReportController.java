@@ -53,7 +53,7 @@ public class ReportController {
     })
     @Operation(
             summary = "리포트 단건 조회 🔑",
-            description = "지정된 ID의 리포트를 조회합니다. 상세 정보를 반환합니다."
+            description = "지정된 ID의 리포트를 조회하고 상세 정보를 반환합니다. 해당 리포트가 가장 최근 리포트면 nextReportId = -1, 가장 오래된 리포트면 prevReport = -1를 반환합니다."
     )
     @GetMapping("/{reportId}")
     public ResponseDto<ReportResponse> getReportByUser(@AuthUser User user,
