@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import zzangdol.diary.dao.DiaryRepository;
@@ -31,7 +32,7 @@ public class ReportCommandServiceImpl implements ReportCommandService {
     private final DiaryRepository diaryRepository;
     private final AssetQueryRepository assetQueryRepository;
 
-
+    @Scheduled(cron = "0 0 0 * * MON")
     @Override
     public Report createReport(User user) {
         LocalDate today = LocalDate.now();
@@ -73,7 +74,7 @@ public class ReportCommandServiceImpl implements ReportCommandService {
         emotionCounts.forEach(
                 (emotion, count) -> report.addReportEmotion(buildReportEmotion(report, totalEmotions, emotion)));
 
-        // TODO isRead = true
+        user.setRead(false);
 
         return reportRepository.save(report);
     }
@@ -122,7 +123,8 @@ public class ReportCommandServiceImpl implements ReportCommandService {
                     int percentage = (int) Math.round((double) count / totalEmotions * 100);
                     report.addReportEmotion(buildReportEmotion(report, percentage, emotion));
                 });
-        // TODO isRead = true
+
+        user.setRead(false);
 
         return reportRepository.save(report);
     }
