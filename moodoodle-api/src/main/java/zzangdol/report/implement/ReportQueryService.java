@@ -7,4 +7,6 @@ public interface ReportQueryService {
 
     Report getReportByUser(User user, Long reportId);
 
+    Report getLatestReportByUser(User user);
+
 }

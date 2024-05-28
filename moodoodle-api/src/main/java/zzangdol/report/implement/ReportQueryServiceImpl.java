@@ -24,6 +24,12 @@ public class ReportQueryServiceImpl implements ReportQueryService {
         return report;
     }
 
+    @Override
+    public Report getLatestReportByUser(User user) {
+        return reportRepository.findFirstByUserOrderByCreatedAtDesc(user)
+                .orElseThrow(() -> ReportNotFoundException.EXCEPTION);
+    }
+
     private void checkReportOwnership(User user, Report report) {
         if (!report.getUser().getId().equals(user.getId())) {
             throw ReportAccessDeniedException.EXCEPTION;

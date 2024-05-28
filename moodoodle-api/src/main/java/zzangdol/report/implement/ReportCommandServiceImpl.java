@@ -16,11 +16,13 @@ import zzangdol.emotion.domain.Emotion;
 import zzangdol.emotion.domain.EmotionPolarity;
 import zzangdol.exception.custom.DiaryNotFoundException;
 import zzangdol.exception.custom.ReportEmotionDataMissingException;
+import zzangdol.exception.custom.ReportNotFoundException;
 import zzangdol.report.dao.ReportRepository;
 import zzangdol.report.dao.querydsl.AssetQueryRepository;
 import zzangdol.report.domain.Asset;
 import zzangdol.report.domain.Report;
 import zzangdol.report.domain.ReportEmotion;
+import zzangdol.user.dao.UserRepository;
 import zzangdol.user.domain.User;
 
 @RequiredArgsConstructor
@@ -31,8 +33,14 @@ public class ReportCommandServiceImpl implements ReportCommandService {
     private final ReportRepository reportRepository;
     private final DiaryRepository diaryRepository;
     private final AssetQueryRepository assetQueryRepository;
+    private final UserRepository userRepository;
 
     @Scheduled(cron = "0 0 0 * * MON")
+    public void createWeeklyReports() {
+        List<User> users = userRepository.findAll();
+        users.forEach(this::createReport);
+    }
+
     @Override
     public Report createReport(User user) {
         LocalDate today = LocalDate.now();
@@ -127,6 +135,15 @@ public class ReportCommandServiceImpl implements ReportCommandService {
         user.setRead(false);
 
         return reportRepository.save(report);
+    }
+
+    @Override
+    public void markReportAsRead(User user, Long reportId) {
+        Report latestReport = reportRepository.findFirstByUserOrderByCreatedAtDesc(user)
+                .orElseThrow(() -> ReportNotFoundException.EXCEPTION);
+        if (reportId.equals(latestReport.getId())) {
+            user.setRead(true);
+        }
     }
 
     private ReportEmotion buildReportEmotion(Report report, int percentage, Emotion emotion) {

@@ -10,4 +10,6 @@ public interface ReportCommandService {
 
     Report createReportByDate(User user, LocalDate startDate, LocalDate endDate);
 
+    void markReportAsRead(User user, Long reportId);
+
 }

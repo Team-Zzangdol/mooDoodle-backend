@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import zzangdol.global.annotation.ApiErrorCodeExample;
 import zzangdol.global.annotation.AuthUser;
 import zzangdol.report.business.ReportFacade;
+import zzangdol.report.presentation.dto.response.LatestReportResponse;
 import zzangdol.report.presentation.dto.response.ReportResponse;
 import zzangdol.response.ResponseDto;
 import zzangdol.response.status.ErrorStatus;
@@ -58,6 +59,19 @@ public class ReportController {
     public ResponseDto<ReportResponse> getReportByUser(@AuthUser User user,
                                                        @PathVariable("reportId") Long reportId) {
         return ResponseDto.onSuccess(reportFacade.getReportByUser(user, reportId));
+    }
+
+    @ApiErrorCodeExample({
+            ErrorStatus.REPORT_NOT_FOUND,
+            ErrorStatus.INTERNAL_SERVER_ERROR
+    })
+    @Operation(
+            summary = "최신 리포트 상태 조회 🔑",
+            description = "최신 리포트의 읽었는지 여부와 ID를 반환합니다. 생성된 리포트가 없으면 4150 에러를 반환합니다."
+    )
+    @GetMapping("/latest")
+    public ResponseDto<LatestReportResponse> getLatestReportStatus(@AuthUser User user) {
+        return ResponseDto.onSuccess(reportFacade.getLatestReportStatus(user));
     }
 
 }

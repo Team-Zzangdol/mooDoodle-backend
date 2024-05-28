@@ -3,8 +3,10 @@ package zzangdol.report.business;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import zzangdol.report.domain.Report;
 import zzangdol.report.implement.ReportCommandService;
 import zzangdol.report.implement.ReportQueryService;
+import zzangdol.report.presentation.dto.response.LatestReportResponse;
 import zzangdol.report.presentation.dto.response.ReportResponse;
 import zzangdol.user.domain.User;
 
@@ -20,8 +22,14 @@ public class ReportFacade {
     }
 
     public ReportResponse getReportByUser(User user, Long reportId) {
-        return ReportMapper.toReportResponse(reportQueryService.getReportByUser(user, reportId));
+        Report report = reportQueryService.getReportByUser(user, reportId);
+        reportCommandService.markReportAsRead(user, report.getId());
+        return ReportMapper.toReportResponse(report);
     }
 
 
+    public LatestReportResponse getLatestReportStatus(User user) {
+        Report report = reportQueryService.getLatestReportByUser(user);
+        return ReportMapper.toLatestReportResponse(report, user.getIsRead());
+    }
 }
