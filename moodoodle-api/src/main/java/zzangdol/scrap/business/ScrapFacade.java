@@ -13,8 +13,8 @@ public class ScrapFacade {
     private final ScrapCommandService scrapCommandService;
     private final ScrapQueryService scrapQueryService;
 
-    public Long createScrap(User user, Long diaryId) {
-        return scrapCommandService.createScrap(user, diaryId).getId();
+    public void handleScrap(User user, Long diaryId) {
+        scrapCommandService.handleScrap(user, diaryId);
     }
 
     public void addCategoryToScrap(User user, Long scrapId, Long categoryId) {
