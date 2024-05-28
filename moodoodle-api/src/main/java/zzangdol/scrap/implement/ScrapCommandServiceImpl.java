@@ -37,8 +37,9 @@ public class ScrapCommandServiceImpl implements ScrapCommandService {
 
         Category defaultCategory = categoryRepository.findCategoryByUserAndName(user, Constants.DEFAULT_CATEGORY_NAME)
                 .orElseThrow(() -> CategoryNotFoundException.EXCEPTION);
+        scrap = scrapRepository.save(scrap);
         addCategoryToScrap(user, scrap.getId(), defaultCategory.getId());
-        return scrapRepository.save(scrap);
+        return scrap;
     }
 
     private void checkScrapDuplication(User user, Long diaryId) {
