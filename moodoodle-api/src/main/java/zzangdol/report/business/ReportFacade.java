@@ -1,5 +1,6 @@
 package zzangdol.report.business;
 
+import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import zzangdol.report.implement.ReportCommandService;
@@ -14,8 +15,8 @@ public class ReportFacade {
     private final ReportCommandService reportCommandService;
     private final ReportQueryService reportQueryService;
 
-    public Long createReport(User user, int year, int month, int week) {
-        return reportCommandService.createReport(user, year, month, week).getId();
+    public Long createReportByDate(User user, LocalDate startDate, LocalDate endDate) {
+        return reportCommandService.createReportByDate(user, startDate, endDate).getId();
     }
 
     public ReportResponse getReportByUser(User user, Long reportId) {

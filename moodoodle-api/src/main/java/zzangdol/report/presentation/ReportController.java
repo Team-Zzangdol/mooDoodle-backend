@@ -3,6 +3,7 @@ package zzangdol.report.presentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,16 +34,15 @@ public class ReportController {
             ErrorStatus.INTERNAL_SERVER_ERROR
     })
     @Operation(
-            summary = "리포트 생성 🔑",
+            summary = "[테스트] 리포트 생성 🔑",
             description = "새로운 리포트를 생성합니다."
     )
     @PostMapping
     public ResponseDto<Long> createReport(
             @AuthUser User user,
-            @RequestParam("year") int year,
-            @RequestParam("month") int month,
-            @RequestParam("week") int week) {
-        return ResponseDto.onSuccess(reportFacade.createReport(user, year, month, week));
+            @RequestParam("startDate") LocalDate startDate,
+            @RequestParam("endDate") LocalDate endDate) {
+        return ResponseDto.onSuccess(reportFacade.createReportByDate(user, startDate, endDate));
     }
 
     @ApiErrorCodeExample({
