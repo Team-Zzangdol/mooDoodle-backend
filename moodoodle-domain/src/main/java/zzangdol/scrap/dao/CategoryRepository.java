@@ -1,6 +1,7 @@
 package zzangdol.scrap.dao;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import zzangdol.scrap.dao.querydsl.CategoryQueryRepository;
 import zzangdol.scrap.domain.Category;
@@ -11,5 +12,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long>, Categ
     List<Category> findCategoriesByUser(User user);
 
     void deleteByUser(User user);
+
+    Optional<Category> findCategoryByUserAndName(User user, String name);
 
 }

@@ -4,6 +4,7 @@ import groovy.util.logging.Slf4j;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import zzangdol.constant.Constants;
 import zzangdol.diary.dao.DiaryRepository;
 import zzangdol.diary.domain.Diary;
 import zzangdol.exception.custom.CategoryNotFoundException;
@@ -33,6 +34,10 @@ public class ScrapCommandServiceImpl implements ScrapCommandService {
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> DiaryNotFoundException.EXCEPTION);
         Scrap scrap = buildScrap(user, diary);
+
+        Category defaultCategory = categoryRepository.findCategoryByUserAndName(user, Constants.DEFAULT_CATEGORY_NAME)
+                .orElseThrow(() -> CategoryNotFoundException.EXCEPTION);
+        addCategoryToScrap(user, scrap.getId(), defaultCategory.getId());
         return scrapRepository.save(scrap);
     }
 
