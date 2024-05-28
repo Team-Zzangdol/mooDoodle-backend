@@ -1,5 +1,6 @@
 package zzangdol.report.implement;
 
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,16 @@ public class ReportQueryServiceImpl implements ReportQueryService {
     public Report getLatestReportByUser(User user) {
         return reportRepository.findFirstByUserOrderByCreatedAtDesc(user)
                 .orElseThrow(() -> ReportNotFoundException.EXCEPTION);
+    }
+
+    @Override
+    public Long getPreviousReportId(User user, LocalDateTime createdAt) {
+        return reportRepository.findPrevReportId(user.getId(), createdAt).orElse(-1L);
+    }
+
+    @Override
+    public Long getNextReportId(User user, LocalDateTime createdAt) {
+        return reportRepository.findNextReportId(user.getId(), createdAt).orElse(-1L);
     }
 
     private void checkReportOwnership(User user, Report report) {

@@ -24,7 +24,9 @@ public class ReportFacade {
     public ReportResponse getReportByUser(User user, Long reportId) {
         Report report = reportQueryService.getReportByUser(user, reportId);
         reportCommandService.markReportAsRead(user, report.getId());
-        return ReportMapper.toReportResponse(report);
+        Long prevReportId = reportQueryService.getPreviousReportId(user, report.getCreatedAt());
+        Long nextReportId = reportQueryService.getNextReportId(user, report.getCreatedAt());
+        return ReportMapper.toReportResponse(report, prevReportId, nextReportId);
     }
 
 

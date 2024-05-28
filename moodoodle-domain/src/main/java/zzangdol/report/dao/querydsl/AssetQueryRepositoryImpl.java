@@ -15,7 +15,6 @@ public class AssetQueryRepositoryImpl implements AssetQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-
     @Override
     public Optional<Asset> findRandomAsset() {
         int count = queryFactory.selectFrom(asset).fetch().size();

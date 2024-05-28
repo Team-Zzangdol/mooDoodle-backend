@@ -32,10 +32,12 @@ public class ReportMapper {
                 .collect(Collectors.toList());
     }
 
-    public static ReportResponse toReportResponse(Report report) {
+    public static ReportResponse toReportResponse(Report report, Long prevReportId, Long nextReportId) {
         return ReportResponse.builder()
                 .id(report.getId())
-                .asset(toAssetResponse(report.getAsset()))
+                .prevReportId(prevReportId)
+                .nextReportId(nextReportId)
+                .asset(report.getAsset() != null ? toAssetResponse(report.getAsset()) : null)
                 .emotions(toReportEmotionResponseList(report.getReportEmotions()))
                 .positivePercentage(report.getPositivePercentage())
                 .negativePercentage(report.getNegativePercentage())
