@@ -33,12 +33,13 @@ public class ScrapController {
             ErrorStatus.DIARY_NOT_FOUND
     })
     @Operation(
-            summary = "스크랩 생성 🔑",
+            summary = "스크랩 생성 및 취소 🔑",
             description = "새로운 스크랩을 생성합니다."
     )
     @PostMapping
-    public ResponseDto<Long> createScrap(@AuthUser User user, @Valid @RequestParam("diaryId") Long diaryId) {
-        return ResponseDto.onSuccess(scrapFacade.createScrap(user, diaryId));
+    public ResponseDto<Void> handleScrap(@AuthUser User user, @Valid @RequestParam("diaryId") Long diaryId) {
+        scrapFacade.handleScrap(user, diaryId);
+        return ResponseDto.onSuccess();
     }
 
     @ApiErrorCodeExample({
