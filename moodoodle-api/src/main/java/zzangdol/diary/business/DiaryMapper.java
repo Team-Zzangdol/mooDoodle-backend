@@ -78,6 +78,8 @@ public class DiaryMapper {
     public static CategoryDiaryResponse toCategoryDiaryResponse(Diary diary) {
         return CategoryDiaryResponse.builder()
                 .id(diary.getId())
+                .date(diary.getDate())
+                .content(diary.getContent())
                 .imageUrl(diary.getPainting().getImageUrl())
                 .build();
     }

@@ -34,7 +34,7 @@ public class ScrapController {
     })
     @Operation(
             summary = "스크랩 생성 및 취소 🔑",
-            description = "새로운 스크랩을 생성합니다."
+            description = "새로운 스크랩을 생성하거나 취소합니다."
     )
     @PostMapping
     public ResponseDto<Void> handleScrap(@AuthUser User user, @Valid @RequestParam("diaryId") Long diaryId) {
@@ -61,14 +61,14 @@ public class ScrapController {
             ErrorStatus.CATEGORY_NOT_FOUND
     })
     @Operation(
-            summary = "스크랩에 카테고리 추가 🔑",
-            description = "기존 스크랩에 카테고리를 추가합니다."
+            summary = "스크랩에 카테고리 저장 및 취소 🔑",
+            description = "기존 스크랩에 카테고리를 저장하거나 취소합니다."
     )
     @PostMapping("/{scrapId}/categories")
-    public ResponseDto<Void> addCategoryToScrap(@AuthUser User user,
-                                                @PathVariable("scrapId") Long scrapId,
-                                                @RequestParam("categoryId") Long categoryId) {
-        scrapFacade.addCategoryToScrap(user, scrapId, categoryId);
+    public ResponseDto<Void> handleCategoryToScrap(@AuthUser User user,
+                                                   @PathVariable("scrapId") Long scrapId,
+                                                   @RequestParam("categoryId") Long categoryId) {
+        scrapFacade.handleCategoryToScrap(user, scrapId, categoryId);
         return ResponseDto.onSuccess();
     }
 

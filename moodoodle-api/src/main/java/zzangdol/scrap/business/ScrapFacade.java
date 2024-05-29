@@ -17,8 +17,8 @@ public class ScrapFacade {
         scrapCommandService.handleScrap(user, diaryId);
     }
 
-    public void addCategoryToScrap(User user, Long scrapId, Long categoryId) {
-        scrapCommandService.addCategoryToScrap(user, scrapId, categoryId);
+    public void handleCategoryToScrap(User user, Long scrapId, Long categoryId) {
+        scrapCommandService.handleCategoryToScrap(user, scrapId, categoryId);
     }
 
     public Boolean deleteScrap(User user, Long scrapId) {
