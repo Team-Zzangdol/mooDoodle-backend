@@ -1,6 +1,11 @@
 package zzangdol.report.business;
 
+import java.time.LocalDate;
+import java.time.temporal.WeekFields;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 import zzangdol.report.domain.Asset;
 import zzangdol.report.domain.Report;
@@ -11,6 +16,16 @@ import zzangdol.report.presentation.dto.response.ReportEmotionResponse;
 import zzangdol.report.presentation.dto.response.ReportResponse;
 
 public class ReportMapper {
+
+    private static final Map<Integer, String> weekNumberToKorean = new HashMap<>();
+
+    static {
+        weekNumberToKorean.put(1, "첫째 주");
+        weekNumberToKorean.put(2, "둘째 주");
+        weekNumberToKorean.put(3, "셋째 주");
+        weekNumberToKorean.put(4, "넷째 주");
+        weekNumberToKorean.put(5, "다섯째 주");
+    }
 
     private static AssetResponse toAssetResponse(Asset asset) {
         return AssetResponse.builder()
@@ -33,8 +48,17 @@ public class ReportMapper {
     }
 
     public static ReportResponse toReportResponse(Report report, Long prevReportId, Long nextReportId) {
+        LocalDate previousSunday = report.getCreatedAt().toLocalDate().minusDays(1);
+        WeekFields weekFields = WeekFields.of(Locale.getDefault());
+        int weekOfMonth = previousSunday.get(weekFields.weekOfMonth());
+        int month = previousSunday.getMonthValue();
+        String weekKorean = weekNumberToKorean.getOrDefault(weekOfMonth, weekOfMonth + "째 주");
+        String reportWeek = String.format("%d월 %s", month, weekKorean);
+
+
         return ReportResponse.builder()
                 .id(report.getId())
+                .reportWeek(reportWeek)
                 .prevReportId(prevReportId)
                 .nextReportId(nextReportId)
                 .asset(report.getAsset() != null ? toAssetResponse(report.getAsset()) : null)

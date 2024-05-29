@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class ReportResponse {
 
     private Long id;
+    private String reportWeek;
     private Long prevReportId;
     private Long nextReportId;
     private AssetResponse asset;
