@@ -12,6 +12,7 @@ import zzangdol.exception.custom.CategoryNotFoundException;
 import zzangdol.exception.custom.DiaryNotFoundException;
 import zzangdol.exception.custom.ScrapNotFoundException;
 import zzangdol.scrap.dao.CategoryRepository;
+import zzangdol.scrap.dao.ScrapCategoryRepository;
 import zzangdol.scrap.dao.ScrapRepository;
 import zzangdol.scrap.domain.Category;
 import zzangdol.scrap.domain.Scrap;
@@ -25,6 +26,7 @@ import zzangdol.user.domain.User;
 public class ScrapCommandServiceImpl implements ScrapCommandService {
 
     private final ScrapRepository scrapRepository;
+    private final ScrapCategoryRepository scrapCategoryRepository;
     private final CategoryRepository categoryRepository;
     private final DiaryRepository diaryRepository;
 
@@ -41,7 +43,7 @@ public class ScrapCommandServiceImpl implements ScrapCommandService {
             Category defaultCategory = categoryRepository.findCategoryByUserAndName(user, Constants.DEFAULT_CATEGORY_NAME)
                     .orElseThrow(() -> CategoryNotFoundException.EXCEPTION);
             scrap = scrapRepository.save(scrap);
-            addCategoryToScrap(user, scrap.getId(), defaultCategory.getId());
+            handleCategoryToScrap(user, scrap.getId(), defaultCategory.getId());
         }
     }
 
@@ -53,14 +55,20 @@ public class ScrapCommandServiceImpl implements ScrapCommandService {
     }
 
     @Override
-    public void addCategoryToScrap(User user, Long scrapId, Long categoryId) {
+    public void handleCategoryToScrap(User user, Long scrapId, Long categoryId) {
         Scrap scrap = scrapRepository.findById(scrapId)
                 .orElseThrow(() -> ScrapNotFoundException.EXCEPTION);
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> CategoryNotFoundException.EXCEPTION);
-        ScrapCategory scrapCategory = buildScrapCategory(scrap, category);
-        scrap.addCategory(scrapCategory);
-        category.addScrapCategory(scrapCategory);
+
+        Optional<ScrapCategory> optionalScrapCategory = scrapCategoryRepository.findScrapCategoryByScrapAndCategory(scrap, category);
+        if (optionalScrapCategory.isPresent()) {
+            scrapCategoryRepository.delete(optionalScrapCategory.get());
+        } else {
+            ScrapCategory scrapCategory = buildScrapCategory(scrap, category);
+            scrap.addCategory(scrapCategory);
+            category.addScrapCategory(scrapCategory);
+        }
     }
 
     @Override
