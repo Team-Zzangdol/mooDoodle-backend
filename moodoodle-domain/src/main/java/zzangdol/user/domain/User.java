@@ -1,5 +1,6 @@
 package zzangdol.user.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -33,6 +34,7 @@ public class User extends BaseTimeEntity implements UserDetails {
     private LocalTime notificationTime;
     private Boolean isRead;
 
+    @Column(nullable = false, length = 50)
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
 
