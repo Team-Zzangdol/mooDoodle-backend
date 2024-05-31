@@ -15,6 +15,9 @@ dependencies {
 
     // redis
     api 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // webclient
+    api 'org.springframework.boot:spring-boot-starter-webflux'
 }
 
 task copyYML(type: Copy) {

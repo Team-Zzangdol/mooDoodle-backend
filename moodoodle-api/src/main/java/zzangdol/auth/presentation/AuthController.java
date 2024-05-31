@@ -17,6 +17,7 @@ import zzangdol.auth.presentation.dto.request.EmailVerificationRequest;
 import zzangdol.auth.presentation.dto.request.RefreshTokenRequest;
 import zzangdol.auth.presentation.dto.request.SignInRequest;
 import zzangdol.auth.presentation.dto.request.SignUpRequest;
+import zzangdol.auth.presentation.dto.request.SocialLoginRequest;
 import zzangdol.auth.presentation.dto.response.EmailVerificationTokenResponse;
 import zzangdol.global.annotation.ApiErrorCodeExample;
 import zzangdol.jwt.JwtResponse;
@@ -76,6 +77,16 @@ public class AuthController {
     @PostMapping("/sign-in")
     public ResponseDto<JwtResponse> signUp(@RequestBody SignInRequest request) {
         return ResponseDto.onSuccess(authFacade.signIn(request));
+    }
+
+    @ApiErrorCodeExample({
+            ErrorStatus.AUTH_PROVIDER_NOT_SUPPORTED,
+            ErrorStatus.INTERNAL_SERVER_ERROR
+    })
+    @Operation(summary = "소셜 로그인", description = "소셜 로그인 제공자를 통해 사용자를 인증하고 Access Token, Refresh Token을 발급합니다.")
+    @PostMapping("/social-login")
+    public ResponseDto<JwtResponse> socialLogin(@RequestBody SocialLoginRequest request) {
+        return ResponseDto.onSuccess(authFacade.socialLogin(request));
     }
 
     @ApiErrorCodeExample({

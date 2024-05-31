@@ -9,6 +9,7 @@ import zzangdol.auth.presentation.dto.request.EmailVerificationRequest;
 import zzangdol.auth.presentation.dto.request.RefreshTokenRequest;
 import zzangdol.auth.presentation.dto.request.SignInRequest;
 import zzangdol.auth.presentation.dto.request.SignUpRequest;
+import zzangdol.auth.presentation.dto.request.SocialLoginRequest;
 import zzangdol.auth.presentation.dto.response.EmailVerificationTokenResponse;
 import zzangdol.constant.Constants;
 import zzangdol.exception.custom.UserCredentialsException;
@@ -59,6 +60,10 @@ public class AuthFacade {
 
     public JwtResponse signIn(SignInRequest request) {
         return authService.signIn(request);
+    }
+
+    public JwtResponse socialLogin(SocialLoginRequest request) {
+        return authService.socialLogin(request);
     }
 
     public boolean isEmailAvailable(String email) {

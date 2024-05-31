@@ -27,6 +27,7 @@ public enum ErrorStatus implements BaseStatus {
     AUTHENTICATION_REQUIRED(HttpStatus.BAD_REQUEST, 4060, "인증 정보가 필요합니다."),
     REFRESH_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, 4061, "저장소에 해당 토큰이 존재하지 않습니다."),
     EMAIL_ALREADY_EXISTS(HttpStatus.CONFLICT, 4062, "이미 사용 중인 이메일입니다."),
+    AUTH_PROVIDER_NOT_SUPPORTED(HttpStatus.BAD_REQUEST, 4063, "지원되지 않는 인증 제공자입니다."),
 
     // Diary (4100 ~ 4149)
     DIARY_NOT_FOUND(HttpStatus.NOT_FOUND, 4100, "일기가 존재하지 않습니다."),
