@@ -47,6 +47,7 @@ public class User extends BaseTimeEntity implements UserDetails {
         this.nickname = nickname;
         this.authProvider = authProvider;
         this.role = role;
+        this.isRead = true;
         this.notificationTime = notificationTime;
     }
 
