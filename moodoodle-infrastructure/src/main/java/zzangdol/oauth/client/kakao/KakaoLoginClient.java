@@ -1,7 +1,8 @@
-package zzangdol.oauth.client;
+package zzangdol.oauth.client.kakao;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import zzangdol.oauth.client.SocialLoginClient;
 import zzangdol.oauth.dto.KakaoTokenResponse;
 import zzangdol.oauth.dto.KakaoUserInfoResponse;
 

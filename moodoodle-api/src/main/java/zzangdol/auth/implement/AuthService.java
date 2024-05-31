@@ -15,6 +15,7 @@ import zzangdol.exception.custom.UserCredentialsException;
 import zzangdol.jwt.JwtResponse;
 import zzangdol.jwt.JwtService;
 import zzangdol.oauth.client.SocialLoginClient;
+import zzangdol.oauth.dto.GoogleUserInfoResponse;
 import zzangdol.oauth.dto.KakaoUserInfoResponse;
 import zzangdol.oauth.dto.SocialUserInfoResponse;
 import zzangdol.response.status.ErrorStatus;
@@ -35,13 +36,18 @@ public class AuthService {
 
     private static final int RANDOM_PASSWORD_LENGTH = 10;
 
-    public AuthService(PasswordEncoder passwordEncoder, UserRepository userRepository, JwtService jwtService,
-                       SocialLoginClient<KakaoUserInfoResponse> kakaoLoginClient /*, SocialLoginClient<NaverUserInfoResponse> naverLoginClient */) {
+    public AuthService(PasswordEncoder passwordEncoder,
+                       UserRepository userRepository,
+                       JwtService jwtService,
+                       SocialLoginClient<KakaoUserInfoResponse> kakaoLoginClient,
+                       SocialLoginClient<GoogleUserInfoResponse> googleLoginClient
+            /*, SocialLoginClient<NaverUserInfoResponse> naverLoginClient */) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.jwtService = jwtService;
         this.socialLoginClients = new EnumMap<>(AuthProvider.class);
         this.socialLoginClients.put(AuthProvider.KAKAO, kakaoLoginClient);
+        this.socialLoginClients.put(AuthProvider.GOOGLE, googleLoginClient);
         // this.socialLoginClients.put(AuthProvider.NAVER, naverLoginClient);
     }
 
