@@ -7,15 +7,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import zzangdol.FCMService;
 import zzangdol.global.annotation.AuthUser;
+import zzangdol.response.ResponseDto;
 import zzangdol.user.business.UserFacade;
+import zzangdol.user.domain.User;
+import zzangdol.user.presentation.dto.request.PushNotificationRequest;
 import zzangdol.user.presentation.dto.request.UserInfoUpdateRequest;
 import zzangdol.user.presentation.dto.response.UserInfoResponse;
-import zzangdol.response.ResponseDto;
-import zzangdol.user.domain.User;
 
 @RequiredArgsConstructor
 @ApiResponse(responseCode = "2000", description = "성공")
@@ -25,6 +28,7 @@ import zzangdol.user.domain.User;
 public class UserController {
 
     private final UserFacade userFacade;
+    private final FCMService fcmService;
 
     @Operation(
             summary = "사용자 정보 조회 🔑",
@@ -42,6 +46,30 @@ public class UserController {
     @PatchMapping
     public ResponseDto<UserInfoResponse> updateUserInfo(@AuthUser User user, @RequestBody UserInfoUpdateRequest request) {
         return ResponseDto.onSuccess(userFacade.updateUserInfo(user, request));
+    }
+
+    @Operation(
+            summary = "Push 알림 허용 / 거부 🔑",
+            description = "사용자가 Push 알림을 허용하거나 거부합니다."
+    )
+    @PatchMapping("/push-notifications")
+    public ResponseDto<Void> handlePushNotifications(@AuthUser User user, @RequestBody PushNotificationRequest request) {
+        userFacade.handlePushNotifications(user, request);
+        return ResponseDto.onSuccess();
+    }
+
+    @Operation(
+            summary = "테스트 푸시 알림 전송 🔑",
+            description = "특정 사용자의 FCM 토큰으로 푸시 알림을 즉시 전송합니다."
+    )
+    @PostMapping("/send-test-notification")
+    public ResponseDto<Void> sendTestNotification(@RequestBody PushNotificationRequest request) {
+        try {
+            fcmService.sendNotification(request.getFcmToken(), "테스트 title", "테스트 body");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseDto.onSuccess();
     }
 
     @Operation(
