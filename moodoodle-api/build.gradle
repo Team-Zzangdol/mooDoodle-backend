@@ -6,6 +6,7 @@ dependencies {
     implementation project(':moodoodle-common')
     implementation project(':moodoodle-domain')
     implementation project(':moodoodle-infrastructure')
+    implementation project(':moodoodle-notification')
 
     // spring boot
     implementation 'org.springframework.boot:spring-boot-starter-web'

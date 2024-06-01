@@ -9,7 +9,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class MoodoodleApiApplication {
 
     public static void main(String[] args) {
-        System.setProperty("spring.config.name", "application-api, application-domain, application-infrastructure");
+        System.setProperty("spring.config.name",
+                "application-api, application-domain, application-infrastructure, application-notification");
         SpringApplication.run(MoodoodleApiApplication.class, args);
     }
 

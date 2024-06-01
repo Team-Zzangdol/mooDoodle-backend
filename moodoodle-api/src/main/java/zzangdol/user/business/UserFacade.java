@@ -3,6 +3,7 @@ package zzangdol.user.business;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import zzangdol.user.implement.UserCommandService;
+import zzangdol.user.presentation.dto.request.PushNotificationRequest;
 import zzangdol.user.presentation.dto.request.UserInfoUpdateRequest;
 import zzangdol.user.presentation.dto.response.UserInfoResponse;
 import zzangdol.user.domain.User;
@@ -24,5 +25,9 @@ public class UserFacade {
     public boolean withDrawUser(User user) {
         userCommandService.withDrawUser(user);
         return true;
+    }
+
+    public void handlePushNotifications(User user, PushNotificationRequest request) {
+        userCommandService.handlePushNotifications(user, request);
     }
 }

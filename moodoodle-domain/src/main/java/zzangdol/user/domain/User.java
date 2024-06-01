@@ -31,6 +31,7 @@ public class User extends BaseTimeEntity implements UserDetails {
     private String email;
     private String password;
     private String nickname;
+    private boolean pushNotificationsEnabled;
     private LocalTime notificationTime;
     private Boolean isRead;
 
@@ -97,5 +98,11 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     public void setRead(Boolean read) {
         isRead = read;
+    }
+
+    public void updatePushNotificationsEnabled(Boolean pushNotificationsEnabled) {
+        if (pushNotificationsEnabled != null) {
+            this.pushNotificationsEnabled = pushNotificationsEnabled;
+        }
     }
 }

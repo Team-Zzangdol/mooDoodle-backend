@@ -1,0 +1,21 @@
+dependencies {
+	implementation project(':moodoodle-domain')
+
+	// spring boot
+	implementation 'org.springframework.boot:spring-boot-starter'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// fcm
+	implementation 'com.google.firebase:firebase-admin:8.0.0'
+	implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
+
+}
+
+task copyYML(type: Copy) {
+	copy {
+		from '../moodoodle-submodule/notification'
+		include "*.yml"
+		into 'src/main/resources'
+	}
+}

@@ -42,3 +42,4 @@ moodoodle-batch/src/main/resources/*.yml
 moodoodle-common/src/main/resources/*.yml
 moodoodle-domain/src/main/resources/*.yml
 moodoodle-infrastructure/src/main/resources/*.yml
+moodoodle-notification/src/main/resources/*.yml
