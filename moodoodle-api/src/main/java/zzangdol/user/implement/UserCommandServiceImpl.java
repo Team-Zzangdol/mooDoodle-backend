@@ -13,6 +13,8 @@ import zzangdol.user.dao.UserRepository;
 import zzangdol.user.domain.User;
 import zzangdol.user.presentation.dto.request.PushNotificationRequest;
 import zzangdol.user.presentation.dto.request.UserInfoUpdateRequest;
+import zzangdol.user.presentation.dto.request.UserNicknameUpdateRequest;
+import zzangdol.user.presentation.dto.request.UserNotificationTimeUpdateRequest;
 
 @RequiredArgsConstructor
 @Transactional
@@ -28,6 +30,18 @@ public class UserCommandServiceImpl implements UserCommandService {
     @Override
     public User updateUserInfo(User user, UserInfoUpdateRequest request) {
         user.updateNickname(request.getNickname());
+        user.updateNotificationTime(request.getNotificationTime());
+        return user;
+    }
+
+    @Override
+    public User updateUserNickname(User user, UserNicknameUpdateRequest request) {
+        user.updateNickname(request.getNickname());
+        return user;
+    }
+
+    @Override
+    public User updateUserNotificationTime(User user, UserNotificationTimeUpdateRequest request) {
         user.updateNotificationTime(request.getNotificationTime());
         return user;
     }

@@ -19,6 +19,8 @@ import zzangdol.user.domain.User;
 import zzangdol.user.presentation.dto.request.PushNotificationRequest;
 import zzangdol.user.presentation.dto.request.TestPushNotificationRequest;
 import zzangdol.user.presentation.dto.request.UserInfoUpdateRequest;
+import zzangdol.user.presentation.dto.request.UserNicknameUpdateRequest;
+import zzangdol.user.presentation.dto.request.UserNotificationTimeUpdateRequest;
 import zzangdol.user.presentation.dto.response.UserInfoResponse;
 
 @RequiredArgsConstructor
@@ -47,6 +49,24 @@ public class UserController {
     @PatchMapping
     public ResponseDto<UserInfoResponse> updateUserInfo(@AuthUser User user, @RequestBody UserInfoUpdateRequest request) {
         return ResponseDto.onSuccess(userFacade.updateUserInfo(user, request));
+    }
+
+    @Operation(
+            summary = "사용자 닉네임 수정 🔑",
+            description = "사용자의 닉네임을 수정합니다."
+    )
+    @PatchMapping("/nickname")
+    public ResponseDto<UserInfoResponse> updateUserNickname(@AuthUser User user, @RequestBody UserNicknameUpdateRequest request) {
+        return ResponseDto.onSuccess(userFacade.updateUserNickname(user, request));
+    }
+
+    @Operation(
+            summary = "사용자 알림 시간 수정 🔑",
+            description = "사용자의 알림 시간을 수정합니다."
+    )
+    @PatchMapping("/notification-time")
+    public ResponseDto<UserInfoResponse> updateUserNotificationTime(@AuthUser User user, @RequestBody UserNotificationTimeUpdateRequest request) {
+        return ResponseDto.onSuccess(userFacade.updateUserNotificationTime(user, request));
     }
 
     @Operation(
