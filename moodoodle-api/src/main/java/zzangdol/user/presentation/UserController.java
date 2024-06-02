@@ -17,6 +17,7 @@ import zzangdol.response.ResponseDto;
 import zzangdol.user.business.UserFacade;
 import zzangdol.user.domain.User;
 import zzangdol.user.presentation.dto.request.PushNotificationRequest;
+import zzangdol.user.presentation.dto.request.TestPushNotificationRequest;
 import zzangdol.user.presentation.dto.request.UserInfoUpdateRequest;
 import zzangdol.user.presentation.dto.response.UserInfoResponse;
 
@@ -59,13 +60,13 @@ public class UserController {
     }
 
     @Operation(
-            summary = "테스트 푸시 알림 전송 🔑",
+            summary = "[테스트] 푸시 알림 전송",
             description = "특정 사용자의 FCM 토큰으로 푸시 알림을 즉시 전송합니다."
     )
     @PostMapping("/send-test-notification")
-    public ResponseDto<Void> sendTestNotification(@RequestBody PushNotificationRequest request) {
+    public ResponseDto<Void> sendTestNotification(@RequestBody TestPushNotificationRequest request) {
         try {
-            fcmService.sendNotification(request.getFcmToken(), "테스트 title", "테스트 body");
+            fcmService.sendNotification(request.getFcmToken(), request.getTitle(), request.getBody());
         } catch (Exception e) {
             e.printStackTrace();
         }
