@@ -5,10 +5,12 @@ import static zzangdol.scrap.domain.QCategory.category;
 import static zzangdol.scrap.domain.QScrap.scrap;
 import static zzangdol.scrap.domain.QScrapCategory.scrapCategory;
 
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import zzangdol.constant.Constants;
 import zzangdol.scrap.domain.Category;
 import zzangdol.user.domain.User;
 
@@ -25,7 +27,12 @@ public class CategoryQueryRepositoryImpl implements CategoryQueryRepository {
                 .leftJoin(scrapCategory.scrap, scrap)
                 .where(category.user.eq(user))
                 .groupBy(category.id)
-                .orderBy(scrapCategory.createdAt.max().desc().nullsLast())
+                .orderBy(
+                        new CaseBuilder()
+                                .when(category.name.eq(Constants.DEFAULT_CATEGORY_NAME)).then(0)
+                                .otherwise(1).asc(),
+                        scrapCategory.createdAt.max().desc().nullsLast()
+                )
                 .fetch();
     }
 

@@ -1,4 +1,6 @@
 dependencies {
+    implementation project(':moodoodle-common')
+
     // spring boot
     implementation 'org.springframework.boot:spring-boot-starter'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
