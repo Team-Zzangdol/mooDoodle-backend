@@ -5,6 +5,6 @@ import zzangdol.report.domain.Asset;
 
 public interface AssetQueryRepository {
 
-    Optional<Asset> findRandomAsset();
+    Optional<Asset> findRandomAssetExcludingId(Long excludedId);
 
 }
