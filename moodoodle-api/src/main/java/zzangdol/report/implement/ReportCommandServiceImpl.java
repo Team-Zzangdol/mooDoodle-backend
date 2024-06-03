@@ -78,7 +78,8 @@ public class ReportCommandServiceImpl implements ReportCommandService {
 
         Optional<Asset> optionalAsset =
                 (negativePercentage > positivePercentage) ? assetQueryRepository.findRandomAsset() : Optional.empty();
-        Report report = buildReport(user, positivePercentage, negativePercentage, optionalAsset.orElse(null));
+        Report report = buildReport(user, optionalAsset.orElse(null), positivePercentage, negativePercentage,
+                lastMonday, thisSunday);
         emotionCounts.forEach(
                 (emotion, count) -> report.addReportEmotion(buildReportEmotion(report, totalEmotions, emotion)));
 
@@ -120,7 +121,8 @@ public class ReportCommandServiceImpl implements ReportCommandService {
 
         Optional<Asset> optionalAsset =
                 (negativePercentage > positivePercentage) ? assetQueryRepository.findRandomAsset() : Optional.empty();
-        Report report = buildReport(user, positivePercentage, negativePercentage, optionalAsset.orElse(null));
+        Report report = buildReport(user, optionalAsset.orElse(null), positivePercentage, negativePercentage,
+                startDate, endDate);
 
         emotionCounts.entrySet().stream()
                 .sorted(Map.Entry.<Emotion, Integer>comparingByValue().reversed())
@@ -154,12 +156,15 @@ public class ReportCommandServiceImpl implements ReportCommandService {
                 .build();
     }
 
-    private Report buildReport(User user, double positivePercentage, double negativePercentage, Asset asset) {
+    private Report buildReport(User user, Asset asset, double positivePercentage, double negativePercentage,
+                               LocalDate startDate, LocalDate endDate) {
         return Report.builder()
                 .user(user)
+                .asset(asset)
                 .positivePercentage(positivePercentage)
                 .negativePercentage(negativePercentage)
-                .asset(asset)
+                .startDate(startDate)
+                .endDate(endDate)
                 .build();
     }
 }
