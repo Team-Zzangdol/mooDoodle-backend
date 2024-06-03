@@ -4,12 +4,12 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import zzangdol.constant.Constants;
 import zzangdol.diary.dao.DiaryRepository;
 import zzangdol.diary.domain.Diary;
 import zzangdol.emotion.domain.Emotion;
@@ -17,8 +17,8 @@ import zzangdol.emotion.domain.EmotionPolarity;
 import zzangdol.exception.custom.DiaryNotFoundException;
 import zzangdol.exception.custom.ReportEmotionDataMissingException;
 import zzangdol.exception.custom.ReportNotFoundException;
+import zzangdol.report.dao.AssetRepository;
 import zzangdol.report.dao.ReportRepository;
-import zzangdol.report.dao.querydsl.AssetQueryRepository;
 import zzangdol.report.domain.Asset;
 import zzangdol.report.domain.Report;
 import zzangdol.report.domain.ReportEmotion;
@@ -32,7 +32,7 @@ public class ReportCommandServiceImpl implements ReportCommandService {
 
     private final ReportRepository reportRepository;
     private final DiaryRepository diaryRepository;
-    private final AssetQueryRepository assetQueryRepository;
+    private final AssetRepository assetRepository;
     private final UserRepository userRepository;
 
     @Scheduled(cron = "0 0 0 * * MON")
@@ -76,9 +76,16 @@ public class ReportCommandServiceImpl implements ReportCommandService {
         double positivePercentage = (double) positiveCount.get() / totalEmotions * 100;
         double negativePercentage = (double) negativeCount.get() / totalEmotions * 100;
 
-        Optional<Asset> optionalAsset =
-                (negativePercentage > positivePercentage) ? assetQueryRepository.findRandomAsset() : Optional.empty();
-        Report report = buildReport(user, positivePercentage, negativePercentage, optionalAsset.orElse(null));
+        Asset asset;
+        if (positivePercentage > negativePercentage) {
+            asset = assetRepository.findById(Constants.POSITIVE_ASSET_ID)
+                    .orElse(null);
+        } else {
+            asset = assetRepository.findRandomAssetExcludingId(Constants.POSITIVE_ASSET_ID)
+                    .orElse(null);
+        }
+
+        Report report = buildReport(user, asset, positivePercentage, negativePercentage, lastMonday, thisSunday);
         emotionCounts.forEach(
                 (emotion, count) -> report.addReportEmotion(buildReportEmotion(report, totalEmotions, emotion)));
 
@@ -118,9 +125,16 @@ public class ReportCommandServiceImpl implements ReportCommandService {
         int positivePercentage = (int) Math.round((double) positiveCount.get() / totalEmotions * 100);
         int negativePercentage = (int) Math.round((double) negativeCount.get() / totalEmotions * 100);
 
-        Optional<Asset> optionalAsset =
-                (negativePercentage > positivePercentage) ? assetQueryRepository.findRandomAsset() : Optional.empty();
-        Report report = buildReport(user, positivePercentage, negativePercentage, optionalAsset.orElse(null));
+        Asset asset;
+        if (positivePercentage > negativePercentage) {
+            asset = assetRepository.findById(Constants.POSITIVE_ASSET_ID)
+                    .orElse(null);
+        } else {
+            asset = assetRepository.findRandomAssetExcludingId(Constants.POSITIVE_ASSET_ID)
+                    .orElse(null);
+        }
+
+        Report report = buildReport(user, asset, positivePercentage, negativePercentage, startDate, endDate);
 
         emotionCounts.entrySet().stream()
                 .sorted(Map.Entry.<Emotion, Integer>comparingByValue().reversed())
@@ -154,12 +168,15 @@ public class ReportCommandServiceImpl implements ReportCommandService {
                 .build();
     }
 
-    private Report buildReport(User user, double positivePercentage, double negativePercentage, Asset asset) {
+    private Report buildReport(User user, Asset asset, double positivePercentage, double negativePercentage,
+                               LocalDate startDate, LocalDate endDate) {
         return Report.builder()
                 .user(user)
+                .asset(asset)
                 .positivePercentage(positivePercentage)
                 .negativePercentage(negativePercentage)
-                .asset(asset)
+                .startDate(startDate)
+                .endDate(endDate)
                 .build();
     }
 }
