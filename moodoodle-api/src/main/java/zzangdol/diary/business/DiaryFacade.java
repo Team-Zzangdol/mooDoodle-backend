@@ -14,6 +14,7 @@ import zzangdol.diary.presentation.dto.request.ImageCreateRequest;
 import zzangdol.diary.presentation.dto.response.DiaryListResponse;
 import zzangdol.diary.presentation.dto.response.DiaryResponse;
 import zzangdol.diary.presentation.dto.response.ImageListResponse;
+import zzangdol.diary.presentation.dto.response.ImageResponse;
 import zzangdol.emotion.dao.querydsl.EmotionQueryRepository;
 import zzangdol.emotion.domain.Emotion;
 import zzangdol.scrap.implement.ScrapQueryService;
@@ -38,14 +39,19 @@ public class DiaryFacade {
         return diaryCommandService.createDiary(user, request, color, emotions).getId();
     }
 
-    public ImageListResponse createDiaryImage(User user, ImageCreateRequest request) {
+    public ImageListResponse generateDiaryImage(User user, ImageCreateRequest request) {
 //        List<String> imageUrls = text2ImageModelClient.generateImage(request.getContent());
         List<String> imageUrls = new ArrayList<>();
         imageUrls.add("https://moodoodle-diary-image.s3.ap-northeast-2.amazonaws.com/diary_image_1.png");
         imageUrls.add("https://moodoodle-diary-image.s3.ap-northeast-2.amazonaws.com/diary_image_2.png");
         imageUrls.add("https://moodoodle-diary-image.s3.ap-northeast-2.amazonaws.com/diary_image_3.png");
         imageUrls.add("https://moodoodle-diary-image.s3.ap-northeast-2.amazonaws.com/diary_image_4.png");
-        return DiaryMapper.toImageResponse(imageUrls);
+        return DiaryMapper.toImageListResponse(imageUrls);
+    }
+
+    public ImageResponse regenerateDiaryImage(User user, ImageCreateRequest request) {
+//        String imageUrl = text2ImageModelClient.regenerateImage(request.getContent());
+        return DiaryMapper.toImageResponse("https://moodoodle-diary-image.s3.ap-northeast-2.amazonaws.com/diary_image_1.png");
     }
 
     public Long updateDiary(User user, Long diaryId, DiaryUpdateRequest request) {

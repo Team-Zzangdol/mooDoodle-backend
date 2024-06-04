@@ -21,6 +21,7 @@ import zzangdol.diary.presentation.dto.request.ImageCreateRequest;
 import zzangdol.diary.presentation.dto.response.DiaryListResponse;
 import zzangdol.diary.presentation.dto.response.DiaryResponse;
 import zzangdol.diary.presentation.dto.response.ImageListResponse;
+import zzangdol.diary.presentation.dto.response.ImageResponse;
 import zzangdol.global.annotation.ApiErrorCodeExample;
 import zzangdol.global.annotation.AuthUser;
 import zzangdol.response.ResponseDto;
@@ -57,8 +58,20 @@ public class DiaryController {
             description = "일기 내용을 사용하여 이미지를 생성합니다. (모델 연동 X)"
     )
     @PostMapping("/images")
-    public ResponseDto<ImageListResponse> createDiaryImage(@AuthUser User user, @Valid @RequestBody ImageCreateRequest request) {
-        return ResponseDto.onSuccess(diaryFacade.createDiaryImage(user, request));
+    public ResponseDto<ImageListResponse> generateDiaryImage(@AuthUser User user, @Valid @RequestBody ImageCreateRequest request) {
+        return ResponseDto.onSuccess(diaryFacade.generateDiaryImage(user, request));
+    }
+
+    @ApiErrorCodeExample({
+            ErrorStatus.INTERNAL_SERVER_ERROR
+    })
+    @Operation(
+            summary = "일기 이미지 재생성 🔑",
+            description = "일기 내용을 사용하여 이미지를 재생성합니다. (모델 연동 X)"
+    )
+    @PostMapping("/images/regenerate")
+    public ResponseDto<ImageResponse> regenerateDiaryImage(@AuthUser User user, @Valid @RequestBody ImageCreateRequest request) {
+        return ResponseDto.onSuccess(diaryFacade.regenerateDiaryImage(user, request));
     }
 
     @ApiErrorCodeExample({
