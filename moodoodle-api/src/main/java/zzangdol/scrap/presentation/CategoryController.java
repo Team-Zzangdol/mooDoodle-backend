@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -66,7 +67,8 @@ public class CategoryController {
             description = "사용자의 카테고리 목록을 반환합니다. 카테고리가 존재하지 않으면 빈 리스트를 반환합니다."
     )
     @GetMapping("/scraps")
-    public ResponseDto<ScrapCategoryListResponse> getScrapCategoriesByUser(@AuthUser User user, @RequestParam Long diaryId) {
+    public ResponseDto<ScrapCategoryListResponse> getScrapCategoriesByUser(@AuthUser User user,
+                                                                           @RequestParam Long diaryId) {
         return ResponseDto.onSuccess(categoryFacade.getScrapCategoriesByUser(user, diaryId));
     }
 
@@ -79,8 +81,24 @@ public class CategoryController {
             description = "특정 스크랩 카테고리에 속한 일기 목록을 조회합니다."
     )
     @GetMapping("/{categoryId}/diaries")
-    public ResponseDto<CategoryDiaryListResponse> getDiariesByCategory(@AuthUser User user, @PathVariable("categoryId") Long categoryId) {
+    public ResponseDto<CategoryDiaryListResponse> getDiariesByCategory(@AuthUser User user,
+                                                                       @PathVariable("categoryId") Long categoryId) {
         return ResponseDto.onSuccess(categoryFacade.getDiariesByCategory(user, categoryId));
+    }
+
+    @ApiErrorCodeExample({
+            ErrorStatus.CATEGORY_NOT_FOUND,
+            ErrorStatus.INTERNAL_SERVER_ERROR
+    })
+    @Operation(
+            summary = "카테고리 삭제 🔑",
+            description = "지정된 ID의 카테고리를 삭제합니다. 삭제 성공 시 true를 반환합니다."
+    )
+    @DeleteMapping("/{categoryId}")
+    public ResponseDto<Boolean> deleteCategory(@AuthUser User user,
+                                               @PathVariable("categoryId") Long categoryId) {
+        categoryFacade.deleteCategory(user, categoryId);
+        return ResponseDto.onSuccess(true);
     }
 
 }

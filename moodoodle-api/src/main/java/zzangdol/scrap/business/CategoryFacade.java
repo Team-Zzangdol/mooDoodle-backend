@@ -40,4 +40,8 @@ public class CategoryFacade {
         List<Diary> diariesByCategory = categoryQueryService.getDiariesByCategory(user, categoryId);
         return DiaryMapper.toCategoryDiaryListResponse(diariesByCategory);
     }
+
+    public void deleteCategory(User user, Long categoryId) {
+        categoryCommandService.deleteCategory(user, categoryId);
+    }
 }
