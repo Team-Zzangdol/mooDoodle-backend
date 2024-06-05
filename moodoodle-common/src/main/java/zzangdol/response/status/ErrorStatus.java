@@ -43,7 +43,9 @@ public enum ErrorStatus implements BaseStatus {
     // Scrap (4200 ~ 4250)
     SCRAP_NOT_FOUND(HttpStatus.NOT_FOUND, 4200, "스크랩이 존재하지 않습니다."),
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, 4201, "카테고리가 존재하지 않습니다."),
-    SCRAP_DUPLICATION(HttpStatus.CONFLICT, 4202, "해당 사용자와 다이어리에 대해 이미 스크랩이 존재합니다.");
+    SCRAP_DUPLICATION(HttpStatus.CONFLICT, 4202, "해당 사용자와 다이어리에 대해 이미 스크랩이 존재합니다."),
+    CATEGORY_ACCESS_DENIED(HttpStatus.FORBIDDEN, 4203, "카테고리 접근이 거부되었습니다."),
+    DEFAULT_CATEGORY_ACCESS_DENIED(HttpStatus.FORBIDDEN, 4204, "기본 카테고리 접근이 거부되었습니다.");
 
     private final HttpStatus httpStatus;
     private final int code;

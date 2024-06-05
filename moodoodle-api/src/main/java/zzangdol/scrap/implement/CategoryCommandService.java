@@ -8,4 +8,6 @@ public interface CategoryCommandService {
 
     Category createCategory(User user, CategoryCreateRequest request);
 
+    void deleteCategory(User user, Long categoryId);
+
 }
