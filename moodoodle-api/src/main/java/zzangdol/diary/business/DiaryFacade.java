@@ -2,6 +2,8 @@ package zzangdol.diary.business;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import zzangdol.diary.domain.Diary;
@@ -15,8 +17,12 @@ import zzangdol.diary.presentation.dto.response.DiaryListResponse;
 import zzangdol.diary.presentation.dto.response.DiaryResponse;
 import zzangdol.diary.presentation.dto.response.ImageListResponse;
 import zzangdol.diary.presentation.dto.response.ImageResponse;
+import zzangdol.emotion.dao.EmotionRepository;
 import zzangdol.emotion.dao.querydsl.EmotionQueryRepository;
 import zzangdol.emotion.domain.Emotion;
+import zzangdol.feign.model.client.TextEmotionAnalysisModelClient;
+import zzangdol.feign.model.dto.ContentRequest;
+import zzangdol.feign.model.dto.EmotionResponse;
 import zzangdol.scrap.implement.ScrapQueryService;
 import zzangdol.user.domain.User;
 
@@ -28,15 +34,29 @@ public class DiaryFacade {
     private final DiaryQueryService diaryQueryService;
     private final ScrapQueryService scrapQueryService;
     private final EmotionQueryRepository emotionQueryRepository;    // TODO 구현 후 제거
-//    private final TextEmotionAnalysisModelClient textEmotionAnalysisModelClient;
-//    private final Text2ImageModelClient text2ImageModelClient;
+    private final EmotionRepository emotionRepository;
+    private final TextEmotionAnalysisModelClient textEmotionAnalysisModelClient;
+    //    private final Text2ImageModelClient text2ImageModelClient;
     private final ImageColorAnalyzer imageColorAnalyzer;
 
     public Long createDiary(User user, DiaryCreateRequest request) {
-        // TODO List<Emotion> emotions = textEmotionAnalysisModelClient.analyzeEmotion(request.getContent());
-        List<Emotion> emotions = emotionQueryRepository.findRandomEmotions(3);
-         String color = imageColorAnalyzer.analyzeAverageColorAsHex(request.getImageUrl());
+        EmotionResponse emotionResponse = textEmotionAnalysisModelClient.analyzeEmotion(buildContentRequest(request));
+        List<String> emotionList = emotionResponse.getResult();
+        List<Emotion> emotions = emotionList.stream()
+                .map(emotionRepository::findByName)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+
+//        List<Emotion> emotions = emotionQueryRepository.findRandomEmotions(3);
+        String color = imageColorAnalyzer.analyzeAverageColorAsHex(request.getImageUrl());
         return diaryCommandService.createDiary(user, request, color, emotions).getId();
+    }
+
+    private ContentRequest buildContentRequest(DiaryCreateRequest request) {
+        return ContentRequest.builder()
+                .content(request.getContent())
+                .build();
     }
 
     public ImageListResponse generateDiaryImage(User user, ImageCreateRequest request) {
@@ -51,7 +71,8 @@ public class DiaryFacade {
 
     public ImageResponse regenerateDiaryImage(User user, ImageCreateRequest request) {
 //        String imageUrl = text2ImageModelClient.regenerateImage(request.getContent());
-        return DiaryMapper.toImageResponse("https://moodoodle-diary-image.s3.ap-northeast-2.amazonaws.com/diary_image_1.png");
+        return DiaryMapper.toImageResponse(
+                "https://moodoodle-diary-image.s3.ap-northeast-2.amazonaws.com/diary_image_1.png");
     }
 
     public Long updateDiary(User user, Long diaryId, DiaryUpdateRequest request) {
@@ -69,7 +90,8 @@ public class DiaryFacade {
     }
 
     public DiaryListResponse getMonthlyDiariesByUser(User user, int year, int month) {
-        return DiaryMapper.toDiaryListResponse(diaryQueryService.getMonthlyDiariesByUser(user, year, month), year, month);
+        return DiaryMapper.toDiaryListResponse(diaryQueryService.getMonthlyDiariesByUser(user, year, month), year,
+                month);
     }
 
 }
