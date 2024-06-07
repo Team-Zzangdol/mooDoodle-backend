@@ -8,6 +8,7 @@ import zzangdol.diary.dao.DiaryRepository;
 import zzangdol.notification.dao.FcmTokenRepository;
 import zzangdol.notification.domain.FcmToken;
 import zzangdol.report.dao.ReportRepository;
+import zzangdol.scrap.dao.CategoryRepository;
 import zzangdol.scrap.dao.ScrapRepository;
 import zzangdol.user.dao.UserRepository;
 import zzangdol.user.domain.User;
@@ -21,6 +22,7 @@ import zzangdol.user.presentation.dto.request.UserNotificationTimeUpdateRequest;
 @Service
 public class UserCommandServiceImpl implements UserCommandService {
 
+    private final CategoryRepository categoryRepository;
     private final ScrapRepository scrapRepository;
     private final ReportRepository reportRepository;
     private final DiaryRepository diaryRepository;
@@ -82,6 +84,7 @@ public class UserCommandServiceImpl implements UserCommandService {
 
     @Override
     public void withDrawUser(User user) {
+        categoryRepository.deleteByUser(user);
         scrapRepository.deleteByUser(user);
         reportRepository.deleteByUser(user);
         diaryRepository.deleteByUser(user);
