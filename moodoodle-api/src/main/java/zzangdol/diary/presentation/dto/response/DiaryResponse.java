@@ -19,6 +19,7 @@ public class DiaryResponse {
     private LocalDate date;
     private String content;
     private String imageUrl;
+    private String audioUrl;
     private String color;
     private DayOfWeek dayOfWeek;
     private Boolean isScrapped;
