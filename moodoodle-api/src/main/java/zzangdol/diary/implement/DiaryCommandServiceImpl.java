@@ -29,11 +29,11 @@ public class DiaryCommandServiceImpl implements DiaryCommandService {
 
     @Override
     public Diary createDiary(User user, DiaryCreateRequest request, String color,
-                             List<Emotion> emotions) {
+                             List<Emotion> emotions, String audioUrl) {
         validateDiaryDate(request.getDate());
         checkDiaryDuplication(user, request.getDate());
         Painting painting = buildPainting(request, color);
-        Diary diary = buildDiary(user, request, painting);
+        Diary diary = buildDiary(user, request, painting, audioUrl);
         diary = diaryRepository.save(diary);
         addEmotionsToDiary(diary, emotions);
         return diaryRepository.save(diary);
@@ -51,12 +51,13 @@ public class DiaryCommandServiceImpl implements DiaryCommandService {
         }
     }
 
-    private Diary buildDiary(User user, DiaryCreateRequest request, Painting painting) {
+    private Diary buildDiary(User user, DiaryCreateRequest request, Painting painting, String audioUrl) {
         return Diary.builder()
                 .date(request.getDate())
                 .content(request.getContent())
                 .user(user)
                 .painting(painting)
+                .audioUrl(audioUrl)
                 .build();
     }
 

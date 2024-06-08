@@ -32,6 +32,7 @@ public class DiaryMapper {
                 .date(diary.getDate())
                 .content(diary.getContent())
                 .imageUrl(diary.getPainting().getImageUrl())
+                .audioUrl(diary.getAudioUrl())
                 .color(diary.getPainting().getColor())
                 .dayOfWeek(diary.getDate().getDayOfWeek())
                 .isScrapped(isScrapped)

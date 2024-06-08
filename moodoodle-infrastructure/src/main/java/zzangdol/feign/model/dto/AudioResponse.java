@@ -7,8 +7,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class MessageDto {
+public class AudioResponse {
 
-    private String message;
+    private String status;
+    private String result;
 
 }

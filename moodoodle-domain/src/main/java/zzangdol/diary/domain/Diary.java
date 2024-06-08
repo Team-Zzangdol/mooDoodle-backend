@@ -40,6 +40,8 @@ public class Diary extends BaseTimeEntity {
     @Embedded
     private Painting painting;
 
+    private String audioUrl;
+
 
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DiaryEmotion> diaryEmotions = new ArrayList<>();
@@ -48,11 +50,12 @@ public class Diary extends BaseTimeEntity {
     private List<Scrap> scraps = new ArrayList<>();
 
     @Builder
-    public Diary(LocalDate date, String content, User user, Painting painting) {
+    public Diary(LocalDate date, String content, User user, Painting painting, String audioUrl) {
         this.date = date;
         this.content = content;
         this.user = user;
         this.painting = painting;
+        this.audioUrl = audioUrl;
     }
 
     public void updateDate(LocalDate date) {

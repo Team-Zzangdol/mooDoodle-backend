@@ -9,7 +9,7 @@ import zzangdol.user.domain.User;
 
 public interface DiaryCommandService {
 
-    Diary createDiary(User user, DiaryCreateRequest request, String color, List<Emotion> emotions);
+    Diary createDiary(User user, DiaryCreateRequest request, String color, List<Emotion> emotions, String audioUrl);
 
     Diary updateDiary(User user, Long diaryId, DiaryUpdateRequest request);
 
