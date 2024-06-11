@@ -21,7 +21,7 @@ import zzangdol.diary.presentation.dto.request.ImageCreateRequest;
 import zzangdol.diary.presentation.dto.response.DiaryListResponse;
 import zzangdol.diary.presentation.dto.response.DiaryResponse;
 import zzangdol.diary.presentation.dto.response.ImageListResponse;
-import zzangdol.diary.presentation.dto.response.ImageResponse;
+import zzangdol.diary.presentation.dto.response.DiaryImageResponse;
 import zzangdol.global.annotation.ApiErrorCodeExample;
 import zzangdol.global.annotation.AuthUser;
 import zzangdol.response.ResponseDto;
@@ -70,7 +70,7 @@ public class DiaryController {
             description = "일기 내용을 사용하여 이미지를 재생성합니다. (모델 연동 X)"
     )
     @PostMapping("/images/regenerate")
-    public ResponseDto<ImageResponse> regenerateDiaryImage(@AuthUser User user, @Valid @RequestBody ImageCreateRequest request) {
+    public ResponseDto<DiaryImageResponse> regenerateDiaryImage(@AuthUser User user, @Valid @RequestBody ImageCreateRequest request) {
         return ResponseDto.onSuccess(diaryFacade.regenerateDiaryImage(user, request));
     }
 

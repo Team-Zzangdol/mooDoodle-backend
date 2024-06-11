@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import zzangdol.diary.domain.Diary;
 import zzangdol.diary.implement.DiaryCommandService;
@@ -13,10 +14,10 @@ import zzangdol.diary.implement.ImageColorAnalyzer;
 import zzangdol.diary.presentation.dto.request.DiaryCreateRequest;
 import zzangdol.diary.presentation.dto.request.DiaryUpdateRequest;
 import zzangdol.diary.presentation.dto.request.ImageCreateRequest;
+import zzangdol.diary.presentation.dto.response.DiaryImageResponse;
 import zzangdol.diary.presentation.dto.response.DiaryListResponse;
 import zzangdol.diary.presentation.dto.response.DiaryResponse;
 import zzangdol.diary.presentation.dto.response.ImageListResponse;
-import zzangdol.diary.presentation.dto.response.ImageResponse;
 import zzangdol.emotion.dao.EmotionRepository;
 import zzangdol.emotion.dao.querydsl.EmotionQueryRepository;
 import zzangdol.emotion.domain.Emotion;
@@ -24,10 +25,13 @@ import zzangdol.feign.model.client.Text2ImageModelClient;
 import zzangdol.feign.model.client.TextEmotionAnalysisModelClient;
 import zzangdol.feign.model.dto.AudioResponse;
 import zzangdol.feign.model.dto.ContentRequest;
+import zzangdol.feign.model.dto.EmotionRequest;
 import zzangdol.feign.model.dto.EmotionResponse;
+import zzangdol.feign.model.dto.ImageResponse;
 import zzangdol.scrap.implement.ScrapQueryService;
 import zzangdol.user.domain.User;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class DiaryFacade {
@@ -44,45 +48,66 @@ public class DiaryFacade {
     public Long createDiary(User user, DiaryCreateRequest request) {
         List<Emotion> emotions;
         try {
-            EmotionResponse emotionResponse = textEmotionAnalysisModelClient.analyzeEmotion(buildContentRequest(request));
+            EmotionResponse emotionResponse = textEmotionAnalysisModelClient.analyzeEmotion(
+                    buildContentRequest(request.getContent()));
             List<String> emotionList = emotionResponse.getResult();
             emotions = emotionList.stream()
                     .map(emotionRepository::findByName)
                     .filter(Optional::isPresent)
                     .map(Optional::get)
                     .collect(Collectors.toList());
+            log.info("generate emotion model success");
         } catch (Exception e) {
             emotions = emotionQueryRepository.findRandomEmotions(3);
+            log.info("insert dummy data (emotion)");
         }
 
         String audioUrl;
         try {
-            AudioResponse audioResponse = text2ImageModelClient.generateAudios(buildContentRequest(request));
+            AudioResponse audioResponse = text2ImageModelClient.generateAudio(buildEmotionRequest(emotions.get(2)));
             audioUrl = audioResponse.getResult();
+            log.info("audioUrl = {}", audioUrl);
+            log.info("generate audio model success");
         } catch (Exception e) {
             audioUrl = "https://moodoodle-diary-image.s3.ap-northeast-2.amazonaws.com/happyday_0.wav";
+            log.info("insert dummy data (audio)");
         }
-        String color = imageColorAnalyzer.analyzeAverageColorAsHex(request.getImageUrl());
+//        String color = imageColorAnalyzer.analyzeAverageColorAsHex(request.getImageUrl());
+        String color = "#FFFFFF";
         return diaryCommandService.createDiary(user, request, color, emotions, audioUrl).getId();
     }
 
-    private ContentRequest buildContentRequest(DiaryCreateRequest request) {
+    private ContentRequest buildContentRequest(String content) {
         return ContentRequest.builder()
-                .content(request.getContent())
+                .content(content)
+                .build();
+    }
+
+    private EmotionRequest buildEmotionRequest(Emotion emotion) {
+        return EmotionRequest.builder()
+//                .emotions(emotion.getName())
+                .emotions("happy")
                 .build();
     }
 
     public ImageListResponse generateDiaryImage(User user, ImageCreateRequest request) {
-//        List<String> imageUrls = text2ImageModelClient.generateImage(request.getContent());
         List<String> imageUrls = new ArrayList<>();
-        imageUrls.add("https://moodoodle-diary-image.s3.ap-northeast-2.amazonaws.com/diary_image_1.png");
-        imageUrls.add("https://moodoodle-diary-image.s3.ap-northeast-2.amazonaws.com/diary_image_2.png");
-        imageUrls.add("https://moodoodle-diary-image.s3.ap-northeast-2.amazonaws.com/diary_image_3.png");
-        imageUrls.add("https://moodoodle-diary-image.s3.ap-northeast-2.amazonaws.com/diary_image_4.png");
+        try {
+            ImageResponse imageResponse = text2ImageModelClient.generateImages(
+                    buildContentRequest(request.getContent()));
+            imageUrls = imageResponse.getResult();
+            log.info("generate image model success");
+        } catch (Exception e) {
+            imageUrls.add("https://moodoodle-diary-image.s3.ap-northeast-2.amazonaws.com/diary_image_1.png");
+            imageUrls.add("https://moodoodle-diary-image.s3.ap-northeast-2.amazonaws.com/diary_image_2.png");
+            imageUrls.add("https://moodoodle-diary-image.s3.ap-northeast-2.amazonaws.com/diary_image_3.png");
+            imageUrls.add("https://moodoodle-diary-image.s3.ap-northeast-2.amazonaws.com/diary_image_4.png");
+            log.info("insert dummy data (image)");
+        }
         return DiaryMapper.toImageListResponse(imageUrls);
     }
 
-    public ImageResponse regenerateDiaryImage(User user, ImageCreateRequest request) {
+    public DiaryImageResponse regenerateDiaryImage(User user, ImageCreateRequest request) {
 //        String imageUrl = text2ImageModelClient.regenerateImage(request.getContent());
         return DiaryMapper.toImageResponse(
                 "https://moodoodle-diary-image.s3.ap-northeast-2.amazonaws.com/diary_image_1.png");

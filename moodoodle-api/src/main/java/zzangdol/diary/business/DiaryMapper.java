@@ -15,7 +15,7 @@ import zzangdol.diary.presentation.dto.response.DiaryListResponse;
 import zzangdol.diary.presentation.dto.response.DiaryResponse;
 import zzangdol.diary.presentation.dto.response.DiarySummaryResponse;
 import zzangdol.diary.presentation.dto.response.ImageListResponse;
-import zzangdol.diary.presentation.dto.response.ImageResponse;
+import zzangdol.diary.presentation.dto.response.DiaryImageResponse;
 import zzangdol.emotion.business.EmotionMapper;
 import zzangdol.emotion.presentation.dto.response.EmotionResponse;
 
@@ -77,8 +77,8 @@ public class DiaryMapper {
                 .build();
     }
 
-    public static ImageResponse toImageResponse(String imageUrl) {
-        return ImageResponse.builder()
+    public static DiaryImageResponse toImageResponse(String imageUrl) {
+        return DiaryImageResponse.builder()
                 .imageUrl(imageUrl)
                 .build();
     }
