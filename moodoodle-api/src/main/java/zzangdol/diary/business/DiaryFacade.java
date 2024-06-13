@@ -58,7 +58,15 @@ public class DiaryFacade {
                     .collect(Collectors.toList());
             log.info("generate emotion model success");
         } catch (Exception e) {
-            emotions = emotionQueryRepository.findRandomEmotions(3);
+//            emotions = emotionQueryRepository.findRandomEmotions(3);
+
+            List<String> emotionList = List.of("신남", "걱정스러움", "충만");
+            emotions = emotionList.stream()
+                    .map(emotionRepository::findByName)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .collect(Collectors.toList());
+
             log.info("insert dummy data (emotion)");
         }
 
@@ -69,7 +77,7 @@ public class DiaryFacade {
             log.info("audioUrl = {}", audioUrl);
             log.info("generate audio model success");
         } catch (Exception e) {
-            audioUrl = "https://moodoodle-diary-image.s3.ap-northeast-2.amazonaws.com/happyday_0.wav";
+            audioUrl = "https://moodoodle-diary-image.s3.amazonaws.com/3990453f-a1e4-48a4-96a7-696b1d58a05c.wav";
             log.info("insert dummy data (audio)");
         }
 //        String color = imageColorAnalyzer.analyzeAverageColorAsHex(request.getImageUrl());
@@ -98,10 +106,10 @@ public class DiaryFacade {
             imageUrls = imageResponse.getResult();
             log.info("generate image model success");
         } catch (Exception e) {
-            imageUrls.add("https://moodoodle-diary-image.s3.ap-northeast-2.amazonaws.com/diary_image_1.png");
-            imageUrls.add("https://moodoodle-diary-image.s3.ap-northeast-2.amazonaws.com/diary_image_2.png");
-            imageUrls.add("https://moodoodle-diary-image.s3.ap-northeast-2.amazonaws.com/diary_image_3.png");
-            imageUrls.add("https://moodoodle-diary-image.s3.ap-northeast-2.amazonaws.com/diary_image_4.png");
+            imageUrls.add("https://moodoodle-diary-image.s3.amazonaws.com/68e6c7ab-817b-4221-aa8e-2939943618f9.png");
+            imageUrls.add("https://moodoodle-diary-image.s3.amazonaws.com/0867f836-cf74-4a22-b278-4e86be8cc5c3.png");
+            imageUrls.add("https://moodoodle-diary-image.s3.amazonaws.com/80914bc6-e454-4c35-89c5-caa6f3ba63fb.png");
+            imageUrls.add("https://moodoodle-diary-image.s3.amazonaws.com/9156b631-4fd5-4506-a66e-f7580ce9d3df.png");
             log.info("insert dummy data (image)");
         }
         return DiaryMapper.toImageListResponse(imageUrls);
