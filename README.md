@@ -1,5 +1,7 @@
 ![logo](https://github.com/Team-Zzangdol/mooDoodle-backend/assets/88311377/74187c38-ac81-42bc-8a29-c6154ca443bb)
 
+> **🏆 세종대학교 제17회 창의설계경진대회 우수상 수상**
+
 ## 👥 Member
 
 <table>
